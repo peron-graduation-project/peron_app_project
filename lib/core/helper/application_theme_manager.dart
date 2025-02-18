@@ -7,7 +7,12 @@ class ApplicationThemeManager{
     fontFamily: StringHelper.primaryFontFamily,
       primaryColor: AppColors.primaryColor,
       scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
-      textTheme: const TextTheme(
+      textTheme:  TextTheme(
+        titleSmall:  TextStyle(
+             fontSize: 40,
+            fontWeight: FontWeight.w500,
+            color: AppColors.primaryColor
+         ),
 
         // titleLarge: TextStyle(
         //     fontFamily: Fonts.,

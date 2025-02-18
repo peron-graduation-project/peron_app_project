@@ -6,6 +6,8 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SplashBody();
+    return Scaffold(
+      body: const SplashBody(),
+    );
   }
 }
