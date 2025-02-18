@@ -21,19 +21,21 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
 
-    // Get screen width to make responsive adjustments
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0),
       child: SizedBox(
-        height: 48,  // Fixed height, but can be adjusted dynamically if needed
-        width: screenWidth * 0.8,  // Adjust width to be responsive
+        height: 48,
+        width: screenWidth * 0.8,
         child: TextButton(
           style: TextButton.styleFrom(
             backgroundColor: backgroundColor,
+            side: BorderSide(
+              color: AppColors.primaryColor
+            ),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
           onPressed: onPressed,
@@ -43,7 +45,7 @@ class CustomButton extends StatelessWidget {
               decoration: decoration,
               decorationColor: AppColors.primaryColor,
               color: textColor,
-              fontSize: screenWidth * 0.05,  // Responsive font size
+              fontSize: screenWidth * 0.05,
             ),
           ),
         ),

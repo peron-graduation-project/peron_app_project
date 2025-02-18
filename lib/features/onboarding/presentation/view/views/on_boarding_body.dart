@@ -4,6 +4,7 @@ import 'package:peron_project/core/helper/images.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
 import 'package:peron_project/features/onboarding/data/page_model.dart';
 
+import '../../../../../core/navigator/page_routes_name.dart';
 import '../widgets/custom_smooth_page_indicator.dart';
 
 class OnBoardingBody extends StatefulWidget {
@@ -21,12 +22,14 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
     Pages(
       image: Images.onBoarding1,
       title: 'ابحث عن شقتك بسهولة',
-      subTitle: 'استكشف مئات الشقق المعروضة للإيجار في مختلف المناطق بكل سهولة.',
+      subTitle:
+      'استكشف مئات الشقق المعروضة للإيجار في مختلف المناطق بكل سهولة.',
     ),
     Pages(
       image: Images.onBoarding2,
       title: 'خيارات تناسب احتياجاتك',
-      subTitle: 'استخدم الفلاتر للبحث حسب السعر، الموقع، والمواصفات التي تناسبك.',
+      subTitle:
+      'استخدم الفلاتر للبحث حسب السعر، الموقع، والمواصفات التي تناسبك.',
     ),
     Pages(
       image: Images.onBoarding3,
@@ -67,7 +70,6 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
               pagesList[index].image,
               fit: BoxFit.cover,
             ),
-
             Positioned(
               bottom: 0,
               left: 0,
@@ -79,8 +81,9 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
                   color: Colors.white,
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.07,
-                        vertical: MediaQuery.of(context).size.height * 0.08),
+                      horizontal: MediaQuery.of(context).size.width * 0.07,
+                      vertical: MediaQuery.of(context).size.height * 0.08,
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -103,20 +106,53 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
                           softWrap: true,
                         ),
                         const SizedBox(height: 28),
-                        CustomSmoothPageIndicator(controller: _controller, pagesList: pagesList),
+                        CustomSmoothPageIndicator(
+                          controller: _controller,
+                          pagesList: pagesList,
+                        ),
                         const SizedBox(height: 32),
-                        CustomButton(
-                          textColor: Colors.white,
-                          text: 'التالي',
-                          backgroundColor: AppColors.primaryColor,
-                        ),
-                        const SizedBox(height: 16),
-                        CustomButton(
-                          textColor: AppColors.primaryColor,
-                          text: 'تخطي',
-                          backgroundColor: Colors.white,
-                          decoration: TextDecoration.underline,
-                        ),
+
+                        /// **هنا التعديل:** إذا كانت الصفحة الأخيرة، يظهر زر واحد فقط (ابدأ)
+                        if (index == pagesList.length - 1)
+                          CustomButton(
+                            textColor: Colors.white,
+                            text: 'ابدأ',
+                            backgroundColor: AppColors.primaryColor,
+                            onPressed: () {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                PageRouteName.beginning,
+                                    (route) => false,
+                              );
+                            },
+                          )
+                        else ...[
+                          CustomButton(
+                            textColor: Colors.white,
+                            text: 'التالي',
+                            backgroundColor: AppColors.primaryColor,
+                            onPressed: () {
+                              _controller.nextPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          CustomButton(
+                            textColor: AppColors.primaryColor,
+                            text: 'تخطي',
+                            backgroundColor: Colors.white,
+                            decoration: TextDecoration.underline,
+                            onPressed: () {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                PageRouteName.beginning,
+                                    (route) => false,
+                              );
+                            },
+                          ),
+                        ],
                       ],
                     ),
                   ),

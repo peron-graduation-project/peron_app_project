@@ -1,6 +1,8 @@
 class PageRouteName{
   static const  String initialRoute="/";
   static const  String onBoarding="onBoarding";
+  static const  String beginning="beginning";
+
 
 // static const  String login="login";
   // static const String signup="signup";

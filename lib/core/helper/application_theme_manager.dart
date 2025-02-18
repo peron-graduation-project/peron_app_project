@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
-import 'package:peron_project/core/helper/string_helper.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class ApplicationThemeManager {
   static ThemeData lightThemeMode = ThemeData(
-    fontFamily: StringHelper.primaryFontFamily,
+    fontFamily: Fonts.primaryFontFamily,
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
     textTheme: TextTheme(
