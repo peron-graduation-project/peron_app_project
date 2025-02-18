@@ -1,33 +1,57 @@
-import 'package:flutter/material.dart' ;
+import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/string_helper.dart';
 
-class ApplicationThemeManager{
-  static ThemeData lightThemeMode=ThemeData(
+class ApplicationThemeManager {
+  static ThemeData lightThemeMode = ThemeData(
     fontFamily: StringHelper.primaryFontFamily,
-      primaryColor: AppColors.primaryColor,
-      scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
-      textTheme:  TextTheme(
-        titleSmall:  TextStyle(
-             fontSize: 40,
-            fontWeight: FontWeight.w500,
-            color: AppColors.primaryColor
-         ),
-
-        // titleLarge: TextStyle(
-        //     fontFamily: Fonts.,
-        //     fontSize: 24,
-        //     fontWeight: FontWeight.bold,
-        //     color: AppColors.
-        // ),
+    primaryColor: AppColors.primaryColor,
+    scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
+    textTheme: TextTheme(
+      titleLarge: TextStyle(
+        fontSize: 40,
+        fontWeight: FontWeight.w500,
+        color: AppColors.primaryColor,
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: AppColors.primaryColor,
-        showSelectedLabels: true,
-
-        showUnselectedLabels: true,
-      )
-
+      titleSmall: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+        color: AppColors.titleSmallColor,
+      ),
+      bodySmall: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: AppColors.bodySmallColor,
+      ),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: AppColors.primaryColor,
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+    ),
   );
 
+  static TextStyle getResponsiveTextStyle(BuildContext context, {required String style}) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    if (style == 'titleLarge') {
+      return TextStyle(
+        fontSize: screenWidth * 0.1,
+        fontWeight: FontWeight.w500,
+        color: AppColors.primaryColor,
+      );
+    } else if (style == 'titleSmall') {
+      return TextStyle(
+        fontSize: screenWidth * 0.05,
+        fontWeight: FontWeight.w700,
+        color: AppColors.titleSmallColor,
+      );
+    } else {
+      return TextStyle(
+        fontSize: screenWidth * 0.04,
+        fontWeight: FontWeight.w400,
+        color: AppColors.bodySmallColor,
+      );
+    }
+  }
 }

@@ -16,7 +16,7 @@ class SlidingText extends StatelessWidget {
       builder: (context,_){
         return SlideTransition(
             position: slidingAnimation,
-            child:  Text('بيرون',style: theme.titleSmall,textAlign: TextAlign.center,));
+            child:  Text('بيرون',style: theme.titleLarge,textAlign: TextAlign.center,));
       },);
   }
 }

@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/images.dart';
 import 'package:peron_project/features/splash/presentation/view/widgets/sliding_text.dart';
 
+import '../../../../../core/navigator/page_routes_name.dart';
+
 class SplashBody extends StatefulWidget {
   const SplashBody({super.key});
 
@@ -12,19 +14,19 @@ class SplashBody extends StatefulWidget {
 
 class _SplashBodyState extends State<SplashBody> with SingleTickerProviderStateMixin {
   late AnimationController animationController;
-  late Animation <Offset> slidingAnimation;
+  late Animation<Offset> slidingAnimation;
 
   @override
   void initState() {
     super.initState();
     initSlidingAnimation();
-    // navigateToHome();
+    navigateToOnBoarding();
   }
 
   @override
   void dispose() {
-    super.dispose();
     animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -33,9 +35,12 @@ class _SplashBodyState extends State<SplashBody> with SingleTickerProviderStateM
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // Dynamically sized logo based on screen size
         SvgPicture.asset(
           Images.kLogo,
+          width: MediaQuery.of(context).size.width * 0.5, // Adjust logo size
         ),
+        const SizedBox(height: 20), // Adding some space between logo and text
         SlidingText(slidingAnimation: slidingAnimation),
       ],
     );
@@ -43,16 +48,22 @@ class _SplashBodyState extends State<SplashBody> with SingleTickerProviderStateM
 
   Future<void> initSlidingAnimation() async {
     animationController =
-        AnimationController(vsync: this, duration: const Duration(
-            seconds: 5
-        ));
+        AnimationController(vsync: this, duration: const Duration(seconds: 5));
     slidingAnimation =
-        Tween<Offset>(begin: const Offset(0, 2), end: const Offset(0, 0))
+        Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
             .animate(animationController);
     animationController.forward();
   }
 
-  void navigateToHome() {
-    Future.delayed(const Duration(seconds: 2), () {});
+  void navigateToOnBoarding() {
+    Future.delayed(const Duration(seconds: 5), () {
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          PageRouteName.onBoarding,
+              (route) => false,
+        );
+      }
+    });
   }
 }
