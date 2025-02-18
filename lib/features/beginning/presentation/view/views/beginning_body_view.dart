@@ -53,6 +53,9 @@ class BeginningBodyView extends StatelessWidget {
             textColor: Colors.black,
             text: 'مؤجر',
             backgroundColor: Colors.white,
+            side: BorderSide(
+                color: AppColors.primaryColor
+            ),
           ),
           const Spacer(flex: 2),
         ],

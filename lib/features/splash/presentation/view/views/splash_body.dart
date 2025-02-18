@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/images.dart';
 import 'package:peron_project/features/splash/presentation/view/widgets/sliding_text.dart';
-
 import '../../../../../core/navigator/page_routes_name.dart';
 
 class SplashBody extends StatefulWidget {
@@ -35,25 +34,34 @@ class _SplashBodyState extends State<SplashBody> with SingleTickerProviderStateM
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Dynamically sized logo based on screen size
         SvgPicture.asset(
           Images.kLogo,
-          width: MediaQuery.of(context).size.width * 0.5, // Adjust logo size
+          width: MediaQuery.of(context).size.width * 0.5,
         ),
-        const SizedBox(height: 20), // Adding some space between logo and text
-        SlidingText(slidingAnimation: slidingAnimation),
+        const SizedBox(height: 20),
+        SlideTransition(
+          position: slidingAnimation,
+          child:  SlidingText(slidingAnimation: slidingAnimation,),
+        ),
       ],
     );
   }
 
   Future<void> initSlidingAnimation() async {
-    animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 5));
-    slidingAnimation =
-        Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
-            .animate(animationController);
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    );
+    slidingAnimation = Tween<Offset>(
+      begin: const Offset(0, 1),
+      end: const Offset(0, 0),
+    ).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeInOut,
+    ));
     animationController.forward();
   }
+
 
   void navigateToOnBoarding() {
     Future.delayed(const Duration(seconds: 5), () {
