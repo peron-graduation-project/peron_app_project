@@ -7,7 +7,13 @@ class ApplicationThemeManager {
     fontFamily: Fonts.primaryFontFamily,
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
+    appBarTheme: AppBarTheme(color: AppColors.appBarBackgroundColor),
     textTheme: TextTheme(
+      headlineMedium: TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.w700,
+        color:AppColors.headlineMediumColor,
+      ),
       titleLarge: TextStyle(
         fontSize: 40,
         fontWeight: FontWeight.w500,
@@ -18,10 +24,30 @@ class ApplicationThemeManager {
         fontWeight: FontWeight.w700,
         color: AppColors.titleSmallColor,
       ),
+      labelLarge: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 16,
+        color: AppColors.labelLargeColor,
+      ),
+      labelSmall: TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 12,
+        color: AppColors.primaryColor,
+      ),
       bodySmall: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: AppColors.bodySmallColor,
+      ),
+      displayMedium: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: AppColors.displayMediumColor,
+      ),
+      displaySmall: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: AppColors.primaryColor,
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(

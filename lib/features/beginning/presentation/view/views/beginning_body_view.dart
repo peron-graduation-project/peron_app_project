@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/helper/images.dart';
+import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
 
 class BeginningBodyView extends StatelessWidget {
@@ -56,6 +57,12 @@ class BeginningBodyView extends StatelessWidget {
             side: BorderSide(
                 color: AppColors.primaryColor
             ),
+            onPressed: (){
+              Navigator.pushNamed(
+                context,
+                PageRouteName.signup,
+              );
+            },
           ),
           const Spacer(flex: 2),
         ],
