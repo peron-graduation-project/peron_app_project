@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/colors.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
+import 'package:peron_project/core/widgets/custom_arrow_back.dart';
+import 'package:peron_project/core/widgets/custom_button.dart';
+
+import '../../../../../core/widgets/build_text_form_field.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -18,12 +23,13 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
     var screenSize = MediaQuery.of(context).size;
+    var showIcon=ModalRoute.of(context)?.settings.arguments as bool;
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
         title: Text("تسجيل الدخول", style: theme.headlineMedium),
         centerTitle: true,
+        leading:showIcon? CustomArrowBack():null,
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -60,27 +66,29 @@ class _LoginState extends State<Login> {
                       ),
                       GestureDetector(
                         child: Text("هل نسيت كلمة السر؟", style: theme.labelSmall),
+                        onTap:() {
+                          Navigator.pushNamed(
+                            context,
+                            PageRouteName.forgetPassword,
+                          );
+                        }
                       ),
+
                     ],
                   ),
                   SizedBox(height: screenSize.height * 0.03),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-                      ),
-                      onPressed: () {
-                        if (_formSignInKey.currentState!.validate()) {
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            PageRouteName.home,
-                                (route) => false,
-                          );
-                        }
-                      },
-                      child: Text("تسجيل دخول", style: theme.labelLarge?.copyWith(color: Colors.white)),
+                    child: CustomButton(textColor: Colors.white, text: 'تسجيل دخول', backgroundColor: AppColors.primaryColor,
+                    onPressed: (){
+    if (_formSignInKey.currentState!.validate()) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            PageRouteName.home,
+                (route) => false,
+          );
+        }
+                    },
                     ),
                   ),
                   SizedBox(height: screenSize.height * 0.04),
@@ -103,17 +111,19 @@ class _LoginState extends State<Login> {
                       SvgPicture.asset("assets/icons/icons8-google.svg", height: 34, width: 34),
                     ],
                   ),
-                  SizedBox(height: screenSize.height * 0.08),
+                  SizedBox(height: screenSize.height * 0.20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("ليس لديك حساب؟", style: theme.bodyMedium?.copyWith(color: Colors.black)),
+                      Text("ليس لديك حساب؟", style: theme.displaySmall?.copyWith(color: Colors.black,fontFamily: Fonts.primaryFontFamily,decoration: TextDecoration.underline)),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, PageRouteName.signup);
                         },
-                        child: Text(" إنشاء حساب", style: theme.bodyMedium?.copyWith(decoration: TextDecoration.underline)),
+                        child: Text(" إنشاء حساب", style: theme.displaySmall?.copyWith(decoration: TextDecoration.underline,fontFamily: Fonts.primaryFontFamily)),
+
                       ),
+                      SizedBox(height: screenSize.height*0.10,)
                     ],
                   ),
                 ],
@@ -121,32 +131,6 @@ class _LoginState extends State<Login> {
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget buildTextField(String label, TextInputType type, {bool obscureText = false}) {
-    return TextFormField(
-      keyboardType: type,
-      obscureText: obscureText,
-      obscuringCharacter: '*',
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'من فضلك أدخل $label';
-        }
-        return null;
-      },
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.black12),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primaryColor),
-          borderRadius: BorderRadius.circular(10),
-        ),
       ),
     );
   }

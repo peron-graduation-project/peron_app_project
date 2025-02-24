@@ -7,7 +7,8 @@ class ApplicationThemeManager {
     fontFamily: Fonts.primaryFontFamily,
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
-    appBarTheme: AppBarTheme(color: AppColors.appBarBackgroundColor),
+    appBarTheme: AppBarTheme(color: AppColors.appBarBackgroundColor,surfaceTintColor: Colors.transparent
+    ),
     textTheme: TextTheme(
       headlineMedium: TextStyle(
         fontSize: 22,
@@ -48,7 +49,13 @@ class ApplicationThemeManager {
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: AppColors.primaryColor,
+        fontFamily:Fonts.kUbuntu,
       ),
+      headlineSmall: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        color: AppColors.headLineSmallColor,
+      )
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.primaryColor,

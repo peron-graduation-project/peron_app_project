@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
+import 'package:peron_project/core/widgets/custom_button.dart';
+
+import '../../../../../core/widgets/custom_arrow_back.dart';
 
 class SignupView extends StatefulWidget {
   const SignupView({super.key});
@@ -24,6 +27,8 @@ class _SignupViewState extends State<SignupView> {
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text("إنشاء حساب", style: theme.headlineMedium),
         centerTitle: true,
+        leading: CustomArrowBack(),
+
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -65,19 +70,16 @@ class _SignupViewState extends State<SignupView> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 24.0),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
+                    child: CustomButton(
+                        textColor: Colors.white,
+                        text: "إنشاء حساب",
                         backgroundColor: AppColors.primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
                       onPressed: () {
-                        if (_formSignInKey.currentState!.validate() && acceptAllTerms) {
+                        if (_formSignInKey.currentState!.validate() &&
+                            acceptAllTerms) {
                           Navigator.pushNamedAndRemoveUntil(
                             context,
                             PageRouteName.home,
@@ -86,12 +88,12 @@ class _SignupViewState extends State<SignupView> {
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('يرجى الموافقة على الشروط والأحكام'),
+                              content: Text(
+                                  'يرجى الموافقة على الشروط والأحكام'),
                             ),
                           );
                         }
-                      },
-                      child: Text("إنشاء حساب", style: theme.labelLarge?.copyWith(color: Colors.white)),
+                      }
                     ),
                   ),
                   const SizedBox(height: 20.0),
@@ -105,7 +107,7 @@ class _SignupViewState extends State<SignupView> {
                       Expanded(child: Divider()),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 27),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -116,16 +118,16 @@ class _SignupViewState extends State<SignupView> {
                       SvgPicture.asset("assets/icons/icons8-google.svg", height: 34, width: 34),
                     ],
                   ),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 30.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("هل لديك حساب؟", style: theme.displaySmall?.copyWith(color: Colors.black)),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, PageRouteName.login);
+                          Navigator.pushNamed(context, PageRouteName.login,arguments: true);
                         },
-                        child: Text(" تسجيل دخول", style: theme.displaySmall?.copyWith(decoration: TextDecoration.underline)),
+                        child: Text(" تسجيل دخول", style: theme.displaySmall),
                       ),
                     ],
                   ),
@@ -150,13 +152,14 @@ class _SignupViewState extends State<SignupView> {
       },
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: TextStyle(color: Colors.black,),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.black12),
           borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Color.fromARGB(255, 76, 141, 95)),
+          borderSide:  BorderSide(color:AppColors.primaryColor),
         ),
       ),
     );

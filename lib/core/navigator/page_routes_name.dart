@@ -5,7 +5,14 @@ class PageRouteName{
   static const  String login="login";
    static const String signup="signup";
   static const String home="home";
-  // static const String chat="chat";
+  static const String forgetPassword="forget password";
+  static const String verificationPass="verification password";
+  static const String newPass="new password";
+
+
+
+
+// static const String chat="chat";
   // static const String fav="fav";
   // static const String profile="profile";
 }

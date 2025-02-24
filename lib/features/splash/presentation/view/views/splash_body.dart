@@ -36,7 +36,7 @@ class _SplashBodyState extends State<SplashBody> with SingleTickerProviderStateM
       children: [
         SvgPicture.asset(
           Images.kLogo,
-          width: MediaQuery.of(context).size.width * 0.5,
+          width: MediaQuery.of(context).size.width * 0.4,
         ),
         const SizedBox(height: 20),
         SlideTransition(

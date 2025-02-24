@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
+import 'package:peron_project/features/authentication/presentation/view/views/forget_password_view.dart';
 import 'package:peron_project/features/authentication/presentation/view/views/login_view.dart';
+import 'package:peron_project/features/authentication/presentation/view/views/new_password_view.dart';
 import 'package:peron_project/features/authentication/presentation/view/views/sign_up_view.dart';
+import 'package:peron_project/features/authentication/presentation/view/views/verification_password_view.dart';
 import 'package:peron_project/features/beginning/presentation/view/views/beginning_view.dart';
 import 'package:peron_project/features/home/presentation/view/views/home_view.dart';
 import 'package:peron_project/features/onboarding/presentation/view/views/on_boarding.dart';
@@ -28,6 +31,15 @@ class RoutesGenerator {
       case PageRouteName.home:
         return MaterialPageRoute(
           builder: (context) => const HomeView(), settings: settings,);
+      case PageRouteName.forgetPassword:
+        return MaterialPageRoute(
+          builder: (context) => const ForgotPasswordScreen(), settings: settings,);
+      case PageRouteName.verificationPass:
+        return MaterialPageRoute(
+          builder: (context) => const VerificationScreen(), settings: settings,);
+      case PageRouteName.newPass:
+        return MaterialPageRoute(
+          builder: (context) => const NewPasswordScreen(), settings: settings,);
       default:
         return MaterialPageRoute(
           builder: (context) => const SplashView(), settings: settings,
