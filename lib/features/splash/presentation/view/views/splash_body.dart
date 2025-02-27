@@ -1,77 +1,161 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/images.dart';
-import 'package:peron_project/features/splash/presentation/view/widgets/sliding_text.dart';
-import '../../../../../core/navigator/page_routes_name.dart';
 
+import '../../../../../core/navigator/page_routes_name.dart';
 class SplashBody extends StatefulWidget {
   const SplashBody({super.key});
 
   @override
-  State<SplashBody> createState() => _SplashBodyState();
+  _SplashBodyState createState() => _SplashBodyState();
 }
 
-class _SplashBodyState extends State<SplashBody> with SingleTickerProviderStateMixin {
-  late AnimationController animationController;
-  late Animation<Offset> slidingAnimation;
+class _SplashBodyState extends State<SplashBody>
+    with SingleTickerProviderStateMixin <SplashBody>{
+  late AnimationController _controller;
+  late Animation<double> _greenCircleAnimation;
+  late Animation<double> _bottomGreenCircleAnimation;
+  late Animation<double> _whiteCircleAnimation;
+  late Animation<double> _logoOpacityAnimation;
+  late Animation<double> _logoScaleAnimation;
 
   @override
   void initState() {
     super.initState();
-    initSlidingAnimation();
-    navigateToOnBoarding();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 6),
+    );
+
+    _greenCircleAnimation = Tween<double>(begin: 0.1, end: 2.0).animate(
+      CurvedAnimation(parent: _controller, curve: Interval(0.0, 0.35, curve: Curves.easeInOut)),
+    );
+
+    _bottomGreenCircleAnimation = Tween<double>(begin: 0.0, end: 2.0).animate(
+      CurvedAnimation(parent: _controller, curve: Interval(0.35, 0.55, curve: Curves.easeInOut)),
+    );
+
+    _logoOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Interval(0.3, 0.85, curve: Curves.easeIn)),
+    );
+
+    _logoScaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Interval(0.3, 0.85, curve: Curves.easeInOutBack)),
+    );
+
+    _whiteCircleAnimation = Tween<double>(begin: 0.0, end: 2.0).animate(
+      CurvedAnimation(parent: _controller, curve: Interval(0.60, 1.0, curve: Curves.easeInOut)),
+    );
+
+    _controller.forward();
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, PageRouteName.onBoarding, (route) => false);
+      }
+    });
+
   }
 
   @override
   void dispose() {
-    animationController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SvgPicture.asset(
-          Images.kLogo,
-          width: MediaQuery.of(context).size.width * 0.4,
-        ),
-        const SizedBox(height: 20),
-        SlideTransition(
-          position: slidingAnimation,
-          child:  SlidingText(slidingAnimation: slidingAnimation,),
-        ),
-      ],
+    var theme = Theme.of(context).textTheme;
+
+    return Scaffold(
+      body: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              CustomPaint(
+                painter: CircleRevealPainter(_greenCircleAnimation.value,AppColors.primaryColor, Alignment.topCenter),
+                child: Container(),
+              ),
+              CustomPaint(
+                painter: CircleRevealPainter(_bottomGreenCircleAnimation.value,AppColors.primaryColor, Alignment.bottomCenter),
+                child: Container(),
+              ),
+              Opacity(
+                opacity: _logoOpacityAnimation.value,
+                child: Transform.scale(
+                  scale: _logoScaleAnimation.value,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(
+                       Images.whiteLogo,
+                        width: MediaQuery.of(context).size.width * 0.4,
+
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "بيرون",
+          style: theme.titleLarge?.copyWith(
+          fontSize: 37,color: Colors.white
+          ),textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              CustomPaint(
+                painter: CircleRevealPainter(_whiteCircleAnimation.value, Colors.white, Alignment.bottomCenter),
+                child: Container(),
+              ),
+              if (_whiteCircleAnimation.value > 1.5) // When white background appears
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset(
+Images.kLogo,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "بيرون",
+                      style: theme.titleLarge?.copyWith(
+                          fontSize: 37,
+                      ),textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
+}
 
-  Future<void> initSlidingAnimation() async {
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    );
-    slidingAnimation = Tween<Offset>(
-      begin: const Offset(0, 1),
-      end: const Offset(0, 0),
-    ).animate(CurvedAnimation(
-      parent: animationController,
-      curve: Curves.easeInOut,
-    ));
-    animationController.forward();
+class CircleRevealPainter extends CustomPainter {
+  final double progress;
+  final Color color;
+  final Alignment alignment;
+
+  CircleRevealPainter(this.progress, this.color, this.alignment);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color;
+    double maxRadius = size.width * 1.5;
+    double radius = maxRadius * progress;
+    Offset center = alignment == Alignment.topCenter
+        ? Offset(size.width / 2, 0)
+        : Offset(size.width / 2, size.height);
+    canvas.drawCircle(center, radius, paint);
   }
 
-
-  void navigateToOnBoarding() {
-    Future.delayed(const Duration(seconds: 5), () {
-      if (mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          PageRouteName.onBoarding,
-              (route) => false,
-        );
-      }
-    });
+  @override
+  bool shouldRepaint(CircleRevealPainter oldDelegate) {
+    return oldDelegate.progress != progress || oldDelegate.color != color;
   }
 }
