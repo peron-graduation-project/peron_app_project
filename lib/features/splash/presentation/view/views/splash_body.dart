@@ -26,7 +26,7 @@ class _SplashBodyState extends State<SplashBody>
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 6),
-    );
+    )..repeat();
 
     _greenCircleAnimation = Tween<double>(begin: 0.1, end: 2.0).animate(
       CurvedAnimation(parent: _controller, curve: Interval(0.0, 0.35, curve: Curves.easeInOut)),
