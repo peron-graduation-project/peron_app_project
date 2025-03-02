@@ -4,7 +4,7 @@ import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
 
-import '../../../../../core/widgets/custom_arrow_back.dart';
+import '../../../../../core/widgets/build_text_form_field.dart';
 
 class SignupView extends StatefulWidget {
   const SignupView({super.key});
@@ -27,8 +27,6 @@ class _SignupViewState extends State<SignupView> {
         iconTheme: const IconThemeData(color: Colors.black),
         title: Text("إنشاء حساب", style: theme.headlineMedium),
         centerTitle: true,
-        leading: CustomArrowBack(),
-
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -140,28 +138,4 @@ class _SignupViewState extends State<SignupView> {
     );
   }
 
-  Widget buildTextField(String label, TextInputType inputType, {bool obscureText = false}) {
-    return TextFormField(
-      keyboardType: inputType,
-      obscureText: obscureText,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'من فضلك أدخل $label';
-        }
-        return null;
-      },
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(color: Colors.black,),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.black12),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide:  BorderSide(color:AppColors.primaryColor),
-        ),
-      ),
-    );
-  }
 }

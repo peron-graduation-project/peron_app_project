@@ -21,18 +21,18 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
   final List<Pages> pagesList = [
     Pages(
       image: Images.onBoarding1,
-      title: 'ابحث عن شقتك بسهولة',
-      subTitle: 'استكشف مئات الشقق المعروضة للإيجار في مختلف المناطق بكل سهولة.',
+      title: 'شقتك تستاهل المستأجر المثالي!',
+      subTitle: 'اعرض شقتك للإيجار بسهولة ووصلها لأكبر عدد من الباحثين عن سكن.',
     ),
     Pages(
       image: Images.onBoarding2,
-      title: 'خيارات تناسب احتياجاتك',
-      subTitle: 'استخدم الفلاتر للبحث حسب السعر، الموقع، والمواصفات التي تناسبك.',
+      title: 'دور على شقتك بسهولة',
+      subTitle: 'استكشف أفضل الشقق للإيجار، تواصل مباشرة مع المالك، واختر المكان المناسب لك بكل ثقة وسهولة.',
     ),
     Pages(
       image: Images.onBoarding3,
-      title: 'تواصل واحجز فورًا',
-      subTitle: 'تواصل مباشرة مع المالك أو الوسيط واحجز شقتك بكل سرعة وأمان.',
+      title: 'تجربة تأجير ذكية وآمنة',
+      subTitle: 'ابحث، تواصل، واتفق بكل راحة. احصل على أفضل الفرص سواء كنت مالكًا أو مستأجرًا، وابدأ رحلتك معنا اليوم',
     ),
   ];
 
@@ -52,7 +52,7 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
   void navigateToHome() {
     Navigator.pushNamedAndRemoveUntil(
       context,
-      PageRouteName.beginning,
+      PageRouteName.signup,
           (route) => false,
     );
   }
