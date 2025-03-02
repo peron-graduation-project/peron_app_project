@@ -29,7 +29,6 @@ class NewPasswordScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.05,vertical: size.height*0.03),
         child: ListView(
           children: [
-            SizedBox(height: size.height * 0.05),
           Center(
             child: SvgPicture.asset(
               Images.newPassword,

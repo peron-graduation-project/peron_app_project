@@ -5,9 +5,6 @@ import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/navigator/routes_generator.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-
-
-
 void main() {
   runApp(const PeronApp());
 }
@@ -30,7 +27,6 @@ class PeronApp extends StatelessWidget {
           ],
           supportedLocales: [
             Locale('ar','AE'), // English
-
           ],
           initialRoute: PageRouteName.initialRoute,
           onGenerateRoute: RoutesGenerator.onGenerateRoute,

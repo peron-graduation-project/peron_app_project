@@ -62,6 +62,9 @@ class ApplicationThemeManager {
       showSelectedLabels: true,
       showUnselectedLabels: true,
     ),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: Colors.white,
+    ),
   );
 
   static TextStyle getResponsiveTextStyle(BuildContext context, {required String style}) {
