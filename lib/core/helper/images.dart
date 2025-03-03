@@ -8,6 +8,8 @@ static String beginning='assets/images/beginning.png';
 static String newPassword="assets/images/newPassword.svg";
 static String verificationPass="assets/images/verificationPass.svg";
 static String forgetPass= "assets/images/forgetPass.svg";
+static String notification= "assets/images/notification.svg";
+
 
 
 

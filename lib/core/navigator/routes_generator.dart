@@ -7,6 +7,7 @@ import 'package:peron_project/features/authentication/presentation/view/views/si
 import 'package:peron_project/features/authentication/presentation/view/views/verification_password_view.dart';
 import 'package:peron_project/features/beginning/presentation/view/views/beginning_view.dart';
 import 'package:peron_project/features/home/presentation/view/views/home_view.dart';
+import 'package:peron_project/features/notification/presentation/view/views/notification.dart';
 import 'package:peron_project/features/onboarding/presentation/view/views/on_boarding.dart';
 import 'package:peron_project/features/splash/presentation/view/views/splash_view.dart';
 class RoutesGenerator {
@@ -40,6 +41,9 @@ class RoutesGenerator {
       case PageRouteName.newPass:
         return MaterialPageRoute(
           builder: (context) => const NewPasswordScreen(), settings: settings,);
+      case PageRouteName.notification:
+        return MaterialPageRoute(
+          builder: (context) => const NotificationView(), settings: settings,);
       default:
         return MaterialPageRoute(
           builder: (context) => const SplashView(), settings: settings,

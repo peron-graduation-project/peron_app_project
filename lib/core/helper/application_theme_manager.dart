@@ -69,7 +69,6 @@ class ApplicationThemeManager {
 
   static TextStyle getResponsiveTextStyle(BuildContext context, {required String style}) {
     double screenWidth = MediaQuery.of(context).size.width;
-
     if (style == 'titleLarge') {
       return TextStyle(
         fontSize: screenWidth * 0.1,

@@ -8,8 +8,7 @@ class PageRouteName{
   static const String forgetPassword="forget password";
   static const String verificationPass="verification password";
   static const String newPass="new password";
-
-
+  static const String notification="notification";
 
 
 // static const String chat="chat";

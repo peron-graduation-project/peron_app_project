@@ -42,7 +42,7 @@ class _SignupViewState extends State<SignupView> {
                 children: [
                   buildTextField("الإسم", TextInputType.name),
                   const SizedBox(height: 20.0),
-                  buildTextField("الإيميل/الهاتف", TextInputType.emailAddress),
+                  buildTextField("الإيميل", TextInputType.emailAddress),
                   const SizedBox(height: 20.0),
                   buildTextField("كلمة السر", TextInputType.visiblePassword, obscureText: true),
                   const SizedBox(height: 20.0),
