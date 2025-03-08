@@ -43,7 +43,7 @@ class _LoginState extends State<Login> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildTextField("الإيميل/الهاتف", TextInputType.emailAddress),
+                  buildTextFieldPattern(label: "البريد الإلكتروني",type:  TextInputType.emailAddress,text:'البريد الإلكتروني',pattern: r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+" ),
                   SizedBox(height: screenSize.height * 0.02),
                   buildTextField("كلمة السر", TextInputType.visiblePassword, obscureText: true),
                   SizedBox(height: screenSize.height * 0.01),
@@ -88,7 +88,7 @@ class _LoginState extends State<Login> {
                 (route) => false,
           );
         }
-                    },
+    },
                     ),
                   ),
                   SizedBox(height: screenSize.height * 0.04),

@@ -11,6 +11,7 @@ import 'package:peron_project/core/widgets/custom_button.dart';
 import 'package:peron_project/features/authentication/data/repos/send_verification_code_repo_imp.dart';
 import 'package:peron_project/features/authentication/presentation/manager/send%20verification%20code/send_verification_code_cubit.dart';
 import 'package:peron_project/features/authentication/presentation/manager/send%20verification%20code/send_verification_code_state.dart';
+import 'package:peron_project/features/authentication/presentation/view/widgets/phone_field.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -63,48 +64,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   style: theme.bodyMedium?.copyWith(color: Colors.black54),
                 ),
                 SizedBox(height: size.height * 0.03),
-                InternationalPhoneNumberInput(
-                  initialValue: PhoneNumber(isoCode: 'EG', dialCode: "+20"),
-                  onInputChanged: _onPhoneNumberChanged,
-                  locale: 'ar',
-                  selectorConfig: const SelectorConfig(
-                    useBottomSheetSafeArea: true,
-                    selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                  ),
-                  ignoreBlank: false,
-                  autoValidateMode: AutovalidateMode.disabled,
-                  textFieldController: _controller,
-                  formatInput: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'يرجى إدخال رقم الهاتف';
-                    }
-                    return null;
-                  },
-                  searchBoxDecoration: InputDecoration(
-                    hintText: "ابحث عن الدولة...",
-                    hintStyle: TextStyle(color: AppColors.primaryColor),
-                  ),
-                  keyboardType: TextInputType.phone,
-                  inputDecoration: InputDecoration(
-                    errorBorder:OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.red),
-                      borderRadius: BorderRadius.circular(12),
-                    ) ,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.black12),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.primaryColor),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    labelText: "رقم الهاتف",
-                    labelStyle: const TextStyle(color: Colors.black54),
-                    prefixIcon: const Icon(Icons.phone, color: Colors.black54),
-                  ),
-                ),
-                SizedBox(height: size.height * 0.03),
+                PhoneFieldInput(),
+                SizedBox(height: size.height * 0.05),
                 BlocConsumer<SendVerificationCodeCubit, SendVerificationCodeState>(
                   listener: (context, state) {
                     if (state is SendVerificationCodeSuccess) {

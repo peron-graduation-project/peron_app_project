@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
+import 'package:peron_project/features/authentication/presentation/view/widgets/phone_field.dart';
 
 import '../../../../../core/widgets/build_text_form_field.dart';
 
@@ -21,6 +22,7 @@ class _SignupViewState extends State<SignupView> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
     var screenSize = MediaQuery.of(context).size;
+    bool isWideScreen = screenSize.width > 600;
 
     return Scaffold(
       appBar: AppBar(
@@ -30,19 +32,20 @@ class _SignupViewState extends State<SignupView> {
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
+          double paddingHorizontal = isWideScreen ? screenSize.width * 0.2 : 20;
+
           return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              horizontal: constraints.maxWidth > 600 ? screenSize.width * 0.2 : 20,
-              vertical: 20,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: paddingHorizontal, vertical: 20),
             child: Form(
               key: _formSignInKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  buildTextField("الإسم", TextInputType.name),
+                  buildTextField("الإسم", TextInputType.name,),
                   const SizedBox(height: 20.0),
-                  buildTextField("الإيميل", TextInputType.emailAddress),
+                  buildTextFieldPattern(label: "البريد الإلكتروني",type:  TextInputType.emailAddress,text:'البريد الإلكتروني',pattern: r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+" ),
+                  const SizedBox(height: 20.0),
+                PhoneFieldInput(),
                   const SizedBox(height: 20.0),
                   buildTextField("كلمة السر", TextInputType.visiblePassword, obscureText: true),
                   const SizedBox(height: 20.0),
@@ -72,12 +75,11 @@ class _SignupViewState extends State<SignupView> {
                   SizedBox(
                     width: double.infinity,
                     child: CustomButton(
-                        textColor: Colors.white,
-                        text: "إنشاء حساب",
-                        backgroundColor: AppColors.primaryColor,
+                      textColor: Colors.white,
+                      text: "إنشاء حساب",
+                      backgroundColor: AppColors.primaryColor,
                       onPressed: () {
-                        if (_formSignInKey.currentState!.validate() &&
-                            acceptAllTerms) {
+                        if (_formSignInKey.currentState!.validate() && acceptAllTerms) {
                           Navigator.pushNamedAndRemoveUntil(
                             context,
                             PageRouteName.home,
@@ -86,12 +88,11 @@ class _SignupViewState extends State<SignupView> {
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text(
-                                  'يرجى الموافقة على الشروط والأحكام'),
+                              content: Text('يرجى إدخال البيانات و الموافقة على الشروط والأحكام'),
                             ),
                           );
                         }
-                      }
+                      },
                     ),
                   ),
                   const SizedBox(height: 20.0),
@@ -123,7 +124,7 @@ class _SignupViewState extends State<SignupView> {
                       Text("هل لديك حساب؟", style: theme.displaySmall?.copyWith(color: Colors.black)),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, PageRouteName.login,arguments: true);
+                          Navigator.pushNamed(context, PageRouteName.login, arguments: true);
                         },
                         child: Text(" تسجيل دخول", style: theme.displaySmall),
                       ),
@@ -137,5 +138,4 @@ class _SignupViewState extends State<SignupView> {
       ),
     );
   }
-
 }

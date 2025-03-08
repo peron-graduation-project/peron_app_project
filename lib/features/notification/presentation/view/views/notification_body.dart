@@ -11,11 +11,16 @@ class NotificationBodyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NotificationCubit, NotificationState>(
+    return EmptyNotificationWidget();
+  }
+}
+/*
+BlocBuilder<NotificationCubit, NotificationState>(
       builder: (context, state) {
         if (state is NotificationStateLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is NotificationStateSuccess) {
+          print(state.notifications);
           return state.notifications.isEmpty
               ? EmptyNotificationWidget()
               : NotificationsWidget(notifications:state.notifications);
@@ -25,5 +30,4 @@ class NotificationBodyView extends StatelessWidget {
         return Container();
       },
     );
-  }
-}
+ */

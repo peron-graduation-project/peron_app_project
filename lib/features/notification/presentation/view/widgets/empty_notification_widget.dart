@@ -30,7 +30,7 @@ class EmptyNotificationWidget extends StatelessWidget {
           ),
           SizedBox(height: screenHeight * 0.02),
           Text(
-            "لا يوجد إشعارات بعد",
+            "سوف تظهر الاشعارات هنا فور وصولها",
             style: theme.displaySmall?.copyWith(color: const Color(0xff818181)),
             textAlign: TextAlign.center,
           ),
