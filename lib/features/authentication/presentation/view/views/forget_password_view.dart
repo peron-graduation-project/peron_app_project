@@ -31,12 +31,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
   }
 
-  void _onPhoneNumberChanged(PhoneNumber number) {
-    setState(() {
-      _phoneNumber = number;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;

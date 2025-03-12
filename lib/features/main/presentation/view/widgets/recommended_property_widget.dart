@@ -36,7 +36,7 @@ class _RecommendedPropertyWidgetState extends State<RecommendedPropertyWidget> {
       builder: (context, constraints) {
         final screenWidth = constraints.maxWidth;
         final itemWidth = screenWidth > 600 ? screenWidth * 0.3 : screenWidth * 0.5;
-        final itemHeight = itemWidth * 1.23;
+        final itemHeight = itemWidth * 1.26;
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: SizedBox(

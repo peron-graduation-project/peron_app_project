@@ -1,5 +1,6 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:peron_project/core/helper/colors.dart';
 
 class AnimatedBottomNavBar extends StatelessWidget {
@@ -9,13 +10,13 @@ class AnimatedBottomNavBar extends StatelessWidget {
   const AnimatedBottomNavBar({super.key, required this.selectedIndex, required this.onItemSelected});
 
   final List<IconData> iconList = const [
-    Icons.home,
-    Icons.favorite,
-    Icons.chat,
-    Icons.person,
+    Symbols.home,
+    Symbols.favorite,
+    Symbols.chat,
+    Symbols.person,
   ];
 
-  final List<String> labels = const ["الرئيسية", "المفضلة", "الدردشات", "الحساب"];
+  final List<String> labels = const ["الرئيسية", "المفضلة", "الدردشة", "الحساب"];
 
   @override
   Widget build(BuildContext context) {

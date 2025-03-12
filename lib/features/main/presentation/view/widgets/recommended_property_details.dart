@@ -29,11 +29,7 @@ class RecommendedPropertyDetails extends StatelessWidget {
         Stack(
           children: [
             PropertyImage(image: property['image'], itemWidth: itemWidth),
-            Positioned(
-              top: 8,
-              left: 12,
-              child: CustomFavouriteIcon(iconSize: iconSize),
-            ),
+            CustomFavouriteIcon(iconSize: iconSize),
           ],
         ),
         SizedBox(height: paddingSize),
@@ -44,7 +40,8 @@ class RecommendedPropertyDetails extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               RecommendedPropertyInfoDetails(
-                icon: Icons.home_filled,
+                icon: Symbols.home,
+               iconColor:  Color(0xff818181),
                 title: 'النوع',
                 label: property['title'],
               ),
@@ -58,6 +55,7 @@ class RecommendedPropertyDetails extends StatelessWidget {
               RecommendedPropertyInfoDetails(
                 icon: Symbols.shoppingmode,
                 title: 'السعر',
+                iconColor: Color(0xff818181),
                 label: property['price'],
               ),
             ],

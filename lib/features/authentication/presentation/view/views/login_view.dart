@@ -115,12 +115,12 @@ class _LoginState extends State<Login> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("ليس لديك حساب؟", style: theme.displaySmall?.copyWith(color: Colors.black,fontFamily: Fonts.primaryFontFamily,decoration: TextDecoration.underline)),
+                      Text("ليس لديك حساب؟", style: theme.displaySmall?.copyWith(color: Colors.black,fontFamily: Fonts.primaryFontFamily,)),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, PageRouteName.signup);
+                          Navigator.pop(context);
                         },
-                        child: Text(" إنشاء حساب", style: theme.displaySmall?.copyWith(decoration: TextDecoration.underline,fontFamily: Fonts.primaryFontFamily)),
+                        child: Text(" إنشاء حساب", style: theme.displaySmall?.copyWith(decoration: TextDecoration.underline,color: AppColors.primaryColor,fontFamily: Fonts.primaryFontFamily)),
 
                       ),
                       SizedBox(height: screenSize.height*0.10,)

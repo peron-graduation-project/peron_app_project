@@ -11,7 +11,7 @@ class PropertyLocation extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme=Theme.of(context).textTheme;
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(Icons.location_on, color: AppColors.primaryColor, size: iconSize * 0.8),
         const SizedBox(width: 4),
