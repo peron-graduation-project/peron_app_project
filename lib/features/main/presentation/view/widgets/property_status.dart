@@ -1,30 +1,34 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/helper/colors.dart';
 
 class PropertyStats extends StatelessWidget {
   final Map<String, dynamic> property;
-  const PropertyStats({super.key, required this.property});
+  final double iconSize;
+  final double textSize;
+
+  const PropertyStats({super.key, required this.property, required this.iconSize, required this.textSize});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
       children: [
-        buildPropertyInfoRow(Icons.chair, property["rooms"]),
-        buildPropertyInfoRow(Icons.bed, "${property["beds"]}"),
-        buildPropertyInfoRow(Icons.bathtub, property["bathrooms"]),
-        buildPropertyInfoRow(Icons.swap_horiz, "${property["area"]} م²"),
+        buildPropertyInfoRow(Icons.chair, "${property["rooms"]} غرف", iconSize, textSize),
+        buildPropertyInfoRow(Icons.bathtub, "${property["bathrooms"]} حمام", iconSize, textSize),
+        buildPropertyInfoRow(Icons.bed, "${property["beds"]} سرير", iconSize, textSize),
+        buildPropertyInfoRow(Icons.square_foot, "${property["area"]} م²", iconSize, textSize),
       ],
     );
   }
 
-  Widget buildPropertyInfoRow(IconData icon, dynamic value) {
-    return Row(
+  Widget buildPropertyInfoRow(IconData icon, dynamic value, double iconSize, double textSize) {
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 4,
       children: [
-        Icon(icon, size: 16, color: AppColors.inActiveColor),
-        SizedBox(width: 6),
-        Text("$value"),
+        Icon(icon, size: iconSize, color: Colors.grey),
+        Text("$value", style: TextStyle(fontSize: textSize * 0.8)),
       ],
     );
   }

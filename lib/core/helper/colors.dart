@@ -11,6 +11,8 @@ static Color headlineMediumColor=Color(0xff282929);
 static Color labelLargeColor=Color(0xff282929);
 static Color displayMediumColor=Color(0xff282929);
 static Color headLineSmallColor=Color(0xff818181);
+static Color labelMediumColor=Colors.white;
+
 
 
 }

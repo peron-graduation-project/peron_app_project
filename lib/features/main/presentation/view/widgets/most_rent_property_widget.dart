@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:peron_project/features/main/presentation/view/widgets/property_card.dart';
 
-class PropertyWidget extends StatefulWidget {
-  const PropertyWidget({super.key});
+import 'most_rent_property_card.dart';
+
+class MostRentPropertyWidget extends StatefulWidget {
+  const MostRentPropertyWidget({super.key});
 
   @override
-  State<PropertyWidget> createState() => _PropertyWidgetState();
+  State<MostRentPropertyWidget> createState() => _MostRentPropertyWidgetState();
 }
 
-class _PropertyWidgetState extends State<PropertyWidget> {
+class _MostRentPropertyWidgetState extends State<MostRentPropertyWidget> {
   final List<Map<String, dynamic>> properties = [
     {
       "price": "200",
@@ -48,11 +49,11 @@ class _PropertyWidgetState extends State<PropertyWidget> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
+
       builder: (context, constraints) {
         final screenWidth = constraints.maxWidth;
         final itemWidth = screenWidth > 600 ? screenWidth * 0.3 : screenWidth * 0.5;
         final itemHeight = itemWidth * 1.5;
-
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: SizedBox(
@@ -65,7 +66,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                   width: itemWidth,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                    child: PropertyCard(property: properties[index]),
+                    child: MostRentPropertyCard(property: properties[index]),
                   ),
                 );
               },

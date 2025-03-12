@@ -55,7 +55,12 @@ class ApplicationThemeManager {
         fontSize: 12,
         fontWeight: FontWeight.w500,
         color: AppColors.headLineSmallColor,
-      )
+      ),
+      labelMedium: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
+        color: AppColors.labelMediumColor,
+      ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.primaryColor,

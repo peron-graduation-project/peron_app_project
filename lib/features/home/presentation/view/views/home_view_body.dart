@@ -19,7 +19,7 @@ class HomeViewBodyState extends State<HomeViewBody> {
 
   final List<Widget> _screens = const[
     MainView(),
-FavouriteView(),
+    FavouriteView(),
     ChatView(),
     Center(child: Text(" الحساب ", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
 

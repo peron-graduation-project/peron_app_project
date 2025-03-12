@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/location_selector.dart';
-import '../widgets/property_widget.dart';
+import '../widgets/most_rent_property_widget.dart';
+import '../widgets/recommended_property_widget.dart';
 import '../widgets/search_bar.dart';
 import '../widgets/section_title.dart';
 
@@ -23,9 +24,10 @@ class MainBodyView extends StatelessWidget {
               CustomSearchBar(),
               const SizedBox(height: 20),
               const SectionTitle(title: "الأكثر ايجاراً"),
-              PropertyWidget(),
-              const SectionTitle(title: "موصى به لك", showViewAll: true),
-               PropertyWidget(),
+              MostRentPropertyWidget(),
+              const SectionTitle(title: "موصى به لك",showViewAll: true, ),
+              RecommendedPropertyWidget(),
+
             ],
           ),
         ),
@@ -33,7 +35,6 @@ class MainBodyView extends StatelessWidget {
     );
   }
 }
-
 
 
 
