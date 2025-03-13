@@ -51,6 +51,11 @@ class ApplicationThemeManager {
         color: AppColors.primaryColor,
         fontFamily:Fonts.kUbuntu,
       ),
+      bodyMedium: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        color: AppColors.primaryColor,
+      ),
       headlineSmall: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w500,
