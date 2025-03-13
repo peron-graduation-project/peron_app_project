@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:material_symbols_icons/symbols.dart';
 import '../../../../../core/helper/colors.dart';
 import '../../../../../core/widgets/custom_arrow_back.dart';
-import '../../manager/get notifications/notification_cubit.dart';
-import '../../manager/get notifications/notification_state.dart';
 
 class NotificationAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Set<int> selectedNotifications;
+  final Set<String> selectedNotifications;
   final Function() onDelete;
 
   const NotificationAppBar({
@@ -33,36 +29,31 @@ class NotificationAppBar extends StatelessWidget implements PreferredSizeWidget 
         ),
       ),
       leading: const CustomArrowBack(),
-      actions: [
-        BlocBuilder<NotificationCubit, NotificationState>(
-          builder: (context, state) {
-            if (state is NotificationStateSuccess && state.notifications.isNotEmpty) {
-              return PopupMenuButton<String>(
-                color: AppColors.scaffoldBackgroundColor,
-                onSelected: (value) {
-                  if (value == "delete" && selectedNotifications.isNotEmpty) {
-                    onDelete();
-                  }
-                },
-                icon: Icon(Icons.do_not_disturb_on_outlined, size: 23, color: Colors.black),
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: "delete",
-                    child: Row(
-                      children: [
-                        Text("حذف", style: theme.labelLarge!.copyWith(color: AppColors.primaryColor)),
-                        const Spacer(),
-                        Icon(Icons.delete, color: AppColors.primaryColor),
-                      ],
-                    ),
-                  ),
-                ],
-              );
+      actions: selectedNotifications.isNotEmpty
+          ? [
+        PopupMenuButton<String>(
+          color: AppColors.scaffoldBackgroundColor,
+          onSelected: (value) {
+            if (value == "delete") {
+              onDelete();
             }
-            return const SizedBox();
           },
+          icon: const Icon(Icons.do_not_disturb_on_outlined, size: 23, color: Colors.black),
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: "delete",
+              child: Row(
+                children: [
+                  Text("حذف", style: theme.labelLarge!.copyWith(color: AppColors.primaryColor)),
+                  const Spacer(),
+                  Icon(Icons.delete, color: AppColors.primaryColor),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ]
+          : [],
     );
   }
 

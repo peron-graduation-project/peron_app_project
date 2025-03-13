@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
-import 'package:peron_project/core/widgets/custom_arrow_back.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
 import 'package:peron_project/features/authentication/presentation/view/widgets/phone_field.dart';
 

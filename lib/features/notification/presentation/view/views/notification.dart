@@ -1,10 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/features/notification/presentation/view/views/notification_body.dart';
-import '../../../../../core/utils/api_service.dart';
-import '../../../data/repo/get_notification_repo_imp.dart';
+import 'package:peron_project/features/notification/presentation/view/widgets/shimmer_notification_placeholder.dart';
 import '../../manager/get notifications/notification_cubit.dart';
+import '../../manager/get notifications/notification_state.dart';
 import '../widgets/notification_app_bar.dart';
 
 class NotificationView extends StatefulWidget {
@@ -15,17 +14,10 @@ class NotificationView extends StatefulWidget {
 }
 
 class _NotificationViewState extends State<NotificationView> {
-  Set<int> selectedNotifications = {};
+  Set<String> selectedNotifications = {};
   bool isSelectionMode = false;
 
-  void _deleteSelectedNotifications() {
-    setState(() {
-      selectedNotifications.clear();
-      isSelectionMode = false;
-    });
-  }
-
-  void _toggleSelection(int notificationId) {
+  void _toggleSelection(String notificationId) {
     setState(() {
       if (selectedNotifications.contains(notificationId)) {
         selectedNotifications.remove(notificationId);
@@ -36,17 +28,41 @@ class _NotificationViewState extends State<NotificationView> {
     });
   }
 
+  void _deleteSelectedNotifications(BuildContext context) {
+    if (selectedNotifications.isNotEmpty) {
+      context.read<NotificationCubit>().deleteNotifications(selectedIds: selectedNotifications.toList());
+      setState(() {
+        selectedNotifications.clear();
+        isSelectionMode = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NotificationCubit(GetNotificationRepoImp(apiService: ApiService(Dio()))),
-      child: Scaffold(
-        appBar: NotificationAppBar(
-          onDelete: _deleteSelectedNotifications,
-          selectedNotifications: selectedNotifications,
-        ),
-        body: NotificationBodyView(),
-      ),
+    return BlocConsumer<NotificationCubit, NotificationState>(
+      listener: (context, state) {
+        if (state is NotificationStateFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMessage)),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: NotificationAppBar(
+            onDelete: () => _deleteSelectedNotifications(context),
+            selectedNotifications: selectedNotifications,
+          ),
+          body: state is NotificationStateLoading
+              ? ShimmerNotificationPlaceholder()
+              : NotificationBodyView(
+            onToggleSelection: _toggleSelection,
+            selectedNotifications: selectedNotifications,
+            isSelectionMode: isSelectionMode,
+          ),
+        );
+      },
     );
   }
 }

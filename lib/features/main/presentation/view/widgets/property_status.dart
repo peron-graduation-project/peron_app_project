@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/helper/colors.dart';
+import '../../../../../core/helper/fonts.dart';
+
 
 class PropertyStats extends StatelessWidget {
   final Map<String, dynamic> property;
@@ -28,7 +31,12 @@ class PropertyStats extends StatelessWidget {
       spacing: 4,
       children: [
         Icon(icon, size: iconSize, color: Colors.grey),
-        Text("$value", style: TextStyle(fontSize: textSize * 0.8)),
+        Text("$value", style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            fontFamily: Fonts.kIbmPlexSans,
+            color:AppColors.titleMediumColor
+        ),),
       ],
     );
   }

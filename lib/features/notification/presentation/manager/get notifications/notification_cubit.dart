@@ -1,51 +1,73 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/features/notification/data/repo/get_notification_repo_imp.dart';
-
-import '../../../domain/notification_model.dart';
+import '../../../../../core/error/failure.dart';
 import 'notification_state.dart';
 
+import 'package:dartz/dartz.dart';
+import '../../../domain/notification_model.dart';
+
+
+
 class NotificationCubit extends Cubit<NotificationState> {
-  NotificationCubit(GetNotificationRepoImp getNotificationRepoImp) : super(NotificationStateInitial());
+  final NotificationRepoImp _notificationRepoImp;
 
-  Future<void> getNotifications() async {
+  NotificationCubit(this._notificationRepoImp) : super(NotificationStateInitial());
+
+  Future<void> fetchNotifications() async {
+    emit(NotificationStateLoading());
+
     try {
-      emit(NotificationStateLoading());
+      final Either<Failure, List<NotificationModel>> result = await _notificationRepoImp.getNotifications();
 
-      await Future.delayed(const Duration(seconds: 2));
-
-      List<NotificationModel> fakeNotifications = [
-        NotificationModel(
-          id: "1",
-          title: "إعلانك أصبح متاحًا!",
-          body: "تمت الموافقة على إعلانك، وهو الآن مرئي للمستخدمين.",
-          date: "منذ 3 دقائق",
-        ),
-        NotificationModel(
-          id: "2",
-          title: " لا يزال هذا العقار متاحًا!",
-          body: "يبدو أنك مهتم بهذا العقار، هل ترغب في التواصل مع المالك؟",
-          date: "منذ 5 دقائق",
-        ),
-        NotificationModel(
-          id: "3",
-          title: " تم تأجير عقارك!",
-          body: "عقارك في (حي الجامعه) قد تم تأجيره، هل ترغب في إزالة الإعلان؟",
-          date: "منذ ساعه",
-        ),
-        NotificationModel(
-          id: "4",
-          title: " عقارات جديدة متاحة!",
-          body: "تمت إضافة عقارات جديدة في منطقتك، تصفحها الآن!",
-          date: "منذ يوم",
-        ),
-      ];
-
-      emit(NotificationStateSuccess(notifications: fakeNotifications));
+      result.fold(
+            (failure) {
+          emit(NotificationStateFailure(errorMessage: failure.errorMessage));
+        },
+            (notifications) {
+          for (var n in notifications) {
+          }
+          emit(NotificationStateSuccess(notifications: notifications));
+        },
+      );
     } catch (e) {
-      emit(NotificationStateFailure( errorMessage: 'حدث خطأ أثناء تحميل الإشعارات'));
+      emit(NotificationStateFailure(errorMessage: 'حدث خطأ أثناء تحميل الإشعارات: ${e.toString()}'));
+    }
+  }
+
+  Future<void> deleteNotifications({required List<String> selectedIds}) async {
+    emit(NotificationStateLoading());
+
+    try {
+      final Either<Failure, List<NotificationModel>> result = await _notificationRepoImp.deleteNotifications(
+        selectedIds: selectedIds,
+      );
+
+      result.fold(
+            (failure) => emit(NotificationStateFailure(errorMessage: failure.errorMessage)),
+            (updatedNotifications) {
+          emit(NotificationStateSuccess(notifications: updatedNotifications));
+        },
+      );
+    } catch (e) {
+      emit(NotificationStateFailure(errorMessage: 'حدث خطأ أثناء حذف الإشعارات: ${e.toString()}'));
+    }
+  }
+
+  void markAllAsRead() {
+    if (state is NotificationStateSuccess) {
+      final currentState = state as NotificationStateSuccess;
+
+      final updatedNotifications = currentState.notifications.map(
+            (notification) => notification.copyWith(isRead: true),
+      ).toList();
+
+      emit(NotificationStateSuccess(notifications: updatedNotifications));
     }
   }
 }
+
+
+
 
 /*
 class NotificationCubit extends Cubit<NotificationState> {

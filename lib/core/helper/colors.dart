@@ -12,6 +12,7 @@ static Color labelLargeColor=Color(0xff282929);
 static Color displayMediumColor=Color(0xff282929);
 static Color headLineSmallColor=Color(0xff818181);
 static Color labelMediumColor=Colors.white;
+static Color titleMediumColor=Color(0xffBABABA);
 static Color dividerColor=Color(0xffE1E1E1);
 
 

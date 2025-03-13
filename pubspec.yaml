@@ -31,6 +31,8 @@ dependencies:
   font_awesome_flutter: ^10.8.0
   material_symbols_icons: ^4.2808.1
   provider:
+  shimmer: 
+
 
 
 flutter_icons:

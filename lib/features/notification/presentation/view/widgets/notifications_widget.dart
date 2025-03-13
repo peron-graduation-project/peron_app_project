@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/helper/media_query.dart';
 import '../../../domain/notification_model.dart';
 import 'notification_item.dart';
 
 class NotificationsWidget extends StatelessWidget {
-  const NotificationsWidget({super.key, required this.notifications});
-
   final List<NotificationModel> notifications;
+  final Function(String) onToggleSelection;
+  final Set<String> selectedNotifications;
+  final bool isSelectionMode;
+
+  const NotificationsWidget({
+    super.key,
+    required this.notifications,
+    required this.onToggleSelection,
+    required this.selectedNotifications,
+    required this.isSelectionMode,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQueryHelper.screenWidth;
-    final double screenHeight = MediaQueryHelper.screenHeight;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
 
     return ListView.builder(
       padding: EdgeInsets.symmetric(
@@ -19,10 +27,17 @@ class NotificationsWidget extends StatelessWidget {
         horizontal: screenWidth * 0.05,
       ),
       itemCount: notifications.length,
+      physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
-        return NotificationItem(notification: notifications[index]);
+        final notification = notifications[index];
+        final isSelected = selectedNotifications.contains(notification.id);
+        return NotificationItem(
+          notification: notification,
+          onToggleSelection: onToggleSelection,
+          isSelected: isSelected,
+          isSelectionMode: isSelectionMode,
+        );
       },
     );
   }
 }
-

@@ -1,43 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peron_project/core/helper/colors.dart';
-import 'package:peron_project/features/notification/presentation/view/widgets/empty_notification_widget.dart';
-
 import '../../manager/get notifications/notification_cubit.dart';
 import '../../manager/get notifications/notification_state.dart';
 import '../widgets/notifications_widget.dart';
-class NotificationBodyView extends StatefulWidget {
-  const NotificationBodyView({super.key});
+import '../widgets/empty_notification_widget.dart';
+import '../widgets/shimmer_notification_placeholder.dart';
 
-  @override
-  State<NotificationBodyView> createState() => _NotificationBodyViewState();
-}
+class NotificationBodyView extends StatelessWidget {
+  final Function(String) onToggleSelection;
+  final Set<String> selectedNotifications;
+  final bool isSelectionMode;
 
-class _NotificationBodyViewState extends State<NotificationBodyView> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<NotificationCubit>().getNotifications();
-  }
+  const NotificationBodyView({
+    super.key,
+    required this.onToggleSelection,
+    required this.selectedNotifications,
+    required this.isSelectionMode,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NotificationCubit, NotificationState>(
+    return BlocConsumer<NotificationCubit, NotificationState>(
+      listener: (context, state) {
+        if (state is NotificationStateFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.red,
+              action: SnackBarAction(
+                label: 'إعادة المحاولة',
+                textColor: Colors.white,
+                onPressed: () => context.read<NotificationCubit>().fetchNotifications(),
+              ),
+            ),
+          );
+        }
+
+        if (state is NotificationStateSuccess) {
+          context.read<NotificationCubit>().markAllAsRead();
+        }
+      },
       builder: (context, state) {
         if (state is NotificationStateLoading) {
-          return Center(child: CircularProgressIndicator(color: AppColors.primaryColor,));
+          return const ShimmerNotificationPlaceholder();
         } else if (state is NotificationStateSuccess) {
-          print(state.notifications);
           return state.notifications.isEmpty
-              ? EmptyNotificationWidget()
-              : NotificationsWidget(notifications:state.notifications);
-        } else if (state is NotificationStateFailure) {
-          return Center(child: Text(state.errorMessage, style: TextStyle(color: Colors.red)));
+              ? const EmptyNotificationWidget()
+              : NotificationsWidget(
+            notifications: state.notifications,
+            onToggleSelection: onToggleSelection,
+            selectedNotifications: selectedNotifications,
+            isSelectionMode: isSelectionMode,
+          );
         }
-        return Container();
+        return const EmptyNotificationWidget();
       },
     );
   }
 }
-
-

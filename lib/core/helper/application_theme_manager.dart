@@ -40,6 +40,12 @@ class ApplicationThemeManager {
         fontWeight: FontWeight.w400,
         color: AppColors.bodySmallColor,
       ),
+      titleMedium: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        fontFamily: Fonts.kIbmPlexSans,
+        color:AppColors.titleMediumColor
+      ),
       displayMedium: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,

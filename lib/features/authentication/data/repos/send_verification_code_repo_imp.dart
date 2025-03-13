@@ -14,7 +14,7 @@ class SendVerificationCodeRepoImp implements SendVerificationCodeRepo {
   @override
   Future<Either<Failure, String>> sendVerificationCode(String phoneNumber)async {
   try{
-    String data=await apiService.sendVerificationCode(endPoint: 'PhoneNumber/send-verification-code?phoneNumber=$phoneNumber');
+    String data=(await apiService.sendVerificationCode(endPoint: 'PhoneNumber/send-verification-code?phoneNumber=$phoneNumber')) as String;
     if (data == "User not found.") {
       return Right("المستخدم غير موجود");
     } else {
