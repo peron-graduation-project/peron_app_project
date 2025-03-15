@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
-import '../../../domain/notification_model.dart';
+import '../../../data/notification_model.dart';
 
 class NotificationItem extends StatelessWidget {
   final NotificationModel notification;

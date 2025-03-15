@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:peron_project/features/notification/domain/notification_model.dart';
+import 'package:peron_project/features/notification/data/notification_model.dart';
 import '../../../../core/error/failure.dart';
 
 class ApiService {

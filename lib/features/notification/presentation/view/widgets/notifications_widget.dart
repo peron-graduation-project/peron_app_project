@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../domain/notification_model.dart';
+import '../../../data/notification_model.dart';
 import 'notification_item.dart';
 
 class NotificationsWidget extends StatelessWidget {

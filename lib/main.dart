@@ -6,9 +6,10 @@ import 'package:peron_project/core/helper/application_theme_manager.dart';
 import 'package:peron_project/core/helper/media_query.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/navigator/routes_generator.dart';
-import 'package:peron_project/features/notification/data/repo/get_notification_repo_imp.dart';
 import 'package:peron_project/features/notification/presentation/manager/get%20notifications/notification_cubit.dart';
 import 'package:peron_project/core/utils/api_service.dart';
+
+import 'features/notification/domain/repo/get_notification_repo_imp.dart';
 
 void main() {
   runApp(const PeronApp());

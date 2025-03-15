@@ -1,7 +1,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/notification_model.dart';
+import '../../../data/notification_model.dart';
 
 abstract class NotificationState extends Equatable {
   @override

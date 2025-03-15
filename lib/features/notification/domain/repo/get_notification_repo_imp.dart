@@ -1,8 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:peron_project/core/error/failure.dart';
 import 'package:peron_project/core/utils/api_service.dart';
-import 'package:peron_project/features/notification/data/repo/get_notification_repo.dart';
-import 'package:peron_project/features/notification/domain/notification_model.dart';
+import 'package:peron_project/features/notification/data/notification_model.dart';
+
+import 'get_notification_repo.dart';
 
 class NotificationRepoImp implements NotificationRepo {
   ApiService apiService;

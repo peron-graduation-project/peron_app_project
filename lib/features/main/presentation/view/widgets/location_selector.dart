@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/helper/colors.dart';
-import 'notification_button.dart';
+import '../../../../main/presentation/view/widgets/notification_button.dart';
+import '../../../../map/views/location_dialog.dart';
 
 class LocationSelector extends StatelessWidget {
-  const LocationSelector({super.key});
+  const LocationSelector({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,10 @@ class LocationSelector extends StatelessWidget {
               padding: EdgeInsets.zero,
               iconSize: 25,
               color: AppColors.primaryColor,
-              onPressed: () {},
+              onPressed: (){
+                _showLocationDialog(context);
+              },
+
               icon: Icon(Icons.location_on),
             ),
             Text("قم بتحديد موقعك الحالى", style: theme.bodySmall!.copyWith(color: Color(0xff292828))),
@@ -30,4 +34,13 @@ class LocationSelector extends StatelessWidget {
       ],
     );
   }
+  Future<void> _showLocationDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const LocationDialog();
+      },
+    );
+  }
+
 }

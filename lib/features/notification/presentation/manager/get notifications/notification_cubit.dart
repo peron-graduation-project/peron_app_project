@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peron_project/features/notification/data/repo/get_notification_repo_imp.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../domain/repo/get_notification_repo_imp.dart';
 import 'notification_state.dart';
 
 import 'package:dartz/dartz.dart';
-import '../../../domain/notification_model.dart';
+import '../../../data/notification_model.dart';
 
 
 
