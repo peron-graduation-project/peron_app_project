@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/location_selector.dart';
+import '../widgets/location_notification_header .dart';
 import '../widgets/most_rent_property_widget.dart';
 import '../widgets/recommended_property_widget.dart';
 import '../widgets/search_bar.dart';
@@ -19,7 +19,7 @@ class MainBodyView extends StatelessWidget {
           ),
           child: ListView(
             children: [
-              const LocationSelector(),
+              const LocationNotificationHeader(),
               const SizedBox(height: 20),
               CustomSearchBar(),
               const SizedBox(height: 20),

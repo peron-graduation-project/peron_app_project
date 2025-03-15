@@ -9,6 +9,7 @@ import 'package:peron_project/features/beginning/presentation/view/views/beginni
 import 'package:peron_project/features/home/presentation/view/views/home_view.dart';
 import 'package:peron_project/features/notification/presentation/view/views/notification.dart';
 import 'package:peron_project/features/onboarding/presentation/view/views/on_boarding.dart';
+import 'package:peron_project/features/search/presentation/view/views/search_view.dart';
 import 'package:peron_project/features/splash/presentation/view/views/splash_view.dart';
 class RoutesGenerator {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -44,6 +45,9 @@ class RoutesGenerator {
       case PageRouteName.notification:
         return MaterialPageRoute(
           builder: (context) => const NotificationView(), settings: settings,);
+      case PageRouteName.search:
+        return MaterialPageRoute(
+          builder: (context) => const SearchView(), settings: settings,);
       default:
         return MaterialPageRoute(
           builder: (context) => const SplashView(), settings: settings,

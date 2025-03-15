@@ -9,6 +9,8 @@ class PageRouteName{
   static const String verificationPass="verification password";
   static const String newPass="new password";
   static const String notification="notification";
+  static const String search="search";
+
 
 
 // static const String chat="chat";
