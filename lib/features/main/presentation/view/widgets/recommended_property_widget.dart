@@ -10,19 +10,19 @@ class RecommendedPropertyWidget extends StatefulWidget {
 
 class _RecommendedPropertyWidgetState extends State<RecommendedPropertyWidget> {
   final List<Map<String, dynamic>> properties = [
-    {
+    {"id":4,
       "price": "500",
       "image": "assets/images/appartment4.jpg",
       "title": "شقه سكنية",
       "location": "توريل",
     },
-    {
+    {"id":5,
       "price": "500",
       "image": "assets/images/appartment4.jpg",
       "title": "شقه سكنية",
       "location": "توريل",
     },
-    {
+    {"id":6,
       "price": "500",
       "image": "assets/images/appartment4.jpg",
       "title": "شقه سكنية",

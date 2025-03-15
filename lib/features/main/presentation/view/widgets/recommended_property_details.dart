@@ -29,7 +29,7 @@ class RecommendedPropertyDetails extends StatelessWidget {
         Stack(
           children: [
             PropertyImage(image: property['image'], itemWidth: itemWidth),
-            CustomFavouriteIcon(iconSize: iconSize),
+             CustomFavouriteIcon(iconSize: iconSize,property: property,category: "recommended",),
           ],
         ),
         SizedBox(height: paddingSize),

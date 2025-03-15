@@ -25,7 +25,7 @@ class MostRentPropertyDetails extends StatelessWidget {
         Stack(
           children: [
             PropertyImage(image: property['image'], itemWidth: itemWidth)   ,
-            CustomFavouriteIcon(iconSize: iconSize,),
+            
             CustomPriceWidget(propertyPrice: property['price'],),
           ],
         ),

@@ -11,7 +11,7 @@ class MostRentPropertyWidget extends StatefulWidget {
 
 class _MostRentPropertyWidgetState extends State<MostRentPropertyWidget> {
   final List<Map<String, dynamic>> properties = [
-    {
+    {"id":1,
       "price": "200",
       "image": "assets/images/appartment4.jpg",
       "title": "شقه سكنيه شارع قناة السويس",
@@ -22,7 +22,7 @@ class _MostRentPropertyWidgetState extends State<MostRentPropertyWidget> {
       "area": 130,
       "beds": 6,
     },
-    {
+    {"id":2,
       "price": "150",
       "image": "assets/images/appartment5.jpg",
       "title": "شقه سكنيه بحي الجامعه - جيهان",
@@ -33,7 +33,7 @@ class _MostRentPropertyWidgetState extends State<MostRentPropertyWidget> {
       "area": 150,
       "beds": 4,
     },
-    {
+    {"id":3,
       "price": "180",
       "image": "assets/images/appartment6.jpg",
       "title": "شقه سكنيه بحي الجامعه - الجلاء",
