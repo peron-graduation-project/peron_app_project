@@ -46,4 +46,54 @@ class ApiService {
       return Left(ServiceFailure.fromDioError(e));
     }
   }
+
+  Future<Either<Failure, dynamic>> signup({
+    required String endPoint,
+    required Map<String, dynamic> body,
+  }) async {
+    try {
+      Response response = await _dio.post(
+        '$_baseUrl$endPoint',
+        data: body,
+        options: Options(headers: {"Content-Type": "application/json"}),
+      );
+      return Right(response.data);
+    } on DioException catch (e) {
+      return Left(ServiceFailure.fromDioError(e));
+    }
+  }
+
+  Future<Either<Failure, String>> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      Dio dio = Dio(
+        BaseOptions(
+          baseUrl: "https://sakaniapi1.runasp.net/api/Auth",
+          connectTimeout: Duration(seconds: 10),
+          receiveTimeout: Duration(seconds: 10),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        ),
+      );
+
+      Response response = await dio.post(
+        '/login',
+        data: {
+          "email": email,
+          "password": password,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return Right(response.data["token"]);
+      } else {
+        return Left(ServiceFailure( errorMessage: 'Login failed'));
+      }
+    } on DioException catch (e) {
+      return Left(ServiceFailure.fromDioError(e));
+    }
+  }
 }

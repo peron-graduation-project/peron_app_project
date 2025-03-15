@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../helper/colors.dart';
 
-Widget buildTextField(String label, TextInputType type, {bool obscureText = false}) {
+Widget buildTextField(String label, TextInputType type, {bool obscureText = false,TextEditingController? controller}) {
   return TextFormField(
+    controller: controller,
     keyboardType: type,
     obscureText: obscureText,
     obscuringCharacter: '*',
@@ -28,8 +29,9 @@ Widget buildTextField(String label, TextInputType type, {bool obscureText = fals
     ),
   );
 }
-Widget buildTextFieldPattern({required String label, required TextInputType type, required String pattern,required String text,bool obscureText = false}) {
+Widget buildTextFieldPattern({required String label, required TextInputType type, required String pattern,required String text,bool obscureText = false,TextEditingController? controller}) {
   return TextFormField(
+    controller: controller,
     keyboardType: type,
     obscureText: obscureText,
     obscuringCharacter: '*',

@@ -3,9 +3,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:peron_project/core/error/failure.dart';
-import 'package:peron_project/features/authentication/data/repos/send_verfication_code_repo.dart';
+import 'package:peron_project/features/authentication/data/repos/send%20verification%20code/send_verfication_code_repo.dart';
 
-import '../../../../core/utils/api_service.dart';
+import '../../../../../core/utils/api_service.dart';
 
 class SendVerificationCodeRepoImp implements SendVerificationCodeRepo {
   final ApiService apiService;

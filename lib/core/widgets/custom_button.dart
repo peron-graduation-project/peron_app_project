@@ -10,7 +10,7 @@ class CustomButton extends StatelessWidget {
     this.onPressed,
     this.decoration,
     this.side,
-    this.borderColor = const Color(0xFF000000),  // قيمة افتراضية للحدود
+    this.borderColor = Colors.transparent,
   });
 
   final Color textColor;
