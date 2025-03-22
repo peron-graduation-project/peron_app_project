@@ -10,8 +10,8 @@ class CustomPriceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme=Theme.of(context).textTheme;
     return Positioned(
-      bottom: 8,
-      right: 8,
+      bottom: 4,
+      right: 4,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(

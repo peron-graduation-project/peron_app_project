@@ -30,13 +30,9 @@ class _MostRentPropertyCardState extends State<MostRentPropertyCard> {
                 property: property,
                 itemWidth: itemWidth,
               ),
-              Positioned(
-                top: 8,
-                left: 8,
-                child: CustomFavouriteIcon(
-                  property: property,
-                  category: "most_rent",
-                ),
+              CustomFavouriteIcon(
+                property: property,
+                category: "most_rent",
               ),
             ],
           ),
