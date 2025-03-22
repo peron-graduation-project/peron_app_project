@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/custom_favourite_icon.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/property_border.dart';
@@ -21,26 +20,33 @@ class _RecommendedPropertyCardState extends State<RecommendedPropertyCard> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        double itemWidth =
-            constraints.maxWidth > 0
-                ? constraints.maxWidth
-                : screenWidth * 0.45;
-        debugPrint("Item Width: $itemWidth");
+        // Define item width based on screen size
+        double itemWidth = constraints.maxWidth > 0 ? constraints.maxWidth : screenWidth * 0.45;
         double iconSize = itemWidth * 0.1;
         double textSize = itemWidth * 0.08;
         double paddingSize = itemWidth * 0.05;
+
         return PropertyBorder(
           paddingSize: paddingSize,
-          child:Stack(children: [ RecommendedPropertyDetails(
-            property: property,
-            iconSize: iconSize,
-            textSize: textSize,
-            paddingSize: paddingSize,
-            itemWidth: itemWidth,
+          child: Stack(
+            children: [
+              RecommendedPropertyDetails(
+                property: property,
+                iconSize: iconSize,
+                textSize: textSize,
+                paddingSize: paddingSize,
+                itemWidth: itemWidth,
+              ),
+              Positioned(
+                top: 8,
+                left: 8,
+                child: CustomFavouriteIcon(
+                  property: property,
+                  category: 'recommended',
+                ),
+              ),
+            ],
           ),
-          CustomFavouriteIcon
-          (iconSize:iconSize,
-          property:property,category:'recommended')],)
         );
       },
     );

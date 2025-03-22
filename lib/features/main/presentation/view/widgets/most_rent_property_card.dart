@@ -20,9 +20,6 @@ class _MostRentPropertyCardState extends State<MostRentPropertyCard> {
     return LayoutBuilder(
       builder: (context, constraints) {
         double itemWidth = constraints.maxWidth > 0 ? constraints.maxWidth : screenWidth * 0.45;
-        debugPrint("Item Width: $itemWidth");
-        double iconSize = itemWidth * 0.1;
-        double textSize = itemWidth * 0.08;
         double paddingSize = itemWidth * 0.05;
 
         return PropertyBorder(
@@ -31,19 +28,14 @@ class _MostRentPropertyCardState extends State<MostRentPropertyCard> {
             children: [
               MostRentPropertyDetails(
                 property: property,
-                iconSize: iconSize,
-                textSize: textSize,
-                paddingSize: paddingSize,
                 itemWidth: itemWidth,
               ),
-              
               Positioned(
                 top: 8,
                 left: 8,
                 child: CustomFavouriteIcon(
-                  iconSize: 24,
                   property: property,
-                  category: "most_rent", 
+                  category: "most_rent",
                 ),
               ),
             ],

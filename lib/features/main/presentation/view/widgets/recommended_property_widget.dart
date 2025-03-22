@@ -5,24 +5,28 @@ class RecommendedPropertyWidget extends StatefulWidget {
   const RecommendedPropertyWidget({super.key});
 
   @override
-  State<RecommendedPropertyWidget> createState() => _RecommendedPropertyWidgetState();
+  State<RecommendedPropertyWidget> createState() =>
+      _RecommendedPropertyWidgetState();
 }
 
 class _RecommendedPropertyWidgetState extends State<RecommendedPropertyWidget> {
   final List<Map<String, dynamic>> properties = [
-    {"id":4,
+    {
+      "id": 4,
       "price": "500",
       "image": "assets/images/appartment4.jpg",
       "title": "شقه سكنية",
       "location": "توريل",
     },
-    {"id":5,
+    {
+      "id": 5,
       "price": "500",
       "image": "assets/images/appartment4.jpg",
       "title": "شقه سكنية",
       "location": "توريل",
     },
-    {"id":6,
+    {
+      "id": 6,
       "price": "500",
       "image": "assets/images/appartment4.jpg",
       "title": "شقه سكنية",
@@ -35,8 +39,11 @@ class _RecommendedPropertyWidgetState extends State<RecommendedPropertyWidget> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenWidth = constraints.maxWidth;
+
         final itemWidth = screenWidth > 600 ? screenWidth * 0.3 : screenWidth * 0.5;
+
         final itemHeight = itemWidth * 1.26;
+
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: SizedBox(

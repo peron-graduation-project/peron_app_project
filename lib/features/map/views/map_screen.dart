@@ -132,6 +132,7 @@ class _MapScreenState extends State<MapScreen> {
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Row(
             children: [
               CustomArrowBack(),
@@ -147,6 +148,8 @@ class _MapScreenState extends State<MapScreen> {
 
     return Scaffold(
       appBar: AppBar(
+
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

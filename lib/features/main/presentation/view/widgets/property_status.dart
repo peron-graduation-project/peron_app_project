@@ -14,8 +14,8 @@ class PropertyStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+      spacing: 9,
+      runSpacing: 4,
       children: [
         buildPropertyInfoRow(Icons.chair, "${property["rooms"]} غرف", iconSize, textSize),
         buildPropertyInfoRow(Icons.bathtub, "${property["bathrooms"]} حمام", iconSize, textSize),
@@ -28,11 +28,11 @@ class PropertyStats extends StatelessWidget {
   Widget buildPropertyInfoRow(IconData icon, dynamic value, double iconSize, double textSize) {
     return Wrap(
       crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: 4,
+      spacing: 2,
       children: [
         Icon(icon, size: iconSize, color: Colors.grey),
         Text("$value", style: TextStyle(
-            fontSize: 14,
+            fontSize: 12,
             fontWeight: FontWeight.w500,
             fontFamily: Fonts.kIbmPlexSans,
             color:AppColors.titleMediumColor

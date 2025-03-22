@@ -17,31 +17,40 @@ class SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width * 0.03,
-        vertical: MediaQuery.of(context).size.height * 0.01,
+        horizontal: screenWidth * 0.03, // Dynamic horizontal padding based on screen width
+        vertical: screenHeight * 0.01, // Dynamic vertical padding based on screen height
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             title,
-            style: theme.labelLarge!.copyWith(color: Color(0xff282929)),
+            style: theme.labelLarge!.copyWith(
+              color: Color(0xff282929),
+              fontSize: screenWidth > 600 ? 20 : 16, // Adjust font size based on screen width
+            ),
           ),
           showViewAll
               ? GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RecommendedViewBody()),
-                  );
-                },
-                child: Text(
-                  "عرض الكل",
-                  style: TextStyle(color: AppColors.primaryColor),
-                ),
-              )
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RecommendedViewBody()),
+              );
+            },
+            child: Text(
+              "عرض الكل",
+              style: TextStyle(
+                color: AppColors.primaryColor,
+                fontSize: screenWidth > 600 ? 16 : 14,
+              ),
+            ),
+          )
               : SortButton(),
         ],
       ),

@@ -22,47 +22,55 @@ class RecommendedPropertyDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Stack(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double screenWidth = constraints.maxWidth;
+        double responsivePadding = screenWidth * 0.05;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            PropertyImage(image: property['image'], itemWidth: itemWidth),
-             CustomFavouriteIcon(iconSize: iconSize,property: property,category: "recommended",),
+            Stack(
+              children: [
+                PropertyImage(image: property['image'], itemWidth: itemWidth),
+                CustomFavouriteIcon(property: property, category: "recommended"),
+              ],
+            ),
+            SizedBox(height: responsivePadding),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsivePadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RecommendedPropertyInfoDetails(
+                    icon: Symbols.home,
+                    iconColor: Color(0xff818181),
+                    title: 'النوع',
+                    label: property['title'],
+
+                  ),
+                  SizedBox(height: responsivePadding * 0.5),
+                  RecommendedPropertyInfoDetails(
+                    icon: Icons.location_on,
+                    title: 'الموقع',
+                    label: property['location'],
+
+                  ),
+                  SizedBox(height: responsivePadding * 0.5),
+                  RecommendedPropertyInfoDetails(
+                    icon: Symbols.shoppingmode,
+                    title: 'السعر',
+                    iconColor: Color(0xff818181),
+                    label: property['price'],
+
+                  ),
+                ],
+              ),
+            ),
           ],
-        ),
-        SizedBox(height: paddingSize),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: paddingSize),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RecommendedPropertyInfoDetails(
-                icon: Symbols.home,
-               iconColor:  Color(0xff818181),
-                title: 'النوع',
-                label: property['title'],
-              ),
-              SizedBox(height: paddingSize * 0.5),
-              RecommendedPropertyInfoDetails(
-                icon: Icons.location_on,
-                title: 'الموقع',
-                label: property['location'],
-              ),
-              SizedBox(height: paddingSize * 0.5),
-              RecommendedPropertyInfoDetails(
-                icon: Symbols.shoppingmode,
-                title: 'السعر',
-                iconColor: Color(0xff818181),
-                label: property['price'],
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
-
