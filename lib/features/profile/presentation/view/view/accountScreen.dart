@@ -4,6 +4,8 @@ import 'package:peron_project/features/profile/presentation/view/widgets/account
 import 'package:peron_project/features/profile/presentation/view/widgets/logOutButton.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/profileSection.dart';
 
+import 'settings_screen.dart';
+
 
 
 
@@ -42,7 +44,12 @@ class AccountScreen extends StatelessWidget {
               icon: Icons.settings_outlined,
               title: "الإعدادات",
               screenWidth: screenWidth,
-              onTap: () {}
+              onTap: () {
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Settings()),
+                    );
+              }
             ),
             AccountOption(
               icon: Icons.privacy_tip_outlined,
