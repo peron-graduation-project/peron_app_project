@@ -5,7 +5,6 @@ import 'package:peron_project/features/main/presentation/view/widgets/property_r
 import 'package:peron_project/features/main/presentation/view/widgets/property_status.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/property_title.dart';
 
-import 'custom_favourite_icon.dart';
 import 'custom_price_widget.dart';
 
 class MostRentPropertyDetails extends StatelessWidget {
@@ -25,7 +24,7 @@ class MostRentPropertyDetails extends StatelessWidget {
         Stack(
           children: [
             PropertyImage(image: property['image'], itemWidth: itemWidth)   ,
-            
+
             CustomPriceWidget(propertyPrice: property['price'],),
           ],
         ),

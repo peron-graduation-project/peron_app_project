@@ -24,7 +24,6 @@ class _LocationDialogState extends State<LocationDialog> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final buttonHeight = screenHeight * 0.06;
     var theme=Theme.of(context).textTheme;
 
     return Dialog(

@@ -1,59 +1,42 @@
 import 'package:dio/dio.dart';
 
 abstract class Failure {
-  String errorMessage;
-  Failure({required this.errorMessage});
+  final String errorMessage;
+  const Failure(this.errorMessage);
 }
 
 class ServiceFailure extends Failure {
-  ServiceFailure({required super.errorMessage});
+  final int? statusCode;
+  final List<String> errors;
 
-  factory ServiceFailure.fromDioError(DioException dioError) {
-    switch (dioError.type) {
-      case DioExceptionType.connectionTimeout:
-        return ServiceFailure(errorMessage: 'انتهت مهلة الاتصال بالخادم');
-      case DioExceptionType.sendTimeout:
-        return ServiceFailure(errorMessage: 'انتهت مهلة الإرسال إلى الخادم');
-      case DioExceptionType.receiveTimeout:
-        return ServiceFailure(errorMessage: 'انتهت مهلة الاستقبال من الخادم');
-      case DioExceptionType.badCertificate:
-        return ServiceFailure(errorMessage: 'الشهادة غير صالحة');
-      case DioExceptionType.badResponse:
-        return ServiceFailure.fromResponse(
-          dioError.response?.statusCode ?? 0,
-          dioError.response?.data,
-        );
-      case DioExceptionType.cancel:
-        return ServiceFailure(errorMessage: 'تم إلغاء الطلب');
-      case DioExceptionType.connectionError:
-        return ServiceFailure(errorMessage: 'خطأ في الاتصال بالخادم');
-      case DioExceptionType.unknown:
-        if (dioError.message?.contains('SocketException') ?? false) {
-          return ServiceFailure(errorMessage: 'لا يوجد اتصال بالإنترنت');
-        }
-        return ServiceFailure(errorMessage: 'حدث خطأ غير متوقع، برجاء المحاولة لاحقًا');
-    }
-  }
+  ServiceFailure({required String errorMessage, this.statusCode, required this.errors})
+      : super(errorMessage);
 
-  factory ServiceFailure.fromResponse(int statusCode, dynamic response) {
-    print("Response Status Code: $statusCode");
-    print("Response Data: $response");
-    print("Response Type: ${response.runtimeType}");
+  factory ServiceFailure.fromDioError(DioException e) {
+    String message = "حدث خطأ أثناء الاتصال بالخادم";
+    List<String> errorsList = [];
+    int? statusCode = e.response?.statusCode;
 
-    String errorMessage = 'حدث خطأ غير متوقع، برجاء المحاولة لاحقًا';
+    if (e.response?.data is Map<String, dynamic>) {
+      final data = e.response!.data as Map<String, dynamic>;
 
-    if (response is Map) {
-      if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
-        errorMessage = response['error']?['message'] ?? response['message'] ?? 'خطأ في البيانات المدخلة';
-      } else if (statusCode == 404) {
-        errorMessage = 'المستخدم غير موجود';
-      } else if (statusCode == 500) {
-        errorMessage = 'خطأ في الخادم، برجاء المحاولة لاحقًا';
+      if (data.containsKey("message") && data["message"] is String && data["message"].isNotEmpty) {
+        message = data["message"];
       }
-    } else if (response is String) {
-      errorMessage = response;
+
+      if (data.containsKey("errors") && data["errors"] is List) {
+        errorsList = List<String>.from(data["errors"].map((e) => e.toString()));
+      }
     }
 
-    return ServiceFailure(errorMessage: errorMessage);
+    if (message == "حدث خطأ أثناء الاتصال بالخادم" && errorsList.isNotEmpty) {
+      message = errorsList.join("\n• ");
+    }
+
+    return ServiceFailure(
+      errorMessage: message,
+      statusCode: statusCode,
+      errors: errorsList,
+    );
   }
 }

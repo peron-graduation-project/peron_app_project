@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:peron_project/core/error/failure.dart';
-import 'package:peron_project/core/utils/api_service.dart';
+import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/features/notification/data/notification_model.dart';
 
 import 'get_notification_repo.dart';
@@ -23,7 +23,7 @@ class NotificationRepoImp implements NotificationRepo {
       await Future.delayed(const Duration(seconds: 2));
       return Right(_notifications);
     } catch (e) {
-      return Left(ServiceFailure(errorMessage: "حدث خطأ أثناء تحميل الإشعارات"));
+      return Left(ServiceFailure(errorMessage: "حدث خطأ أثناء تحميل الإشعارات", errors: [e.toString()]));
     }
   }
 
@@ -34,7 +34,7 @@ class NotificationRepoImp implements NotificationRepo {
       _notifications.removeWhere((notification) => selectedIds.contains(notification.id));
       return Right(_notifications);
     } catch (e) {
-      return Left(ServiceFailure(errorMessage: "حدث خطأ أثناء حذف الإشعارات"));
+      return Left(ServiceFailure(errorMessage: "حدث خطأ أثناء حذف الإشعارات", errors: [e.toString()]));
     }
   }
   @override
@@ -49,7 +49,7 @@ class NotificationRepoImp implements NotificationRepo {
 
       return Right(_notifications);
     } catch (e) {
-      return Left(ServiceFailure(errorMessage: "حدث خطأ أثناء تحديث الإشعارات"));
+      return Left(ServiceFailure(errorMessage: "حدث خطأ أثناء تحديث الإشعارات", errors: [e.toString()]));
     }
   }
 }

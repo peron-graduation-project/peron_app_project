@@ -38,6 +38,9 @@ dependencies:
   permission_handler: ^11.4.0
   geocoding: ^2.0.0
   location:
+  shared_preferences:
+  flutter_otp_text_field: ^1.5.1+1
+  collection: ^1.19.1
 
 
 

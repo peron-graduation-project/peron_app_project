@@ -1,28 +1,46 @@
 import 'package:dartz/dartz.dart';
-
 import '../../../../../core/error/failure.dart';
-import '../../../../../core/utils/api_service.dart';
+import '../../../../../core/helper/shared_prefs_helper.dart';
+import '../../../../../core/network/api_service.dart';
+import '../../models/user_model.dart';
 import 'login_repo.dart';
 
-class LoginRepoImp implements LoginRepo {
+class LoginRepoImpl implements LoginRepo {
   final ApiService apiService;
+  final SharedPrefsHelper sharedPrefsHelper;
 
-  LoginRepoImp({required this.apiService});
+  LoginRepoImpl({required this.apiService, required this.sharedPrefsHelper});
 
   @override
-  Future<Either<Failure, String>> login(String email, String password) async {
+  Future<Either<Failure, UserModel>> login({
+    required String email,
+    required String password,
+    required bool rememberMe,
+  }) async {
     try {
-      final response = await apiService.login(
-        email: email,
-        password: password,
-      );
+      final response = await apiService.login(email: email, password: password);
 
-      return response.fold(
-            (failure) => Left(failure),
-            (token) => Right(token),
+      return await response.fold(
+            (failure) async {
+          return Left(failure);
+        },
+            (jsonData) async {
+          final userModel = UserModel.fromJson(jsonData as Map<String, dynamic>);
+
+          if (rememberMe) {
+            await sharedPrefsHelper.saveUserCredentials(email, password);
+          } else {
+            await sharedPrefsHelper.clearUserCredentials();
+          }
+
+          return Right(userModel);
+        },
       );
     } catch (e) {
-      return Left(ServiceFailure(errorMessage: e.toString()));
+      return Left(ServiceFailure(
+        errorMessage: e.toString(),
+        errors: [e.toString()],
+      ));
     }
   }
 }

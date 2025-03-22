@@ -11,6 +11,7 @@ class CustomButton extends StatelessWidget {
     this.decoration,
     this.side,
     this.borderColor = Colors.transparent,
+    this.isLoading = false,
   });
 
   final Color textColor;
@@ -20,6 +21,7 @@ class CustomButton extends StatelessWidget {
   final TextDecoration? decoration;
   final void Function()? onPressed;
   final BorderSide? side;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,6 @@ class CustomButton extends StatelessWidget {
       child: SizedBox(
         height: 48,
         width: screenWidth * 0.8,
-
         child: TextButton(
           style: TextButton.styleFrom(
             backgroundColor: backgroundColor,
@@ -43,8 +44,17 @@ class CustomButton extends StatelessWidget {
               side: defaultSide,
             ),
           ),
-          onPressed: onPressed,
-          child: Text(
+          onPressed: isLoading ? null : onPressed,
+          child: isLoading
+              ? const SizedBox(
+            width: 24,
+            height: 24,
+            child: CircularProgressIndicator(
+              color: Colors.white,
+              strokeWidth: 2,
+            ),
+          )
+              : Text(
             text,
             style: theme.titleLarge?.copyWith(
               decoration: decoration,

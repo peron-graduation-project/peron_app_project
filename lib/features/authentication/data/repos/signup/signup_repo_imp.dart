@@ -1,50 +1,74 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:peron_project/core/error/failure.dart';
 import 'package:peron_project/features/authentication/data/repos/signup/signup_repo.dart';
 
-import '../../../../../core/utils/api_service.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/network/api_service.dart';
+import '../../models/user_model.dart';
 
-class SignupRepoImpl implements SignupRepo {
+class SignupRepoImp implements SignupRepo {
   final ApiService apiService;
 
-  SignupRepoImpl({required this.apiService});
+  SignupRepoImp({required this.apiService});
 
   @override
-  Future<Either<Failure, String>> signup({
-    required String fullName,
-    required String email,
-    required String phoneNumber,
-    required String password,
-    required String confirmPassword,
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> signUp({required Map<String, dynamic> body}) async {
     try {
-      final result = await apiService.signup(
-        endPoint: 'Auth/register',
-        body: {
-          "fullName": fullName,
-          "email": email,
-          "phoneNumber": phoneNumber,
-          "password": password,
-          "confirmPassword": confirmPassword,
-        },
-      );
+      final response = await apiService.signup(body: body);
 
-      return result.fold(
-            (failure) => Left(failure),
+      return response.fold(
+            (failure) {
+          print("📌 [DEBUG] Failure Details: $failure");
+          return Left(failure);
+        },
             (data) {
-          if (data["message"] == "User registered successfully") {
-            return Right("تم التسجيل بنجاح!");
-          } else {
-            return Left(ServiceFailure(errorMessage: data["message"] ?? "حدث خطأ أثناء التسجيل!"));
+          try {
+            print("📌 [DEBUG] Response Data: $data");
+
+            if (data.containsKey("email") || data.containsKey("username")) {
+              return Right({
+                "user": UserModel.fromJson(data),
+                "message": data["message"] ?? "تم التسجيل بنجاح"
+              });
+            } else {
+              return Left(ServiceFailure(
+                errorMessage: "الاستجابة لا تحتوي على بيانات المستخدم",
+                errors: ["لم يتم العثور على مفتاح 'user' أو 'email' أو 'username' في الاستجابة"],
+              ));
+            }
+                    } catch (e) {
+            print("📌 [DEBUG] Error while processing response data: $e");
+            return Left(ServiceFailure(
+              errorMessage: "خطأ في تنسيق البيانات المستلمة",
+              errors: ["فشل في تحليل بيانات المستخدم: ${e.toString()}"],
+            ));
           }
         },
       );
+    } on DioException catch (e) {
+      print("📌 [DEBUG] DioError: $e");
+      return Left(ServiceFailure.fromDioError(e));
     } catch (e) {
-      if (e is DioException) {
-        return Left(ServiceFailure.fromDioError(e));
-      }
-      return Left(ServiceFailure(errorMessage: e.toString()));
+      print("📌 [DEBUG] Unexpected Error: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء التسجيل",
+        errors: [e.toString()],
+      ));
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, String>> sendOtp(String email) async {
+    try {
+      return await apiService.sendOtp(email);
+    } on DioException catch (e) {
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ أثناء إرسال OTP",
+        errors: [e.toString()],
+      ));
     }
   }
 }

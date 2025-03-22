@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/helper/colors.dart';
-import '../../../../main/presentation/view/widgets/notification_button.dart';
-import '../../../../map/views/location_dialog.dart';
 import 'location_selector.dart';
 
 class LocationNotificationHeader extends StatelessWidget {

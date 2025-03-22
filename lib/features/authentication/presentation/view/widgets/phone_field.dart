@@ -10,7 +10,7 @@ class PhoneFieldInput extends StatefulWidget {
 }
 
 class _PhoneFieldInputState extends State<PhoneFieldInput> {
-  String completePhoneNumber = ''; // لتخزين الرقم مع كود الدولة
+  String completePhoneNumber = '';
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _PhoneFieldInputState extends State<PhoneFieldInput> {
           languageCode: 'ar',
           onChanged: (phone) {
             setState(() {
-              completePhoneNumber = phone.completeNumber; // تحديث الرقم
+              completePhoneNumber = phone.completeNumber;
             });
             widget.controller?.text = completePhoneNumber;
             print(widget.controller?.text);

@@ -1,26 +1,38 @@
-import 'package:equatable/equatable.dart';
+import '../../../data/models/user_model.dart';
 
-abstract class LoginState extends Equatable {
-  @override
-  List<Object> get props => [];
-}
+abstract class LoginState {}
 
 class LoginInitial extends LoginState {}
 
 class LoginLoading extends LoginState {}
 
 class LoginSuccess extends LoginState {
-  final String token;
-  LoginSuccess(this.token);
+  final UserModel userModel;
+  final String email;
+  final String password;
 
-  @override
-  List<Object> get props => [token];
+  LoginSuccess({
+    required this.userModel,
+    required this.email,
+    required this.password,
+  });
 }
 
 class LoginFailure extends LoginState {
   final String error;
-  LoginFailure(this.error);
 
-  @override
-  List<Object> get props => [error];
+  LoginFailure({required this.error});
+}
+
+class LoginCredentialsLoaded extends LoginState {
+  final String email;
+  final String password;
+
+  LoginCredentialsLoaded({required this.email, required this.password});
+}
+
+class LoginRememberPasswordUpdated extends LoginState {
+  final bool rememberPassword;
+
+  LoginRememberPasswordUpdated({required this.rememberPassword});
 }
