@@ -6,6 +6,7 @@ import 'package:peron_project/core/helper/media_query.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/navigator/routes_generator.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:peron_project/features/profile/presentation/view/view/accountScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'core/network/api_service.dart';
@@ -46,7 +47,7 @@ class PeronApp extends StatelessWidget {
           ],
           initialRoute: PageRouteName.initialRoute,
           onGenerateRoute: RoutesGenerator.onGenerateRoute,
-
+home: AccountScreen(),
         );
       }
     );
