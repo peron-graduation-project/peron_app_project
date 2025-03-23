@@ -15,12 +15,13 @@ class _RatingDialogState extends State<RatingDialog> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmallScreen = size.width < 360;
-    
+
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Container(
+          color: Colors.white,
           width: size.width * 0.85,
           padding: EdgeInsets.all(size.width * 0.05),
           child: Column(
@@ -50,8 +51,8 @@ class _RatingDialogState extends State<RatingDialog> {
               SizedBox(height: size.height * 0.025),
 
               Image.asset(
-                'assets/images/review.png', 
-                height: size.height * 0.15
+                'assets/images/review.png',
+                height: size.height * 0.25,
               ),
 
               SizedBox(height: size.height * 0.025),
@@ -60,8 +61,9 @@ class _RatingDialogState extends State<RatingDialog> {
                 'هل أنت مستمتع باستخدام ابلكيشن بيرون؟',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: isSmallScreen ? 16 : 18, 
-                  fontWeight: FontWeight.bold
+                  fontSize: isSmallScreen ? 16 : 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.titleSmallColor,
                 ),
               ),
 
@@ -71,8 +73,9 @@ class _RatingDialogState extends State<RatingDialog> {
                 'رأيك يهمنا فشاركنا تقييمك',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: isSmallScreen ? 12 : 14, 
-                  color: Colors.grey
+                  fontSize: isSmallScreen ? 12 : 14,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w200,
                 ),
               ),
 

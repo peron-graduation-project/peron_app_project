@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/colors.dart';
 
 import '../widgets/lang_selection_dialog.dart';
 import '../widgets/rating_dialog.dart';
@@ -24,12 +25,34 @@ class Settings extends StatelessWidget {
                 Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-                    child: Text(
-                      'الاعدادات',
-                      style: TextStyle(
-                        fontSize: isSmallScreen ? 16 : 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "الاعدادات",
+                            style: TextStyle(
+                              fontSize: isSmallScreen ? 14 : 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.titleSmallColor,
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Icon(
+                              Icons.chevron_left,
+                              size: isSmallScreen ? 20 : 24,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
