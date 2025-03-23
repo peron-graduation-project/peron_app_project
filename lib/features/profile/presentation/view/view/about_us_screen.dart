@@ -36,6 +36,7 @@ class AboutUs extends StatelessWidget {
                       style: TextStyle(
                         fontSize: isSmallScreen ? 14 : 16,
                         fontWeight: FontWeight.bold,
+                        color: AppColors.titleSmallColor,
                       ),
                     ),
                   ),
