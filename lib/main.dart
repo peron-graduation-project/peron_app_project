@@ -54,7 +54,6 @@ class PeronApp extends StatelessWidget {
           ],
           initialRoute: PageRouteName.initialRoute,
           onGenerateRoute: RoutesGenerator.onGenerateRoute,
-          home: Settings(),
         );
       },
     );
