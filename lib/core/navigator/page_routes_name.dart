@@ -10,6 +10,10 @@ class PageRouteName{
   static const String newPass="new password";
   static const String notification="notification";
   static const String search="search";
+  static const String loginScreen = '/login';
+  static const String privacyPolicyScreen = '/privacyPolicy';
+  static const String helpScreen = '/help';
+  static const String settingsScreen = '/settings';
 
 
 

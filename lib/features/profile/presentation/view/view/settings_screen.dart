@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
+import 'package:peron_project/core/navigator/page_routes_name.dart';
+import 'package:peron_project/features/profile/presentation/view/widgets/delete_account_dialog.dart';
 
 import '../widgets/lang_selection_dialog.dart';
 import '../widgets/rating_dialog.dart';
@@ -106,7 +108,9 @@ class Settings extends StatelessWidget {
                   title: 'تحتاج إلي المساعدة؟',
                   icon: Icons.help_outline,
                   showArrow: true,
-                  onTap: () {},
+                   onTap: () {
+                  Navigator.pushNamed(context, PageRouteName.helpScreen);
+                },    
                   isDeleteAccount: null,
                 ),
 
@@ -115,7 +119,12 @@ class Settings extends StatelessWidget {
                   icon: Icons.delete_outline,
                   showArrow: false,
                   isDeleteAccount: true,
-                  onTap: () {},
+                   onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => DeleteAccountDialog(),
+                  );
+                },
                 ),
               ],
             ),

@@ -10,7 +10,11 @@ static String verificationPass="assets/images/verificationPass.svg";
 static String forgetPass= "assets/images/forgetPass.svg";
 static String notification= "assets/images/notifications.svg";
 static String selectLocation="assets/images/select_location.svg";
-
+static String backIcon = 'assets/images/backicon.svg'; 
+static String phoneIcon = 'assets/images/iconamoon_phone.svg';
+static String sign = 'assets/images/Launching-cuate 1.svg';
+static String deleteAccount = 'assets/images/Inbox cleanup-cuate 1.svg';
+static String emailIcon = 'assets/images/mage_email.svg';
 
 
 

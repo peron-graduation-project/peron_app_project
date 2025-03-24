@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/features/profile/presentation/view/view/profile_screen.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/logOutButton.dart';
@@ -55,7 +56,12 @@ class AccountScreen extends StatelessWidget {
               icon: Icons.privacy_tip_outlined,
               title: "سياسة الخصوصية",
               screenWidth: screenWidth,
-              onTap: () {}
+              onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    PageRouteName.privacyPolicyScreen,
+                  );
+                },
             ),
             AccountOption(
               icon: Icons.list_alt_rounded,
