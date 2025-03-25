@@ -10,7 +10,7 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmallScreen = size.width < 360;
-    
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F8F8),
       body: SafeArea(
@@ -18,8 +18,8 @@ class AboutUs extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.04, 
-                vertical: size.height * 0.015
+                horizontal: size.width * 0.04,
+                vertical: size.height * 0.015,
               ),
               decoration: const BoxDecoration(
                 border: Border(
@@ -36,6 +36,7 @@ class AboutUs extends StatelessWidget {
                       style: TextStyle(
                         fontSize: isSmallScreen ? 14 : 16,
                         fontWeight: FontWeight.bold,
+                        color: AppColors.titleSmallColor,
                       ),
                     ),
                   ),
@@ -46,7 +47,7 @@ class AboutUs extends StatelessWidget {
                         Navigator.pop(context);
                       },
                       child: Icon(
-                        Icons.chevron_right,
+                        Icons.chevron_left,
                         size: isSmallScreen ? 20 : 24,
                       ),
                     ),

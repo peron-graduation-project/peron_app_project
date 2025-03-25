@@ -8,6 +8,10 @@ import 'package:peron_project/features/beginning/presentation/view/views/beginni
 import 'package:peron_project/features/home/presentation/view/views/home_view.dart';
 import 'package:peron_project/features/notification/presentation/view/views/notification.dart';
 import 'package:peron_project/features/onboarding/presentation/view/views/on_boarding.dart';
+import 'package:peron_project/features/profile/presentation/view/view/help_screen.dart';
+import 'package:peron_project/features/profile/presentation/view/view/login_screen.dart';
+import 'package:peron_project/features/profile/presentation/view/view/privacy_policy_screen.dart';
+import 'package:peron_project/features/profile/presentation/view/view/settings_screen.dart';
 import 'package:peron_project/features/search/presentation/view/views/search_view.dart';
 import 'package:peron_project/features/splash/presentation/view/views/splash_view.dart';
 
@@ -55,6 +59,15 @@ class RoutesGenerator {
       case PageRouteName.search:
         return MaterialPageRoute(
           builder: (context) => const SearchView(), settings: settings,);
+           case PageRouteName.loginScreen:
+  return MaterialPageRoute(builder: (_) => LoginScreen());
+case PageRouteName.privacyPolicyScreen:
+  return MaterialPageRoute(builder: (_) => PrivacyPolicyScreen());
+case PageRouteName.helpScreen:
+  return MaterialPageRoute(builder: (_) => HelpScreen());
+case PageRouteName.settingsScreen:
+  return MaterialPageRoute(builder: (_) => Settings());
+
       default:
         return MaterialPageRoute(
           builder: (context) => const SplashView(), settings: settings,

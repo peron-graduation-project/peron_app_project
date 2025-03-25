@@ -14,7 +14,7 @@ import 'features/notification/domain/repo/get_notification_repo_imp.dart';
 import 'features/notification/presentation/manager/get notifications/notification_cubit.dart';
 void main() {
   runApp(
-    MultiProvider(providers:
+    MultiProvider(providers: 
     [
       BlocProvider(
         create: (_) => NotificationCubit(

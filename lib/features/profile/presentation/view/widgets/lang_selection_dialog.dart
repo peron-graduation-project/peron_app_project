@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:peron_project/core/helper/colors.dart';
 
 class LanguageSelectionDialog extends StatelessWidget {
@@ -8,13 +9,26 @@ class LanguageSelectionDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmallScreen = size.width < 360;
-    
+
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      insetPadding: EdgeInsets.zero,
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Container(
-          width: size.width * 0.85,
+          width: size.width * 0.75,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 10,
+                spreadRadius: 1,
+              ),
+            ],
+          ),
           padding: EdgeInsets.all(size.width * 0.05),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -43,8 +57,8 @@ class LanguageSelectionDialog extends StatelessWidget {
               SizedBox(height: size.height * 0.025),
 
               Container(
-                width: size.width * 0.2,
-                height: size.width * 0.2,
+                width: size.width * 0.4,
+                height: size.width * 0.4,
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: ClipOval(
                   child: Image.asset(
@@ -54,13 +68,14 @@ class LanguageSelectionDialog extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: size.height * 0.025),
+              SizedBox(height: size.height * 0.005),
 
               Text(
                 'اختر اللغة',
                 style: TextStyle(
-                  fontSize: isSmallScreen ? 16 : 18, 
-                  fontWeight: FontWeight.bold
+                  color: AppColors.titleSmallColor,
+                  fontSize: isSmallScreen ? 16 : 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
 
@@ -69,32 +84,6 @@ class LanguageSelectionDialog extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop('en');
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: AppColors.primaryColor),
-                        padding: EdgeInsets.symmetric(
-                          vertical: size.height * 0.015
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Text(
-                        'English',
-                        style: TextStyle(
-                          color: AppColors.primaryColor,
-                          fontSize: isSmallScreen ? 14 : 16,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(width: size.width * 0.025),
-
-                  Expanded(
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop('ar');
@@ -102,17 +91,42 @@ class LanguageSelectionDialog extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor,
                         padding: EdgeInsets.symmetric(
-                          vertical: size.height * 0.015
+                          vertical: size.height * 0.025,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: Text(
                         'العربية',
                         style: TextStyle(
-                          color: Colors.white, 
-                          fontSize: isSmallScreen ? 14 : 16
+                          color: Colors.white,
+                          fontSize: isSmallScreen ? 14 : 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: size.width * 0.025),
+
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop('en');
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: AppColors.primaryColor),
+                        padding: EdgeInsets.symmetric(
+                          vertical: size.height * 0.025,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text(
+                        'English',
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: isSmallScreen ? 14 : 16,
                         ),
                       ),
                     ),
