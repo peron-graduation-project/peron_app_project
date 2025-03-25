@@ -78,7 +78,7 @@ class ApiService {
     required String password,
   }) async {
     try {
-      debugPrint("📩 إرسال طلب تسجيل الدخول إلى API...");
+      debugPrint(" إرسال طلب تسجيل الدخول إلى API..");
       debugPrint("🔹 Email: $email");
       debugPrint("🔹 Password: $password");
 
@@ -110,6 +110,87 @@ class ApiService {
       ));
     }
   }
+  Future<Either<Failure, Map<String, dynamic>>> resetPassword(
+      Map<String, dynamic> body,
+      ) async {
+    try {
+      final response = await _dio.post(
+        '/Auth/reset-password',
+        data: body,
+      );
+
+      print("✅ [DEBUG] Forgot Password API Response: ${response.data}");
+
+      if (response.data is Map<String, dynamic>) {
+        return Right(response.data as Map<String, dynamic>);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error: $e");
+
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] Unexpected Error in ApiService: $e");
+
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ أثناء الاتصال بالسيرفر",
+        errors: [e.toString()],
+      ));
+    }
+  }
+  Future<Either<Failure, bool>> checkOtp({required String email, required String otpCode}) async {
+    try {
+      debugPrint("📩 إرسال طلب تحقق إلى API...");
+      debugPrint("🔹 Email: $email");
+      debugPrint("🔹 OTP Code: $otpCode");
+
+      Response response = await _dio.post(
+        '/Auth/Check-Otp-For-ResetPassword',
+        data: {"email": email.toLowerCase(), "otpCode": otpCode},
+      );
+
+      _printDebugInfo(functionName: 'verifyOtp', response: response);
+      return Right(response.data["isAuthenticated"] ?? false);
+    } on DioException catch (e) {
+      _printDebugInfo(functionName: 'verifyOtp', error: e);
+      return Left(ServiceFailure.fromDioError(e));
+    }
+  }
+
+
+  Future<Either<Failure, Map<String, dynamic>>> forgotPassword({
+    required String email,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/Auth/forgot-password',
+        data: {
+          "email": email,
+        },
+      );
+
+      print(" [DEBUG] Forgot Password API Response: ${response.data}");
+
+      return Right(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      print(" [DEBUG] Dio Error: $e");
+
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      print(" [DEBUG] Unexpected Error in ApiService: $e");
+
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ أثناء الاتصال بالسيرفر",
+        errors: [e.toString()],
+      ));
+    }
+  }
+
 
 
   Future<Either<Failure, List<NotificationModel>>> getNotifications({required String endPoint, Map<String, dynamic>? queryParameters}) async {

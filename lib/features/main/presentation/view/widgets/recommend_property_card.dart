@@ -20,7 +20,6 @@ class _RecommendedPropertyCardState extends State<RecommendedPropertyCard> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Define item width based on screen size
         double itemWidth = constraints.maxWidth > 0 ? constraints.maxWidth : screenWidth * 0.45;
         double iconSize = itemWidth * 0.1;
         double textSize = itemWidth * 0.08;
@@ -37,13 +36,9 @@ class _RecommendedPropertyCardState extends State<RecommendedPropertyCard> {
                 paddingSize: paddingSize,
                 itemWidth: itemWidth,
               ),
-              Positioned(
-                top: 8,
-                left: 8,
-                child: CustomFavouriteIcon(
-                  property: property,
-                  category: 'recommended',
-                ),
+              CustomFavouriteIcon(
+                property: property,
+                category: 'recommended',
               ),
             ],
           ),

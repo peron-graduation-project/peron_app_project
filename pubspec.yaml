@@ -41,6 +41,7 @@ dependencies:
   shared_preferences:
   flutter_otp_text_field: ^1.5.1+1
   collection: ^1.19.1
+  get_it:
 
 
 

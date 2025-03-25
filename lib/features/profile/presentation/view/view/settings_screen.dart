@@ -6,7 +6,7 @@ import '../widgets/setting_item.dart';
 import 'about_us_screen.dart';
 
 class Settings extends StatelessWidget {
-  const Settings({Key? key}) : super(key: key);
+  const Settings({super.key});
 
   @override
   Widget build(BuildContext context) {

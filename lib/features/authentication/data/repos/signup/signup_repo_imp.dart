@@ -57,18 +57,4 @@ class SignupRepoImp implements SignupRepo {
     }
   }
 
-
-  @override
-  Future<Either<Failure, String>> sendOtp(String email) async {
-    try {
-      return await apiService.sendOtp(email);
-    } on DioException catch (e) {
-      return Left(ServiceFailure.fromDioError(e));
-    } catch (e) {
-      return Left(ServiceFailure(
-        errorMessage: "حدث خطأ أثناء إرسال OTP",
-        errors: [e.toString()],
-      ));
-    }
-  }
 }

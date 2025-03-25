@@ -11,7 +11,10 @@ class VerifyOtpLoading extends VerifyOtpState {}
 
 class VerifyOtpSuccess extends VerifyOtpState {
   final String message;
-  VerifyOtpSuccess(this.message);
+  final String otp;
+
+
+  VerifyOtpSuccess({required this.otp, required this.message, });
 
   @override
   List<Object?> get props => [message];
@@ -25,20 +28,3 @@ class VerifyOtpFailure extends VerifyOtpState {
   List<Object?> get props => [errorMessage];
 }
 
-class ResendOtpLoading extends VerifyOtpState {}
-
-class OtpResentSuccess extends VerifyOtpState {
-  final String message;
-  OtpResentSuccess(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
-
-class OtpResentFailure extends VerifyOtpState {
-  final String errorMessage;
-  OtpResentFailure(this.errorMessage);
-
-  @override
-  List<Object?> get props => [errorMessage];
-}

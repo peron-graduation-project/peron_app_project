@@ -25,7 +25,7 @@ class LoginRepoImpl implements LoginRepo {
           return Left(failure);
         },
             (jsonData) async {
-          final userModel = UserModel.fromJson(jsonData as Map<String, dynamic>);
+          final userModel = UserModel.fromJson(jsonData);
 
           if (rememberMe) {
             await sharedPrefsHelper.saveUserCredentials(email, password);

@@ -38,20 +38,3 @@ class SignupFailure extends SignupState {
       "SignupFailure(errorMessage: $errorMessage, errors: $errors)";
 }
 
-class OtpSending extends SignupState {}
-
-class OtpSentSuccess extends SignupState {
-  final String message;
-  OtpSentSuccess(this.message);
-
-  @override
-  List<Object> get props => [message];
-}
-
-class OtpSendingFailure extends SignupState {
-  final String errorMessage;
-  OtpSendingFailure(this.errorMessage);
-
-  @override
-  List<Object> get props => [errorMessage];
-}

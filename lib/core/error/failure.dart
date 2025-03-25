@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 
 abstract class Failure {
@@ -9,29 +10,56 @@ class ServiceFailure extends Failure {
   final int? statusCode;
   final List<String> errors;
 
-  ServiceFailure({required String errorMessage, this.statusCode, required this.errors})
-      : super(errorMessage);
+  ServiceFailure({
+    required String errorMessage,
+    this.statusCode,
+    required this.errors,
+  }) : super(errorMessage);
 
   factory ServiceFailure.fromDioError(DioException e) {
     String message = "حدث خطأ أثناء الاتصال بالخادم";
     List<String> errorsList = [];
     int? statusCode = e.response?.statusCode;
 
-    if (e.response?.data is Map<String, dynamic>) {
-      final data = e.response!.data as Map<String, dynamic>;
+    dynamic data = e.response?.data;
 
-      if (data.containsKey("message") && data["message"] is String && data["message"].isNotEmpty) {
+    if (data is String) {
+      try {
+        data = jsonDecode(data);
+      } catch (_) {
+      }
+    }
+
+    if (data is Map<String, dynamic>) {
+      print("📦 [DEBUG] Dio Response Data: $data");
+
+      if (data.containsKey("message") &&
+          data["message"] is String &&
+          data["message"].isNotEmpty) {
         message = data["message"];
       }
 
-      if (data.containsKey("errors") && data["errors"] is List) {
-        errorsList = List<String>.from(data["errors"].map((e) => e.toString()));
+      if (data.containsKey("errors")) {
+        final errorsData = data["errors"];
+
+        if (errorsData is List) {
+          errorsList = errorsData.map((e) => e.toString()).toList();
+        } else if (errorsData is Map) {
+          errorsList = errorsData.entries
+              .map((e) => "${e.key}: ${e.value}")
+              .toList();
+        } else if (errorsData is String) {
+          errorsList = [errorsData];
+        }
       }
     }
 
     if (message == "حدث خطأ أثناء الاتصال بالخادم" && errorsList.isNotEmpty) {
-      message = errorsList.join("\n• ");
+      message = "• " + errorsList.join("\n• ");
     }
+
+    print("📦 [DEBUG] Extracted Message: $message");
+    print("📦 [DEBUG] Extracted Errors List: $errorsList");
 
     return ServiceFailure(
       errorMessage: message,

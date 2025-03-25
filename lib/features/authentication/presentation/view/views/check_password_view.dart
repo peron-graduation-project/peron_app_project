@@ -7,19 +7,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/features/authentication/data/repos/resend%20otp/resend_otp_repo_imp.dart';
+import 'package:peron_project/features/authentication/presentation/manager/check%20otp/check_otp_cubit.dart';
+import 'package:peron_project/features/authentication/presentation/manager/check%20otp/check_otp_state.dart';
 import 'package:peron_project/features/authentication/presentation/manager/resend%20otp/resend_otp_state.dart';
 
 import '../../../../../core/helper/colors.dart';
 import '../../../../../core/helper/images.dart';
 import '../../../../../core/navigator/page_routes_name.dart';
 import '../../../../../core/widgets/custom_button.dart';
-import '../../../data/repos/verify otp/verify_otp_repo_imp.dart';
+import '../../../data/repos/check otp/check_otp_repo_imp.dart';
 import '../../manager/resend otp/resend_otp_cubit.dart';
-import '../../manager/verify otp/verify_otp_cubit.dart';
-import '../../manager/verify otp/verify_otp_state.dart';
 
-class VerificationScreen extends StatelessWidget {
-  const VerificationScreen({super.key,});
+
+class CheckOtpScreen extends StatelessWidget {
+  const CheckOtpScreen({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -27,30 +28,30 @@ class VerificationScreen extends StatelessWidget {
     String email = arguments;
     print(email);
     return MultiBlocProvider(
-  providers: [
-    BlocProvider(
-      create: (context) => VerifyOtpCubit(verifyOtpRepo: VerifyOtpRepoImpl(apiService: ApiService(Dio())), email: email),
-),
-    BlocProvider(
-      create: (context) => ResendOtpCubit(email: email, resendOtpRepo: ResendOtpRepoImp(apiService: ApiService(Dio()))),
-    ),
-  ],
-  child: _VerificationScreenBody(email: email,),
-);
+      providers: [
+        BlocProvider(
+          create: (context) => CheckOtpCubit(checkOtpRepo: CheckOtpRepoImpl(apiService: ApiService(Dio())), email: email),
+        ),
+        BlocProvider(
+          create: (context) => ResendOtpCubit(email: email, resendOtpRepo: ResendOtpRepoImp(apiService: ApiService(Dio()))),
+        ),
+      ],
+      child: _CheckOtpScreenBody(email: email,),
+    );
   }
 }
 
-class _VerificationScreenBody extends StatefulWidget {
+class _CheckOtpScreenBody extends StatefulWidget {
   final String email;
 
 
-  const _VerificationScreenBody({required this.email,});
+  const _CheckOtpScreenBody({required this.email,});
 
   @override
-  _VerificationScreenBodyState createState() => _VerificationScreenBodyState();
+  _CheckOtpScreenBodyState createState() => _CheckOtpScreenBodyState();
 }
 
-class _VerificationScreenBodyState extends State<_VerificationScreenBody> {
+class _CheckOtpScreenBodyState extends State<_CheckOtpScreenBody> {
   int _timerSeconds = 60;
   Timer? _timer;
   bool _canResend = false;
@@ -118,7 +119,7 @@ class _VerificationScreenBodyState extends State<_VerificationScreenBody> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
     var size = MediaQuery.of(context).size;
-    String? verifiedOtp;
+    String? checkedOtp;
     String otpCode = '';
     return Scaffold(
       appBar: AppBar(
@@ -127,21 +128,21 @@ class _VerificationScreenBodyState extends State<_VerificationScreenBody> {
       ),
       body: MultiBlocListener(
         listeners: [
-        BlocListener<VerifyOtpCubit, VerifyOtpState>(
-      listenWhen: (previous, current) => current is VerifyOtpSuccess,
-      listener: (context, state) {
-        final successState = state as VerifyOtpSuccess;
-        verifiedOtp = successState.otp;
-        print("تم التحقق من OTP: $verifiedOtp");
-          Navigator.pushNamedAndRemoveUntil(
-            context, PageRouteName.login, (route) => false,);
-      },
-      ),
-
-        BlocListener<VerifyOtpCubit, VerifyOtpState>(
-            listenWhen: (previous, current) => current is VerifyOtpFailure,
+          BlocListener<CheckOtpCubit, CheckOtpState>(
+            listenWhen: (previous, current) => current is CheckOtpSuccess,
             listener: (context, state) {
-              if (state is VerifyOtpFailure) {
+              final successState = state as CheckOtpSuccess;
+              checkedOtp = successState.otp;
+              print("تم التحقق من OTP: $checkedOtp");
+              Navigator.pushNamedAndRemoveUntil(
+                context, PageRouteName.newPass, (route) => false,arguments: {'email':widget.email,'otpCode':checkedOtp});
+            },
+          ),
+
+          BlocListener<CheckOtpCubit, CheckOtpState>(
+            listenWhen: (previous, current) => current is CheckOtpFailure,
+            listener: (context, state) {
+              if (state is CheckOtpFailure) {
                 debugPrint("❌ خطأ عند التحقق من OTP: ${state.errorMessage}");
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(state.errorMessage)),
@@ -154,7 +155,8 @@ class _VerificationScreenBodyState extends State<_VerificationScreenBody> {
             listener: (context, state) {
               if (state is OtpResentSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("تم إرسال رمز جديد")));
+                    SnackBar(
+                        content: Text("تم إرسال رمز جديد")));
                 startTimer();
               }
             },
@@ -235,7 +237,7 @@ class _VerificationScreenBodyState extends State<_VerificationScreenBody> {
                   textColor: Colors.white,
                   text: "إرسال",
                   backgroundColor: AppColors.primaryColor,
-                  isLoading: context.watch<VerifyOtpCubit>().state is VerifyOtpLoading,
+                  isLoading: context.watch<CheckOtpCubit>().state is CheckOtpLoading,
                   onPressed: () {
                     otpCode = List.generate(
                       _otpControllers.length,
@@ -244,7 +246,7 @@ class _VerificationScreenBodyState extends State<_VerificationScreenBody> {
 
                     debugPrint("📤 يتم إرسال OTP: $otpCode");
                     if (otpCode.length == 4 && otpCode.runes.every((r) => r >= 48 && r <= 57)) {
-                      context.read<VerifyOtpCubit>().verifyOtp(otpCode: otpCode,);
+                      context.read<CheckOtpCubit>().checkOtp(otpCode: otpCode,);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("يرجى إدخال الرمز بالكامل والتأكد أنه أرقام فقط")),

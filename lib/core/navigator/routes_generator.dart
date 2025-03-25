@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
+import 'package:peron_project/features/authentication/presentation/view/views/check_password_view.dart';
 import 'package:peron_project/features/authentication/presentation/view/views/login_view.dart';
 import 'package:peron_project/features/authentication/presentation/view/views/new_password_view.dart';
 import 'package:peron_project/features/authentication/presentation/view/views/sign_up_view.dart';
@@ -10,6 +11,7 @@ import 'package:peron_project/features/onboarding/presentation/view/views/on_boa
 import 'package:peron_project/features/search/presentation/view/views/search_view.dart';
 import 'package:peron_project/features/splash/presentation/view/views/splash_view.dart';
 
+import '../../features/authentication/presentation/view/views/forget_password_view.dart';
 import '../../features/authentication/presentation/view/views/verification_view.dart';
 class RoutesGenerator {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -33,19 +35,20 @@ class RoutesGenerator {
       case PageRouteName.home:
         return MaterialPageRoute(
           builder: (context) => const HomeView(), settings: settings,);
-      // case PageRouteName.forgetPassword:
-      //   return MaterialPageRoute(
-      //     builder: (context) => const ForgotPasswordScreen(), settings: settings,);
-      case PageRouteName.verificationOtp:
-        final email = settings.arguments as String;
+      case PageRouteName.forgetPassword:
         return MaterialPageRoute(
-          builder: (context) => VerificationScreen(email: email),
+          builder: (context) => const ForgotPasswordScreen(), settings: settings,);
+      case PageRouteName.verificationOtp:
+        return MaterialPageRoute(
+          builder: (context) => VerificationScreen(),
           settings: settings,
         );
-
       case PageRouteName.newPass:
         return MaterialPageRoute(
           builder: (context) => const NewPasswordScreen(), settings: settings,);
+      case PageRouteName.checkOtp:
+        return MaterialPageRoute(
+          builder: (context) => const CheckOtpScreen(), settings: settings,);
       case PageRouteName.notification:
         return MaterialPageRoute(
           builder: (context) => const NotificationView(), settings: settings,);

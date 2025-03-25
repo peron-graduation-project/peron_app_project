@@ -1,13 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/features/authentication/presentation/manager/signup/signup_state.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../data/repos/send otp/send_repo.dart';
 import '../../../data/repos/signup/signup_repo.dart';
 
 class SignupCubit extends Cubit<SignupState> {
   final SignupRepo authRepo;
+  final SendOtpRepo sendRepo;
   String? userEmail;
 
-  SignupCubit(this.authRepo) : super(SignupInitial());
+  SignupCubit(this.authRepo, this.sendRepo) : super(SignupInitial());
 
   Future<void> signUp({
     required String username,
@@ -37,8 +39,8 @@ class SignupCubit extends Cubit<SignupState> {
             errors = failure.errors;
           }
 
-          print("📌 [DEBUG] Failure Details: $failure");
-          print("📌 [DEBUG] Extracted Errors: $errors");
+          print(" [DEBUG] Failure Details: $failure");
+          print(" [DEBUG] Extracted Errors: $errors");
 
           if (errors.isEmpty) {
             emit(SignupSuccess("تم التسجيل بنجاح"));
@@ -58,7 +60,7 @@ class SignupCubit extends Cubit<SignupState> {
 
           if (errors.isEmpty) {
             emit(SignupSuccess(message));
-            await sendOtp();
+          //  await sendRepo.sendOtp(email);
           } else {
             emit(SignupFailure(
               errorMessage: "حدث خطأ أثناء التسجيل، حاول مرة أخرى.",
@@ -75,19 +77,4 @@ class SignupCubit extends Cubit<SignupState> {
 
 
 
-  Future<void> sendOtp() async {
-    if (userEmail == null || userEmail!.isEmpty) return;
-
-    emit(OtpSending());
-
-    try {
-      final result = await authRepo.sendOtp(userEmail!);
-      result.fold(
-            (failure) => emit(OtpSendingFailure(failure.errorMessage)),
-            (message) => emit(OtpSentSuccess(message)),
-      );
-    } catch (e) {
-      emit(OtpSendingFailure("حدث خطأ أثناء إرسال رمز التحقق، حاول مرة أخرى."));
-    }
-  }
 }

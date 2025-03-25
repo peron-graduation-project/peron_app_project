@@ -7,10 +7,9 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
   final VerifyOtpRepo verifyOtpRepo;
   final String email;
 
-  VerifyOtpCubit({required this.verifyOtpRepo, required this.email})
-      : super(VerifyOtpInitial());
+  VerifyOtpCubit({required this.email, required this.verifyOtpRepo,}) : super(VerifyOtpInitial());
 
-  Future<void> verifyOtp({required String otpCode}) async {
+  Future<void> verifyOtp({required String otpCode,}) async {
     if (isClosed) return;
 
     emit(VerifyOtpLoading());
@@ -30,7 +29,7 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
           if (!isClosed) {
             if (isAuthenticated) {
               debugPrint("✅ تم التحقق بنجاح!");
-              emit(VerifyOtpSuccess("تم التحقق من OTP بنجاح!"));
+              emit(VerifyOtpSuccess(message: "تم التحقق من OTP بنجاح!",otp:otpCode ));
             } else {
               debugPrint("❌ OTP غير صالح!");
               emit(VerifyOtpFailure("OTP غير صالح أو منتهي الصلاحية!"));
@@ -46,34 +45,4 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
     }
   }
 
-  Future<void> resendOtp() async {
-    if (isClosed) return;
-
-    emit(ResendOtpLoading());
-    debugPrint("🔄 إعادة إرسال OTP إلى: $email");
-
-    try {
-      final result = await verifyOtpRepo.resendOtp(email: email);
-
-      result.fold(
-            (failure) {
-          if (!isClosed) {
-            debugPrint("❌ فشل في إعادة الإرسال: ${failure.errorMessage}");
-            emit(OtpResentFailure("تعذر إعادة إرسال OTP، يرجى المحاولة لاحقًا."));
-          }
-        },
-            (message) {
-          if (!isClosed) {
-            debugPrint("✅ OTP تمت إعادة إرساله بنجاح!");
-            emit(OtpResentSuccess("تم إرسال OTP بنجاح إلى بريدك الإلكتروني."));
-          }
-        },
-      );
-    } catch (e) {
-      if (!isClosed) {
-        debugPrint("⚠️ خطأ غير متوقع أثناء إعادة إرسال OTP: $e");
-        emit(OtpResentFailure("حدث خطأ غير متوقع، يرجى المحاولة لاحقًا."));
-      }
-    }
-  }
 }

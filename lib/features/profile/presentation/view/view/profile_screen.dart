@@ -6,6 +6,8 @@ import 'package:peron_project/features/profile/presentation/view/widgets/user_in
 
 
 class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

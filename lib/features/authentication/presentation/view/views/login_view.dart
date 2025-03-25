@@ -15,13 +15,13 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     final sharedPrefs = SharedPrefsHelper();
     return BlocProvider(
-    create: (_) => LoginCubit(
-      loginRepo: LoginRepoImpl(
-        apiService: ApiService(Dio()),
-        sharedPrefsHelper: sharedPrefs,
+      create: (_) => LoginCubit(
+        loginRepo: LoginRepoImpl(
+          apiService: ApiService(Dio()),
+          sharedPrefsHelper: sharedPrefs,
+        ),
+        prefsHelper: sharedPrefs,
       ),
-      prefsHelper: sharedPrefs,
-    ),
       child: Scaffold(
         body: LoginBodyView(),
       ),

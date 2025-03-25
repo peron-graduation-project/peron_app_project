@@ -6,6 +6,7 @@ import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
+import 'package:peron_project/features/authentication/data/repos/send%20otp/send_repo_imp.dart';
 import 'package:peron_project/features/authentication/presentation/view/widgets/phone_field.dart';
 import '../../../../../core/widgets/build_text_form_field.dart';
 import '../../../data/repos/signup/signup_repo_imp.dart';
@@ -32,7 +33,10 @@ class _SignupViewState extends State<SignupView> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
     return BlocProvider(
-      create: (context) => SignupCubit(SignupRepoImp(apiService: ApiService(Dio()))),
+      create: (context) => SignupCubit(
+          SignupRepoImp(apiService: ApiService(Dio())),
+        SendOtpRepoImp(apiService: ApiService(Dio())),
+      ),
       child: BlocConsumer<SignupCubit, SignupState>(
         listener: (context, state) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -41,11 +45,7 @@ class _SignupViewState extends State<SignupView> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message), backgroundColor: Colors.green),
             );
-            Navigator.pushNamedAndRemoveUntil(context, PageRouteName.verificationOtp, (context)=>false,arguments: _emailController.text);
-
-            Future.delayed(Duration(seconds: 1), () {
-              BlocProvider.of<SignupCubit>(context).sendOtp();
-            });
+            Navigator.pushNamedAndRemoveUntil(context, PageRouteName.verificationOtp, (context)=>false,arguments: _emailController.text,);
           } else if (state is SignupFailure) {
             String errorMessage = (state.errors != null && state.errors!.isNotEmpty)
                 ? state.errors!.map((e) => e.toString()).join('\n')
@@ -53,16 +53,6 @@ class _SignupViewState extends State<SignupView> {
 
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
-            );
-          }
-          else if (state is OtpSentSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: Colors.blue),
-            );
-            Navigator.pushNamed(
-              context,
-              PageRouteName.verificationOtp,
-              arguments: {"email": _emailController.text.trim()},
             );
           }
         },
