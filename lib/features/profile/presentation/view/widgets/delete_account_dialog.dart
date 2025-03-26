@@ -5,6 +5,8 @@ import 'package:peron_project/core/helper/images.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 
 class DeleteAccountDialog extends StatelessWidget {
+  const DeleteAccountDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(

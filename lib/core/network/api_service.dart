@@ -190,6 +190,36 @@ class ApiService {
       ));
     }
   }
+  Future<Either<Failure, Map<String, dynamic>>> logout() async {
+    try {
+      final response = await _dio.post(
+        '/Auth/logout',
+      );
+
+      print("✅ [DEBUG] Logout API Response: ${response.data}");
+
+      if (response.data is Map<String, dynamic>) {
+        return Right(response.data as Map<String, dynamic>);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error: $e");
+
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] Unexpected Error in ApiService: $e");
+
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ أثناء الاتصال بالسيرفر",
+        errors: [e.toString()],
+      ));
+    }
+  }
 
 
 

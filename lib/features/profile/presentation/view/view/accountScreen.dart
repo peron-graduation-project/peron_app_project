@@ -1,10 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
+import 'package:peron_project/core/network/api_service.dart';
+import 'package:peron_project/features/authentication/presentation/manager/logout/logout_cubit.dart';
 import 'package:peron_project/features/profile/presentation/view/view/profile_screen.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/logOutButton.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/profileSection.dart';
 
+import '../../../../authentication/data/repos/logout/logout_repo_imp.dart';
 import 'settings_screen.dart';
 
 
@@ -18,7 +23,9 @@ class AccountScreen extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return BlocProvider(
+  create: (context) => LogoutCubit(LogoutRepoImp(ApiService(Dio()))),
+  child: Scaffold(
       appBar: AppBar(
         title: Text("حسابي", style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.w600)),
         
@@ -85,6 +92,7 @@ class AccountScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ),
+);
   }
 }
