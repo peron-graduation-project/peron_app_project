@@ -3,14 +3,19 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:peron_project/features/notification/data/notification_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 import '../../../../core/error/failure.dart';
 
 class ApiService {
   final String _baseUrl = 'https://sakaniapi1.runasp.net/api';
   final Dio _dio;
+  late CookieManager _cookieManager;
 
   ApiService(this._dio) {
     _dio.options.baseUrl = _baseUrl;
+    _cookieManager = CookieManager(CookieJar());
+    _dio.interceptors.add(_cookieManager);
   }
 
   void _printDebugInfo({
@@ -43,6 +48,25 @@ class ApiService {
       return Left(ServiceFailure.fromDioError(e));
     }
   }
+  Future<Either<Failure, bool>> checkOtp({required String email, required String otpCode}) async {
+    try {
+      debugPrint("📩 إرسال طلب تحقق إلى API...");
+      debugPrint("🔹 Email: $email");
+      debugPrint("🔹 OTP Code: $otpCode");
+
+      Response response = await _dio.post(
+        '/Auth/Check-Otp-For-ResetPassword',
+        data: {"email": email.toLowerCase(), "otpCode": otpCode},
+      );
+
+      _printDebugInfo(functionName: 'checkOtp', response: response);
+      return Right(response.data["isAuthenticated"] ?? false);
+    } on DioException catch (e) {
+      _printDebugInfo(functionName: 'checkOtp', error: e);
+      return Left(ServiceFailure.fromDioError(e));
+    }
+  }
+
 
   Future<Either<Failure, Map<String, dynamic>>> signup({required Map<String, dynamic> body}) async {
     try {
@@ -123,6 +147,46 @@ class ApiService {
     }
   }
 
+  Future<Either<Failure, Map<String, dynamic>>> refreshToken({required String token}) async {
+    try {
+      final response = await _dio.post(
+        '/Auth/refresh-token',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("✅ [DEBUG] Refresh Token API Response: ${response.data}");
+
+      if (response.data is Map<String, dynamic>) {
+        final prefs = await SharedPreferences.getInstance();
+
+        final newToken = response.data['token'];
+        await prefs.setString('token', newToken);
+
+        return Right(response.data as Map<String, dynamic>);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error: $e");
+
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] Unexpected Error in ApiService: $e");
+
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء تجديد التوكن",
+        errors: [e.toString()],
+      ));
+    }
+  }
 
   Future<Either<Failure, Map<String, dynamic>>> resetPassword(
       Map<String, dynamic> body,
@@ -157,25 +221,6 @@ class ApiService {
       ));
     }
   }
-  Future<Either<Failure, bool>> checkOtp({required String email, required String otpCode}) async {
-    try {
-      debugPrint("📩 إرسال طلب تحقق إلى API...");
-      debugPrint("🔹 Email: $email");
-      debugPrint("🔹 OTP Code: $otpCode");
-
-      Response response = await _dio.post(
-        '/Auth/Check-Otp-For-ResetPassword',
-        data: {"email": email.toLowerCase(), "otpCode": otpCode},
-      );
-
-      _printDebugInfo(functionName: 'verifyOtp', response: response);
-      return Right(response.data["isAuthenticated"] ?? false);
-    } on DioException catch (e) {
-      _printDebugInfo(functionName: 'verifyOtp', error: e);
-      return Left(ServiceFailure.fromDioError(e));
-    }
-  }
-
 
   Future<Either<Failure, Map<String, dynamic>>> forgotPassword({
     required String email,
@@ -204,6 +249,7 @@ class ApiService {
       ));
     }
   }
+
   Future<Either<Failure, Map<String, dynamic>>> logout({required String token}) async {
     try {
       final response = await _dio.post(
@@ -241,7 +287,6 @@ class ApiService {
       ));
     }
   }
-
 
   Future<Either<Failure, List<NotificationModel>>> getNotifications({required String endPoint, Map<String, dynamic>? queryParameters}) async {
     try {

@@ -42,6 +42,8 @@ dependencies:
   flutter_otp_text_field: ^1.5.1+1
   collection: ^1.19.1
   get_it:
+  dio_cookie_manager: ^3.2.0
+  cookie_jar: ^4.0.8
 
 
 

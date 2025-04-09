@@ -34,7 +34,7 @@ class LogoutRepoImp implements LogoutRepo {
             (data) {
           if (data is Map<String, dynamic>) {
             if (data.containsKey("message")) {
-              return Right(data["message"].toString());
+              return Right(data["message"].toString()); // إعادة رسالة النجاح
             } else {
               return Left(ServiceFailure(
                 errorMessage: "الاستجابة لا تحتوي على المفتاح 'message'",
@@ -52,7 +52,7 @@ class LogoutRepoImp implements LogoutRepo {
     } catch (e) {
       print("❗ [DEBUG] Unexpected Error in LogoutRepoImp: $e");
       return Left(ServiceFailure(
-        errorMessage: "حدث خطأ غير متوقع",
+        errorMessage: "حدث خطأ غير متوقع أثناء تسجيل الخروج",
         errors: [e.toString()],
       ));
     }
