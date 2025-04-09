@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:peron_project/features/notification/data/notification_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/error/failure.dart';
 
 class ApiService {
@@ -78,9 +79,8 @@ class ApiService {
     required String password,
   }) async {
     try {
-      debugPrint(" إرسال طلب تسجيل الدخول إلى API..");
+      debugPrint("إرسال طلب تسجيل الدخول إلى API..");
       debugPrint("🔹 Email: $email");
-      debugPrint("🔹 Password: $password");
 
       Response response = await _dio.post(
         '/Auth/login',
@@ -93,7 +93,19 @@ class ApiService {
       _printDebugInfo(functionName: 'login', response: response);
 
       if (response.data["isAuthenticated"] == true) {
-        return Right(response.data as Map<String, dynamic>);
+        final token = response.data['token'];
+
+        final prefs = await SharedPreferences.getInstance();
+        bool isTokenSaved = await prefs.setString('token', token);
+
+        if (isTokenSaved) {
+          return Right(response.data as Map<String, dynamic>);
+        } else {
+          return Left(ServiceFailure(
+            errorMessage: "فشل في حفظ التوكين",
+            errors: [],
+          ));
+        }
       } else {
         return Left(ServiceFailure(
           errorMessage: response.data["message"] ?? "خطأ في بيانات الدخول",
@@ -110,6 +122,8 @@ class ApiService {
       ));
     }
   }
+
+
   Future<Either<Failure, Map<String, dynamic>>> resetPassword(
       Map<String, dynamic> body,
       ) async {
@@ -190,15 +204,22 @@ class ApiService {
       ));
     }
   }
-  Future<Either<Failure, Map<String, dynamic>>> logout() async {
+  Future<Either<Failure, Map<String, dynamic>>> logout({required String token}) async {
     try {
       final response = await _dio.post(
         '/Auth/logout',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
       );
 
       print("✅ [DEBUG] Logout API Response: ${response.data}");
 
       if (response.data is Map<String, dynamic>) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('token');
         return Right(response.data as Map<String, dynamic>);
       } else {
         return Left(ServiceFailure(
@@ -215,12 +236,11 @@ class ApiService {
       print("❗ [DEBUG] Unexpected Error in ApiService: $e");
 
       return Left(ServiceFailure(
-        errorMessage: "حدث خطأ أثناء الاتصال بالسيرفر",
+        errorMessage: "حدث خطأ غير متوقع أثناء تسجيل الخروج",
         errors: [e.toString()],
       ));
     }
   }
-
 
 
   Future<Either<Failure, List<NotificationModel>>> getNotifications({required String endPoint, Map<String, dynamic>? queryParameters}) async {

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/network/api_service.dart';
 import 'logout_repo.dart';
@@ -11,7 +12,17 @@ class LogoutRepoImp implements LogoutRepo {
   @override
   Future<Either<Failure, String>> logout() async {
     try {
-      final response = await apiService.logout();
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      if (token == null || token.isEmpty) {
+        return Left(ServiceFailure(
+          errorMessage: "لا يوجد توكين مسجل لتسجيل الخروج",
+          errors: ["التوكين غير موجود"],
+        ));
+      }
+
+      final response = await apiService.logout(token: token);
 
       print("✅ [DEBUG] LogoutRepoImp Response: $response");
 
@@ -21,12 +32,19 @@ class LogoutRepoImp implements LogoutRepo {
           return Left(failure);
         },
             (data) {
-          if (data.containsKey("message")) {
-            return Right(data["message"].toString());
+          if (data is Map<String, dynamic>) {
+            if (data.containsKey("message")) {
+              return Right(data["message"].toString());
+            } else {
+              return Left(ServiceFailure(
+                errorMessage: "الاستجابة لا تحتوي على المفتاح 'message'",
+                errors: ["لم يتم العثور على المفتاح 'message' في الاستجابة"],
+              ));
+            }
           } else {
             return Left(ServiceFailure(
-              errorMessage: "الاستجابة لا تحتوي على الرسالة",
-              errors: ["لم يتم العثور على المفتاح 'message' في الاستجابة"],
+              errorMessage: "الاستجابة غير صحيحة",
+              errors: ["البيانات المستلمة ليست من النوع المناسب"],
             ));
           }
         },

@@ -15,9 +15,13 @@ class LogoutButton extends StatelessWidget {
       listener: (context, state) {
         if (state is LogoutSuccess) {
           Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-        } else if (state is LogoutFailure) {
+        }
+        else if (state is LogoutFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage),backgroundColor: Colors.red,),
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       },
@@ -28,10 +32,18 @@ class LogoutButton extends StatelessWidget {
               : () {
             context.read<LogoutCubit>().logout();
           },
-          icon: Icon(Icons.logout, color: Colors.white, size: screenWidth * 0.05),
+          icon: Icon(
+            Icons.logout,
+            color: Colors.white,
+            size: screenWidth * 0.05,
+          ),
           label: Text(
             "تسجيل الخروج",
-            style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.w600, color: Colors.white),
+            style: TextStyle(
+              fontSize: screenWidth * 0.05,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
           ),
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 50),
