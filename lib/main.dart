@@ -44,6 +44,7 @@ class PeronApp extends StatelessWidget {
           supportedLocales: [
             Locale('ar','AE'), // English
           ],
+
           initialRoute: PageRouteName.initialRoute,
           onGenerateRoute: RoutesGenerator.onGenerateRoute,
         );

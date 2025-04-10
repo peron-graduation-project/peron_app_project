@@ -34,7 +34,7 @@ class LogoutRepoImp implements LogoutRepo {
             (data) {
           if (data is Map<String, dynamic>) {
             if (data.containsKey("message")) {
-              return Right(data["message"].toString()); // إعادة رسالة النجاح
+              return Right(data["message"].toString());
             } else {
               return Left(ServiceFailure(
                 errorMessage: "الاستجابة لا تحتوي على المفتاح 'message'",

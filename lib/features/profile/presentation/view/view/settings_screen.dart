@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
+import 'package:peron_project/core/widgets/custom_arrow_back.dart';
+import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/delete_account_dialog.dart';
 
 import '../widgets/lang_selection_dialog.dart';
 import '../widgets/rating_dialog.dart';
-import '../widgets/setting_item.dart';
 import 'about_us_screen.dart';
 
 class Settings extends StatelessWidget {
@@ -13,118 +14,77 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isSmallScreen = size.width < 360;
-
+    var theme=Theme.of(context).textTheme;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(size.width * 0.04),
-          child: Column(
-            children: [
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "الاعدادات",
-                          style: TextStyle(
-                            fontSize: isSmallScreen ? 14 : 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.titleSmallColor,
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(
-                            Icons.chevron_left,
-                            size: isSmallScreen ? 20 : 24,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              SizedBox(height: size.height * 0.025),
-
-              SettingsItem(
-                title: 'اللغة',
-                icon: Icons.language,
-                showArrow: true,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const LanguageSelectionDialog();
-                    },
-                  );
-                },
-                isDeleteAccount: null,
-              ),
-
-              SettingsItem(
-                title: 'قم بتقييمنا',
-                icon: Icons.star_border,
-                showArrow: true,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return RatingDialog();
-                    },
-                  );
-                },
-                isDeleteAccount: null,
-              ),
-
-              SettingsItem(
-                title: 'من نحن',
-                icon: Icons.info_outline,
-                showArrow: true,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AboutUs()),
-                  );
-                },
-                isDeleteAccount: null,
-              ),
-
-              SettingsItem(
-                title: 'تحتاج إلي المساعدة؟',
-                icon: Icons.help_outline,
-                showArrow: true,
-                 onTap: () {
-                Navigator.pushNamed(context, PageRouteName.helpScreen);
-              },
-                isDeleteAccount: null,
-              ),
-
-              SettingsItem(
-                title: 'حذف الحساب',
-                icon: Icons.delete_outline,
-                showArrow: false,
-                isDeleteAccount: true,
-                 onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => DeleteAccountDialog(),
-                );
-              },
-              ),
-            ],
+      appBar: AppBar(
+        title: Text(
+          "الاعدادات",
+          style: theme.headlineMedium!.copyWith(fontSize: 20),
+        ),
+        leading: CustomArrowBack(),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Divider(
+            thickness: 1,
+            height: 1,
+            color: AppColors.dividerColor,
           ),
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.only(top: 12),
+        child: Column(
+          children: [
+            AccountOption(
+              title: 'اللغة',
+              icon: Icons.language,
+              onTap: () {
+                return showChangeLanguageDialog(context);
+              },
+               screenWidth: screenWidth,
+            ),
+
+            AccountOption(
+              title: 'قم بتقييمنا',
+              icon: Icons.star_border,
+              onTap: () {
+                return showRatingDialog(context);
+              },
+              screenWidth: screenWidth,
+            ),
+            AccountOption(
+              title: 'من نحن',
+              icon: Icons.info_outline,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutUs()),
+                );
+              }, screenWidth: screenWidth,
+            ),
+
+            AccountOption(
+              title: 'تحتاج إلي المساعدة؟',
+              icon: Icons.help_outline,
+               onTap: () {
+              Navigator.pushNamed(context, PageRouteName.helpScreen);
+            }, screenWidth: screenWidth,
+            ),
+
+            AccountOption(
+              showArrow: false,
+              textColor: Colors.red,
+              iconColor: Colors.red,
+              title: 'حذف الحساب',
+              icon: Icons.delete_outline,
+               onTap: () {
+              return showDeleteAccountDialog(context);
+            }, screenWidth: screenWidth,
+            ),
+          ],
         ),
       ),
     );

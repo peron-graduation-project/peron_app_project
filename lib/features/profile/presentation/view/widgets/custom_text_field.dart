@@ -6,7 +6,7 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final int maxLines;
 
-  const CustomTextField({required this.label, this.maxLines = 1});
+  const CustomTextField({super.key, required this.label, this.maxLines = 1});
 
   @override
   Widget build(BuildContext context) {

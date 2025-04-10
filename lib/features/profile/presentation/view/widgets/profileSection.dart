@@ -4,12 +4,16 @@ class ProfileSection extends StatelessWidget {
   final double screenWidth;
   final double screenHeight;
 
-  const ProfileSection({required this.screenWidth, required this.screenHeight});
+  const ProfileSection({super.key, required this.screenWidth, required this.screenHeight});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    var theme=Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Stack(
             children: [
@@ -32,11 +36,10 @@ class ProfileSection extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: screenHeight * 0.015),
+          SizedBox(height: 8),
           Text(
             "تاليا أنس",
-            style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold),
-          ),
+            style: theme.bodyMedium?.copyWith(color: Color(0xff282929))),
         ],
       ),
     );

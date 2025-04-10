@@ -8,8 +8,8 @@ import 'package:peron_project/features/beginning/presentation/view/views/beginni
 import 'package:peron_project/features/home/presentation/view/views/home_view.dart';
 import 'package:peron_project/features/notification/presentation/view/views/notification.dart';
 import 'package:peron_project/features/onboarding/presentation/view/views/on_boarding.dart';
+import 'package:peron_project/features/profile/presentation/view/view/after_exit_screen.dart';
 import 'package:peron_project/features/profile/presentation/view/view/help_screen.dart';
-import 'package:peron_project/features/profile/presentation/view/view/login_screen.dart';
 import 'package:peron_project/features/profile/presentation/view/view/privacy_policy_screen.dart';
 import 'package:peron_project/features/profile/presentation/view/view/settings_screen.dart';
 import 'package:peron_project/features/search/presentation/view/views/search_view.dart';
@@ -59,8 +59,8 @@ class RoutesGenerator {
       case PageRouteName.search:
         return MaterialPageRoute(
           builder: (context) => const SearchView(), settings: settings,);
-           case PageRouteName.loginScreen:
-  return MaterialPageRoute(builder: (_) => LoginScreen());
+           case PageRouteName.afterExit:
+  return MaterialPageRoute(builder: (_) => AfterExitScreen(),settings: settings);
 case PageRouteName.privacyPolicyScreen:
   return MaterialPageRoute(builder: (_) => PrivacyPolicyScreen());
 case PageRouteName.helpScreen:

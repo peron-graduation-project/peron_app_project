@@ -1,116 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/colors.dart';
-import 'package:peron_project/features/profile/presentation/view/widgets/custom_text_field.dart';
-import 'package:peron_project/features/profile/presentation/view/widgets/phone_number_field.dart';
+import 'package:peron_project/core/widgets/build_text_form_field.dart';
+import 'package:peron_project/core/widgets/custom_button.dart';
 
-class HelpScreen extends StatelessWidget {
+import '../../../../../core/widgets/custom_arrow_back.dart';
+import '../../../../authentication/presentation/view/widgets/phone_field.dart';
+
+class HelpScreen extends StatefulWidget {
+  const HelpScreen({super.key});
+
+  @override
+  State<HelpScreen> createState() => _HelpScreenState();
+}
+
+class _HelpScreenState extends State<HelpScreen> {
+  final _formHelpKey = GlobalKey<FormState>();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         double screenWidth = constraints.maxWidth;
         double screenHeight = constraints.maxHeight;
-
+        var theme=Theme.of(context).textTheme;
         return Scaffold(
-          body: Directionality(
-            textDirection: TextDirection.rtl,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.07,
-                  vertical: screenHeight * 0.03,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: SvgPicture.asset(
-                            'assets/images/backicon.svg',
-                            width: screenWidth * 0.06,
-                            height: screenWidth * 0.06,
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'تحتاج إلى مساعدة؟',
-                              style: GoogleFonts.tajawal(
-                                fontSize: screenWidth * 0.05,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.black, 
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: screenWidth * 0.06),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
-                    Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            'مرحبًا بك!',
-                            style: GoogleFonts.tajawal(
-                              fontSize: screenWidth * 0.05,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.primary, 
-                            ),
-                          ),
-                          SizedBox(height: screenHeight * 0.01),
-                          Text(
-                            'هل تحتاج إلى مساعدة؟ فريقنا جاهز للتواصل معك في أقرب وقت!',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.tajawal(
-                              fontSize: screenWidth * 0.04,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.grey, 
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.04),
-                    CustomTextField(label: 'الاسم'),
-                    CustomTextField(label: 'البريد الإلكتروني'),
-                    CustomPhoneField(),
-                    CustomTextField(label: 'الوصف / الاستفسار', maxLines: 3),
-                    SizedBox(height: screenHeight * 0.03),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary, 
-                          padding: EdgeInsets.symmetric(
-                            vertical: screenHeight * 0.02,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              screenWidth * 0.02,
-                            ),
-                          ),
-                        ),
-                        child: Text(
-                          'إرسال',
-                          style: GoogleFonts.tajawal(
-                            fontSize: screenWidth * 0.045,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.white, 
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                  ],
-                ),
+          appBar: AppBar(
+            title: Text(
+              'تحتاج إلى مساعدة؟',
+              style: theme.headlineMedium!.copyWith(fontSize: 20),
+            ),
+            centerTitle: true,
+            leading: CustomArrowBack(),
+            automaticallyImplyLeading: false,
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(1),
+              child: Divider(
+                thickness: 1,
+                height: 1,
+                color: AppColors.dividerColor,
+              ),
+            ),
+          ),
+          body: Form(
+            key: _formHelpKey,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.07,
+                vertical: screenHeight * 0.02,
+              ),
+              child: ListView(
+                children: [
+                  Text(
+                    'مرحبًا بك!',
+                    textAlign: TextAlign.center,
+                    style:theme.headlineMedium?.copyWith(color: AppColors.primaryColor,fontSize: 20)
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Text(
+                    '" هل تحتاج إلى مساعدة؟ فريقنا جاهز للتواصل معك في أقرب وقت ! "',
+                    style: theme.titleMedium?.copyWith(color: Color(0xff818181))
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+                  buildTextField("الإسم", TextInputType.name, controller: _fullNameController),
+                  const SizedBox(height: 15.0),
+                  buildTextField("البريد الإلكتروني", TextInputType.emailAddress, controller: _emailController),
+                  const SizedBox(height: 15.0),
+                  PhoneFieldInput(controller: _phoneController),
+                  buildTextField("الوصف / الاستفسار", TextInputType.text, controller: _descriptionController,maxLines: 3),
+                  SizedBox(height: 15),
+               CustomButton(
+                   textColor: Colors.white, text: 'إرسال', backgroundColor: AppColors.primaryColor,
+                 onPressed: (){
+                   if (_formHelpKey.currentState!.validate() ) {
+                     ScaffoldMessenger.of(context).showSnackBar(
+
+                       const SnackBar(
+                         backgroundColor: Colors.green,
+                           content: Text('تم الإرسال')),
+                     );
+                   return ;
+                   } else {
+                     ScaffoldMessenger.of(context).showSnackBar(
+                       const SnackBar(
+                         backgroundColor: Colors.red,
+                           content: Text('يرجى إدخال البيانات بشكل صحيح')),
+                     );
+                   }
+                 },
+               )
+                ],
               ),
             ),
           ),

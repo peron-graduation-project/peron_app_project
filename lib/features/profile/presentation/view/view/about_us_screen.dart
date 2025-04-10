@@ -1,108 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/colors.dart';
+import 'package:peron_project/features/profile/presentation/view/widgets/about_item.dart';
 
-import '../widgets/about_item.dart';
+import '../../../../../core/helper/images.dart';
+import '../../../../../core/widgets/custom_arrow_back.dart';
 
 class AboutUs extends StatelessWidget {
-  const AboutUs({Key? key}) : super(key: key);
+  const AboutUs({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isSmallScreen = size.width < 360;
+    var theme=Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F8F8),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.04,
-                vertical: size.height * 0.015,
-              ),
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Colors.grey, width: 0.1),
-                ),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "من نحن",
-                      style: TextStyle(
-                        fontSize: isSmallScreen ? 14 : 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.titleSmallColor,
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.chevron_left,
-                        size: isSmallScreen ? 20 : 24,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: size.height * 0.04),
-              child: Column(
-                children: [
-                  Container(
-                    width: size.width * 0.25,
-                    height: size.width * 0.25,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/images/peron.png',
-                        width: size.width * 0.175,
-                        height: size.width * 0.175,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: size.height * 0.012),
-                  Text(
-                    "بيرون",
-                    style: TextStyle(
-                      fontSize: isSmallScreen ? 20 : 22,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.primaryColor,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.width * 0.04),
-              child: Column(
-                children: [
-                  AboutItem(title: "موقع الويب", onTap: () {}),
-                  AboutItem(title: "فيسبوك", onTap: () {}),
-                  AboutItem(title: "انستجرام", onTap: () {}),
-                  AboutItem(title: "شروط الاستخدام", onTap: () {}),
-                ],
-              ),
-            ),
-          ],
+      appBar: AppBar(
+        title: Text(
+          "من نحن",
+          style: theme.headlineMedium!.copyWith(fontSize: 20),
+        ),
+        centerTitle: true,
+        leading: CustomArrowBack(),
+        automaticallyImplyLeading: false,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Divider(
+            thickness: 1,
+            height: 1,
+            color: AppColors.dividerColor,
+          ),
         ),
       ),
-    );
+      body: Padding(
+        padding: const EdgeInsets.only(top: 16.0),
+        child: Column(
+crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              Images.kLogo,
+              width: MediaQuery.of(context).size.width * 0.3,
+            ),
+            SizedBox(height: 5),
+            Text(
+              "بيرون",
+              style: theme.titleLarge?.copyWith(
+                fontSize: 28.43,
+              )
+            ),
+            SizedBox(height: 20,),
+            AboutItem(title: 'موقع الويب',  onTap: () {  },),
+            AboutItem(title: 'فيسبوك', onTap: () {  },),
+            AboutItem(title: 'انستجرام', onTap: () {  },),
+            AboutItem(title: 'شروط الاستخدام', onTap: () {  }, ),
+          ],
+              ),
+      ),
+          );
   }
 }

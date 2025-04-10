@@ -15,6 +15,9 @@ static String phoneIcon = 'assets/images/iconamoon_phone.svg';
 static String sign = 'assets/images/Launching-cuate 1.svg';
 static String deleteAccount = 'assets/images/Inbox cleanup-cuate 1.svg';
 static String emailIcon = 'assets/images/mage_email.svg';
+static String language = 'assets/images/language.svg';
+static String rating = 'assets/images/rating.svg';
+
 
 
 

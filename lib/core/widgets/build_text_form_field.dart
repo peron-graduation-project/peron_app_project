@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../helper/colors.dart';
 
-Widget buildTextField(String label, TextInputType type, {bool obscureText = false,TextEditingController? controller,String? hintText}) {
+Widget buildTextField(String label, TextInputType type, {bool obscureText = false,TextEditingController? controller,String? hintText,int maxLines=1}) {
   return TextFormField(
+    maxLines: maxLines,
     controller: controller,
     keyboardType: type,
     obscureText: obscureText,

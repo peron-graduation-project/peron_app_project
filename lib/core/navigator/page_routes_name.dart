@@ -11,7 +11,7 @@ class PageRouteName{
   static const String checkOtp="check otp";
   static const String notification="notification";
   static const String search="search";
-  static const String loginScreen = '/login';
+  static const String afterExit = 'after exit';
   static const String privacyPolicyScreen = '/privacyPolicy';
   static const String helpScreen = '/help';
   static const String settingsScreen = '/settings';

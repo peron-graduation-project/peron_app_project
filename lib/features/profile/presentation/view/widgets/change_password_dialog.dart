@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/colors.dart';
+import 'package:peron_project/core/widgets/custom_button.dart';
 import 'success_dialog.dart';
 
 void showChangePasswordDialog(BuildContext context) {
@@ -13,6 +15,7 @@ void showChangePasswordDialog(BuildContext context) {
     context: context,
     barrierDismissible: false,
     builder: (context) {
+      var theme=Theme.of(context).textTheme;
       double screenWidth = MediaQuery.of(context).size.width;
       return StatefulBuilder(
         builder: (context, setState) {
@@ -32,7 +35,7 @@ void showChangePasswordDialog(BuildContext context) {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.topRight,
                     child: GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: Container(
@@ -52,10 +55,7 @@ void showChangePasswordDialog(BuildContext context) {
                   SizedBox(height: screenWidth * 0.02),
                   Text(
                     'إنشاء كلمة مرور جديدة',
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.05,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: theme.titleSmall?.copyWith(color: Color(0xff292828))
                   ),
                   SizedBox(height: screenWidth * 0.03),
                   buildPasswordField(
@@ -92,28 +92,16 @@ void showChangePasswordDialog(BuildContext context) {
                     context,
                   ),
                   SizedBox(height: screenWidth * 0.05),
-                  SizedBox(
-                    height: screenWidth * 0.12,
-                    width: screenWidth * 0.4,
-                    child: ElevatedButton(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 55.0),
+                    child: CustomButton(
                       onPressed: () {
                         Navigator.pop(context);
                         showSuccessDialog(context);
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xff0F7757),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Text(
-                        'تأكيد',
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.045,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
+                      backgroundColor: AppColors.primaryColor,
+                      textColor: Colors.white,
+                      text:'تأكيد' ,
                     ),
                   ),
                 ],
