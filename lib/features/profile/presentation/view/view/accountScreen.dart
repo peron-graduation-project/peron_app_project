@@ -100,7 +100,7 @@ class AccountScreen extends StatelessWidget {
                     if (state is LogoutSuccess) {
                       Navigator.of(
                         context,
-                      ).pushNamedAndRemoveUntil('/login', (route) => false);
+                      ).pushNamedAndRemoveUntil(PageRouteName.afterExit, (route) => false);
                     } else if (state is LogoutFailure) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
