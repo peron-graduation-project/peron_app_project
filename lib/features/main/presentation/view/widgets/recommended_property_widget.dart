@@ -17,6 +17,7 @@ class _RecommendedPropertyWidgetState extends State<RecommendedPropertyWidget> {
       "image": "assets/images/appartment4.jpg",
       "title": "شقه سكنية",
       "location": "توريل",
+
     },
     {
       "id": 5,

@@ -25,11 +25,11 @@ class CustomFavouriteIcon extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           debugPrint(" Toggling favorite for: ${property['title']} (ID: ${property['id']}) in category: $category");
-          Provider.of<FavoriteManager>(context, listen: false).toggleFavorite(property, category);
+          Provider.of<FavoriteManager>(context, listen: false).toggleFavorite(property,category ) ;
         },
         child: Consumer<FavoriteManager>(
           builder: (context, favoriteManager, child) {
-            bool isFavorite = favoriteManager.isFavorite(property, category);
+            bool isFavorite = favoriteManager.isFavorite(property,category );
             debugPrint(" UI Updated: ${property['title']} isFavorite = $isFavorite");
 
             return AnimatedSwitcher(

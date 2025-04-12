@@ -18,7 +18,7 @@ class RecommendedViewBody extends StatelessWidget {
       ),
       body: Consumer<FavoriteManager>(
         builder: (context, favoriteManager, child) {
-          final recommendedFavorites = favoriteManager.recommendedFavorites;
+          final recommendedFavorites = favoriteManager.favorites;
 
           return recommendedFavorites.isEmpty
               ? Center(

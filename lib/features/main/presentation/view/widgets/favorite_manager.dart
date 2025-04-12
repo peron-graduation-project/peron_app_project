@@ -1,40 +1,31 @@
 import 'package:flutter/material.dart';
 
 class FavoriteManager extends ChangeNotifier {
-  final List<Map<String, dynamic>> _mostRentFavorites = [];
-  final List<Map<String, dynamic>> _recommendedFavorites = [];
+  final List<Map<String, dynamic>> _favorites = [];
 
-  List<Map<String, dynamic>> get mostRentFavorites => _mostRentFavorites;
-  List<Map<String, dynamic>> get recommendedFavorites => _recommendedFavorites;
+  List<Map<String, dynamic>> get favorites => _favorites;
 
   void toggleFavorite(Map<String, dynamic> property, String category) {
-    if (category == "most_rent") {
-      if (isFavorite(property, category)) {
-        _mostRentFavorites.removeWhere((item) => item['id'] == property['id']);
-      } else {
-        _mostRentFavorites.add(property);
-      }
-    } else if (category == "recommended") {
-      if (isFavorite(property, category)) {
-        _recommendedFavorites.removeWhere((item) => item['id'] == property['id']);
-      } else {
-        _recommendedFavorites.add(property);
-      }
-    }
-    debugPrint(" Total Most Rent Favorites: ${_mostRentFavorites.length}");
-    debugPrint(" Total Recommended Favorites: ${_recommendedFavorites.length}");
-      debugPrint("Most Rent Favorites: ${_mostRentFavorites.map((e) => e['id']).toList()}");
-debugPrint("Recommended Favorites: ${_recommendedFavorites.map((e) => e['id']).toList()}");
-   
-    notifyListeners();
-  }
+    print("بدء محاولة إضافة/إزالة عقار من المفضلة");
+    print("العقار: $property");
+    print("القسم: $category");
 
-  bool isFavorite(Map<String, dynamic> property, String category) {
-    if (category == "most_rent") {
-      return _mostRentFavorites.any((item) => item['id'] == property['id']);
-    } else if (category == "recommended") {
-      return _recommendedFavorites.any((item) => item['id'] == property['id']);
+    final isAlreadyFavorite = _favorites.any((item) => item['id'] == property['id'] && item['source'] == category);
+
+    if (isAlreadyFavorite) {
+      print("العقار موجود بالفعل في المفضلة، سيتم حذفه");
+      _favorites.removeWhere((item) => item['id'] == property['id'] && item['source'] == category);
+      print("تم حذف العقار");
+    } else {
+      print("العقار غير موجود في المفضلة، سيتم إضافته");
+      _favorites.add({...property, 'source': category});
+      print("تم إضافة العقار");
     }
-    return false;
+    print("قائمة المفضلة الآن: $_favorites");
+    notifyListeners();
+    print("تم إعلام المستمعين بالتغيير");
+  }
+  bool isFavorite(Map<String, dynamic> property, String category) {
+    return _favorites.any((item) => item['id'] == property['id'] && item['source'] == category);
   }
 }

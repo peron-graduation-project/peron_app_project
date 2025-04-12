@@ -21,10 +21,10 @@ class _RecommendedPropertyCardState extends State<RecommendedPropertyCard> {
     return LayoutBuilder(
       builder: (context, constraints) {
         double itemWidth = constraints.maxWidth > 0 ? constraints.maxWidth : screenWidth * 0.45;
+        print("RecommendedPropertyCard - constraints.maxWidth: ${constraints.maxWidth}, itemWidth: $itemWidth"); // هنطبع القيم دي
         double iconSize = itemWidth * 0.1;
         double textSize = itemWidth * 0.08;
         double paddingSize = itemWidth * 0.05;
-
         return PropertyBorder(
           paddingSize: paddingSize,
           child: Stack(
@@ -38,7 +38,7 @@ class _RecommendedPropertyCardState extends State<RecommendedPropertyCard> {
               ),
               CustomFavouriteIcon(
                 property: property,
-                category: 'recommended',
+                category: 'recommendation',
               ),
             ],
           ),
