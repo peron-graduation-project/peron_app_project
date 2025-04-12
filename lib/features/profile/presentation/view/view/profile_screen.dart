@@ -2,14 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
-import 'package:peron_project/features/profile/presentation/manager/get%20profile/get_profile_cubit.dart'; // استوردنا الـ Cubit
-import 'package:peron_project/features/profile/presentation/manager/get%20profile/get_profile_state.dart'; // استوردنا الـ State
+import 'package:peron_project/features/profile/presentation/manager/get%20profile/get_profile_cubit.dart';
+import 'package:peron_project/features/profile/presentation/manager/get%20profile/get_profile_state.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/change_password_dialog.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/profileSection.dart';
 
-class ProfileScreen extends StatelessWidget {
+import '../widgets/change_user_name.dart';
+
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String? _editedFullName;
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +58,23 @@ class ProfileScreen extends StatelessWidget {
                     screenWidth: screenWidth,
                     screenHeight: screenHeight,
                   ),
-                  AccountOption(
-                    icon: Icons.person,
-                    title: state.profile.fullName ?? "اسم المستخدم",
-                    screenWidth: screenWidth,
+                  GestureDetector(
+                    onTap: () async {
+                      final newName = await showChangeUserNameDialog(
+                        context,
+                        _editedFullName ?? state.profile.fullName ?? "اسم المستخدم",
+                      );
+                      if (newName != null && newName != state.profile.fullName) {
+                        setState(() {
+                          _editedFullName = newName;
+                        });
+                      }
+                    },
+                    child: AccountOption(
+                      icon: Icons.person,
+                      title: _editedFullName ?? state.profile.fullName ?? "اسم المستخدم",
+                      screenWidth: screenWidth,
+                    ),
                   ),
                   AccountOption(
                     icon: Icons.email_outlined,
@@ -72,7 +94,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             );
           } else {
-            return  Center(child: CircularProgressIndicator(
+            return Center(child: CircularProgressIndicator(
               color:AppColors.primaryColor ,
             ));
           }
