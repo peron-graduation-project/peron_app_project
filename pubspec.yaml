@@ -44,6 +44,7 @@ dependencies:
   get_it:
   dio_cookie_manager: ^3.2.0
   cookie_jar: ^4.0.8
+  image_picker: ^1.1.2
 
 
 

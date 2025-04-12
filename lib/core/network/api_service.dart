@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:peron_project/features/notification/data/notification_model.dart';
+import 'package:peron_project/features/profile/data/models/profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -287,7 +288,30 @@ class ApiService {
       ));
     }
   }
-
+  Future<Either<Failure, ProfileModel>> getProfile({required String token}) async {
+    try {
+      final response = await _dio.get(
+        '/Profile/me',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      print("✅ [DEBUG] Get Profile API Response: ${response.data}");
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        return Right(ProfileModel.fromJson(response.data));
+      } else {
+        return Left(ServiceFailure(errorMessage: "فشل في استرجاع بيانات البروفايل: استجابة غير متوقعة", errors: [response.data.toString()]));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error (Get Profile): $e");
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      print("❗ [DEBUG] Unexpected Error in getProfile: $e");
+      return Left(ServiceFailure(errorMessage: "حدث خطأ غير متوقع أثناء جلب بيانات البروفايل", errors: [e.toString()]));
+    }
+  }
   Future<Either<Failure, List<NotificationModel>>> getNotifications({required String endPoint, Map<String, dynamic>? queryParameters}) async {
     try {
       Response response = await _dio.get(endPoint, queryParameters: queryParameters);

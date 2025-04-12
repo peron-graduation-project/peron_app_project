@@ -49,7 +49,8 @@ class _LoginBodyViewState extends State<LoginBodyView> {
                         (route) => false,
                   );
                 }
-              } else if (state is LoginFailure) {
+              }
+              else if (state is LoginFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(state.error),
