@@ -10,7 +10,10 @@ import 'package:peron_project/core/navigator/routes_generator.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:peron_project/features/favourite/data/repos/addFavorite/addFav_imp.dart';
 import 'package:peron_project/features/favourite/data/repos/addFavorite/addFavorite_repo.dart';
+import 'package:peron_project/features/favourite/data/repos/removeFavorite/removeFav_imp.dart';
+import 'package:peron_project/features/favourite/data/repos/removeFavorite/removeFavorite_repo.dart';
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
+import 'package:peron_project/features/favourite/presentation/manager/deleteFavorite/deleteFavorite_cubit.dart';
 import 'package:peron_project/features/home/presentation/view/views/home_view.dart';
 import 'package:peron_project/features/notification/domain/repo/get%20notification/notification_repo_imp.dart';
 import 'package:provider/provider.dart';
@@ -27,32 +30,40 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPreferences = await SharedPreferences.getInstance();
   runApp(
-    MultiProvider(
-      providers:  [
-        BlocProvider(
-          create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
-        ),
-        ChangeNotifierProxyProvider<AddfavoriteCubit, FavoriteManager>(
-          create: (context) => FavoriteManager(),
-          update: (context, addFavoriteCubit, favoriteManager) =>
-              favoriteManager!..setCubit(addFavoriteCubit),
-        ),
-      
-        BlocProvider(
-          create: (_) => GetNotificationCubit(
-            NotificationRepoImpl( ApiService(Dio())),
-          )..getNotifications(),
-        ),
-        ChangeNotifierProvider(create: (context) => FavoriteManager()),
-        BlocProvider<GetProfileCubit>(
-          create: (context) {
-            final profileRepo = ProfileRepoImp(ApiService(Dio()), sharedPreferences);
-            final profileCubit = GetProfileCubit(profileRepo);
-            profileCubit.getProfile();
-            return profileCubit;
-          },
-        ),
-      ],
+  MultiProvider(
+  providers: [
+    BlocProvider(
+      create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
+    ),
+    BlocProvider(
+      create: (context) => DeletefavoriteCubit(DeletefavImp(ApiService(Dio()))),
+    ),
+
+    
+    ChangeNotifierProxyProvider2<AddfavoriteCubit, DeletefavoriteCubit, FavoriteManager>(
+      create: (context) => FavoriteManager(),
+      update: (context, addCubit, deleteCubit, favoriteManager) =>
+          favoriteManager!
+            ..setAddCubit(addCubit)
+            ..setDeleteCubit(deleteCubit),
+    ),
+
+    BlocProvider(
+      create: (_) => GetNotificationCubit(
+        NotificationRepoImpl(ApiService(Dio())),
+      )..getNotifications(),
+    ),
+    BlocProvider<GetProfileCubit>(
+      create: (context) {
+        final profileRepo = ProfileRepoImp(ApiService(Dio()), sharedPreferences);
+        final profileCubit = GetProfileCubit(profileRepo);
+        profileCubit.getProfile();
+        return profileCubit;
+      },
+    ),
+  ],
+  
+
       child: const PeronApp(),
     ),
   );

@@ -426,4 +426,50 @@ class ApiService {
         errors: [e.toString()],
       ));
     }
-  }}
+  }
+  Future<Either<Failure, Map<String, dynamic>>> deleteFavorite({
+  required String token,
+  required int id,
+}) async {
+  try {
+    
+    final response = await _dio.delete(
+      '/Favorites/remove/$id', 
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ),
+      data: {
+        "propertyId": id, 
+      },
+    );
+
+    
+    print("✅ [DEBUG] delete Favorite API Response: ${response.data}");
+
+
+    if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+      return Right(response.data as Map<String, dynamic>); 
+    } else {
+    
+      return Left(ServiceFailure(
+        errorMessage: "فشل في استرجاع بيانات المفضلة: استجابة غير متوقعة",
+        errors: [response.data.toString()],
+      ));
+    }
+  } on DioException catch (e) {
+  
+    print("❌ [DEBUG] Dio Error (delete Favorite): $e");
+    return Left(ServiceFailure.fromDioError(e)); 
+  } catch (e) {
+    
+    print("❗ [DEBUG] Unexpected Error in deleteFavorite: $e");
+    return Left(ServiceFailure(
+      errorMessage: "حدث خطأ غير متوقع أثناء جلب بيانات المفضلة",
+      errors: [e.toString()],
+    ));
+  }
+}
+
+  }
