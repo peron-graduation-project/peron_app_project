@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peron_project/features/notification/presentation/manager/delete%20notifications/delete_notification_cubit.dart';
 import 'package:peron_project/features/notification/presentation/view/views/notification_body.dart';
-import '../../manager/get notifications/notification_cubit.dart';
+import '../../../../../core/network/api_service.dart';
+import '../../../domain/repo/get%20notification/notification_repo_imp.dart';
 import '../widgets/notification_app_bar.dart';
+import 'package:dio/dio.dart';
 
 class NotificationView extends StatefulWidget {
   const NotificationView({super.key});
@@ -26,22 +29,35 @@ class _NotificationViewState extends State<NotificationView> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    context.read<GetNotificationCubit>().getNotifications();
+  void _deleteSelectedNotifications(BuildContext context) {
+    if (selectedNotifications.isNotEmpty) {
+      selectedNotifications.forEach((id) {
+        BlocProvider.of<DeleteNotificationCubit>(context)
+            .deleteNotification(id: int.parse(id));
+      });
+      setState(() {
+        selectedNotifications.clear();
+        isSelectionMode = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: NotificationAppBar(
-        selectedNotifications: selectedNotifications,
+    return BlocProvider<DeleteNotificationCubit>(
+      create: (context) => DeleteNotificationCubit(
+        NotificationRepoImpl(ApiService(Dio())),
       ),
-      body: NotificationBodyView(
-        onToggleSelection: _toggleSelection,
-        selectedNotifications: selectedNotifications,
-        isSelectionMode: isSelectionMode,
+      child: Scaffold(
+        appBar: NotificationAppBar(
+          onDelete: _deleteSelectedNotifications,
+          selectedNotifications: selectedNotifications,
+        ),
+        body: NotificationBodyView(
+          onToggleSelection: _toggleSelection,
+          selectedNotifications: selectedNotifications,
+          isSelectionMode: isSelectionMode,
+        ),
       ),
     );
   }
