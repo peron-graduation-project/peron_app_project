@@ -20,9 +20,9 @@ class NotificationBodyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NotificationCubit, NotificationState>(
+    return BlocConsumer<GetNotificationCubit, GetNotificationState>(
       listener: (context, state) {
-        if (state is NotificationStateFailure) {
+        if (state is GetNotificationStateFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.errorMessage),
@@ -30,20 +30,16 @@ class NotificationBodyView extends StatelessWidget {
               action: SnackBarAction(
                 label: 'إعادة المحاولة',
                 textColor: Colors.white,
-                onPressed: () => context.read<NotificationCubit>().fetchNotifications(),
+                onPressed: () => context.read<GetNotificationCubit>().getNotifications(),
               ),
             ),
           );
         }
-
-        if (state is NotificationStateSuccess) {
-          context.read<NotificationCubit>().markAllAsRead();
-        }
       },
       builder: (context, state) {
-        if (state is NotificationStateLoading) {
+        if (state is GetNotificationStateLoading) {
           return const ShimmerNotificationPlaceholder();
-        } else if (state is NotificationStateSuccess) {
+        } else if (state is GetNotificationStateSuccess) {
           return state.notifications.isEmpty
               ? const EmptyNotificationWidget()
               : NotificationsWidget(

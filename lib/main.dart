@@ -7,14 +7,14 @@ import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/navigator/routes_generator.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // استوردنا shared_preferences
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/network/api_service.dart';
 import 'features/main/presentation/view/widgets/favorite_manager.dart';
-import 'features/notification/domain/repo/get_notification_repo_imp.dart';
+import 'features/notification/domain/repo/get notification/notification_repo_imp.dart';
 import 'features/notification/presentation/manager/get notifications/notification_cubit.dart';
 import 'features/profile/domain/repos/get_profile_repo_imp.dart';
-import 'features/profile/presentation/manager/get profile/get_profile_cubit.dart'; // استوردنا GetProfileCubit
+import 'features/profile/presentation/manager/get profile/get_profile_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +23,9 @@ void main() async {
     MultiProvider(
       providers: [
         BlocProvider(
-          create: (_) => NotificationCubit(
-            NotificationRepoImp(apiService: ApiService(Dio())),
-          )..fetchNotifications(),
+          create: (_) => GetNotificationCubit(
+            NotificationRepoImpl(ApiService(Dio())),
+          )..getNotifications(),
         ),
         ChangeNotifierProvider(create: (context) => FavoriteManager()),
         BlocProvider<GetProfileCubit>(

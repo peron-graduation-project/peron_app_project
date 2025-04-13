@@ -312,35 +312,77 @@ class ApiService {
       return Left(ServiceFailure(errorMessage: "حدث خطأ غير متوقع أثناء جلب بيانات البروفايل", errors: [e.toString()]));
     }
   }
-  Future<Either<Failure, List<NotificationModel>>> getNotifications({required String endPoint, Map<String, dynamic>? queryParameters}) async {
+  Future<Either<Failure, List<NotificationModel>>> getNotification({required String token}) async {
     try {
-      Response response = await _dio.get(endPoint, queryParameters: queryParameters);
-      _printDebugInfo(functionName: 'getNotifications', response: response);
+      final response = await _dio.get(
+        '/Notifications',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("✅ [DEBUG] Get Notifications API Response: ${response.data}");
 
       if (response.data is List) {
-        List<NotificationModel> notifications = (response.data as List)
-            .map((json) => NotificationModel.fromJson(json))
+        final List<NotificationModel> notifications = (response.data as List)
+            .map((json) => NotificationModel.fromJson(json as Map<String, dynamic>))
             .toList();
         return Right(notifications);
       } else {
-        return Left(ServiceFailure(errorMessage: "البيانات المستلمة غير صحيحة", errors: ["توقعنا قائمة، ولكن استلمنا نوعًا مختلفًا"]));
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم عند جلب الإشعارات",
+          errors: [response.data.toString()],
+        ));
       }
     } on DioException catch (e) {
-      _printDebugInfo(functionName: 'getNotifications', error: e);
-      return Left(ServiceFailure.fromDioError(e));
-    } catch (e) {
-      return Left(ServiceFailure(errorMessage: "حدث خطأ أثناء معالجة الإشعارات", errors: [e.toString()]));
-    }
-  }
+      print("❌ [DEBUG] Dio Error أثناء جلب الإشعارات: $e");
 
-  Future<Either<Failure, bool>> deleteNotifications({required String endPoint, required List<String> ids}) async {
-    try {
-      Response response = await _dio.delete(endPoint, data: {"ids": ids});
-      _printDebugInfo(functionName: 'deleteNotifications', response: response);
-      return Right(response.statusCode == 200 || response.statusCode == 204);
-    } on DioException catch (e) {
-      _printDebugInfo(functionName: 'deleteNotifications', error: e);
-      return Left(ServiceFailure.fromDioError(e));
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء جلب الإشعارات في ApiService: $e");
+
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء جلب الإشعارات",
+        errors: [e.toString()],
+      ));
     }
   }
-}
+  Future<Either<Failure, bool>> deleteNotification({required String token, required int id}) async {
+    try {
+      final response = await _dio.delete(
+        '/Notifications/Delete',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+        data: {
+          'id': id,
+        },
+      );
+
+      print("✅ [DEBUG] Delete Notification API Response: ${response.statusCode}");
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        return const Right(true);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "فشل حذف الإشعار. كود الحالة: ${response.statusCode}",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error أثناء حذف الإشعار: $e");
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء حذف الإشعار في ApiService: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء حذف الإشعار",
+        errors: [e.toString()],
+      ));
+    }
+  }}

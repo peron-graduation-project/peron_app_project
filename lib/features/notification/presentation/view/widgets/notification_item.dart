@@ -52,7 +52,7 @@ class NotificationItem extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          notification.title,
+                          notification.message,
                           style: theme.bodyMedium?.copyWith(
                             fontWeight: notification.isRead ? FontWeight.normal : FontWeight.bold,
                           ),
@@ -61,15 +61,10 @@ class NotificationItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        notification.date,
+                        notification.createdAt,
                         style: theme.bodySmall?.copyWith(color: const Color(0xff818181)),
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    notification.body,
-                    style: theme.bodySmall,
                   ),
                 ],
               ),

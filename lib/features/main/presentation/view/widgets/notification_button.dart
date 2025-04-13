@@ -12,11 +12,11 @@ class NotificationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final double size = MediaQuery.of(context).size.width * 0.12;
 
-    return BlocBuilder<NotificationCubit, NotificationState>(
+    return BlocBuilder<GetNotificationCubit, GetNotificationState>(
       builder: (context, state) {
         bool hasNewNotifications = false;
 
-        if (state is NotificationStateSuccess) {
+        if (state is GetNotificationStateSuccess) {
           hasNewNotifications =
               state.notifications.any((notification) => !notification.isRead);
         }

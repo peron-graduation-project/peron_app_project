@@ -3,19 +3,19 @@ import 'package:equatable/equatable.dart';
 
 import '../../../data/notification_model.dart';
 
-abstract class NotificationState extends Equatable {
+abstract class GetNotificationState extends Equatable {
   @override
   List<Object?> get props => throw UnimplementedError();
 
 }
 
-class NotificationStateInitial extends NotificationState {}
-class NotificationStateLoading extends NotificationState {}
-class NotificationStateSuccess extends NotificationState {
+class GetNotificationStateInitial extends GetNotificationState {}
+class GetNotificationStateLoading extends GetNotificationState {}
+class GetNotificationStateSuccess extends GetNotificationState {
   final List<NotificationModel> notifications;
-  NotificationStateSuccess({required this.notifications});
+  GetNotificationStateSuccess({required this.notifications});
 }
-class NotificationStateFailure extends NotificationState {
+class GetNotificationStateFailure extends GetNotificationState {
   final String errorMessage;
-  NotificationStateFailure({required this.errorMessage});
+  GetNotificationStateFailure({required this.errorMessage});
 }

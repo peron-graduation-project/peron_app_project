@@ -4,12 +4,12 @@ import '../../../../../core/widgets/custom_arrow_back.dart';
 
 class NotificationAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Set<String> selectedNotifications;
-  final Function() onDelete;
+  final Function()? onDelete;
 
   const NotificationAppBar({
     super.key,
     required this.selectedNotifications,
-    required this.onDelete,
+     this.onDelete,
   });
 
   @override
@@ -35,7 +35,7 @@ class NotificationAppBar extends StatelessWidget implements PreferredSizeWidget 
           color: AppColors.scaffoldBackgroundColor,
           onSelected: (value) {
             if (value == "delete") {
-              onDelete();
+           //   onDelete();
             }
           },
           icon: const Icon(Icons.do_not_disturb_on_outlined, size: 23, color: Colors.black),

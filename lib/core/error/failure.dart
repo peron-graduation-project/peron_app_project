@@ -27,6 +27,8 @@ class ServiceFailure extends Failure {
       try {
         data = jsonDecode(data);
       } catch (_) {
+        // إذا فشل الـ jsonDecode، نعتبر الـ String هو الرسالة
+        message = data;
       }
     }
 
@@ -66,5 +68,4 @@ class ServiceFailure extends Failure {
       statusCode: statusCode,
       errors: errorsList,
     );
-  }
-}
+  }}
