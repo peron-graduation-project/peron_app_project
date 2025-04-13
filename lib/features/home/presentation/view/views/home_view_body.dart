@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/features/chats/presentation/view/views/chat_view.dart';
+import 'package:peron_project/features/favourite/data/repos/addFavorite/addFav_imp.dart';
+import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
 import 'package:peron_project/features/favourite/presentation/view/views/favourite_view.dart';
 import 'package:peron_project/features/main/presentation/view/views/main_view.dart';
 import 'package:peron_project/features/profile/domain/repos/get_profile_repo_imp.dart';
@@ -32,7 +34,10 @@ class HomeViewBodyState extends State<HomeViewBody> {
     profileCubit.getProfile();
 
     _screens = [
-      const MainView(),
+      BlocProvider(
+  create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
+  child: MainView(),
+),
       const FavouriteView(),
       const ChatView(),
       BlocProvider.value(

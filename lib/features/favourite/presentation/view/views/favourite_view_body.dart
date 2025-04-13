@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/most_rent_property_card.dart';
-import 'package:peron_project/features/main/presentation/view/widgets/recommend_property_card.dart'; // تأكد إنك استوردت ده
+import 'package:peron_project/features/main/presentation/view/widgets/recommend_property_card.dart';    
 
 import '../../../../main/presentation/view/widgets/favorite_manager.dart';
 

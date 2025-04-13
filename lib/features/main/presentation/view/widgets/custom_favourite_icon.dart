@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/favorite_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/helper/colors.dart';
+import '../../../../../features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
 
 class CustomFavouriteIcon extends StatelessWidget {
   final Map<String, dynamic> property;
@@ -24,12 +26,19 @@ class CustomFavouriteIcon extends StatelessWidget {
       left: positionOffset,
       child: GestureDetector(
         onTap: () {
+          
+          BlocProvider.of<AddfavoriteCubit>(context).addFavorite(
+          
+            id: property['id'],
+          );
+
+          
           debugPrint(" Toggling favorite for: ${property['title']} (ID: ${property['id']}) in category: $category");
-          Provider.of<FavoriteManager>(context, listen: false).toggleFavorite(property,category ) ;
         },
         child: Consumer<FavoriteManager>(
           builder: (context, favoriteManager, child) {
-            bool isFavorite = favoriteManager.isFavorite(property,category );
+            
+            bool isFavorite = favoriteManager.isFavorite(property, category);
             debugPrint(" UI Updated: ${property['title']} isFavorite = $isFavorite");
 
             return AnimatedSwitcher(

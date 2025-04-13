@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/favorite_manager.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/recommend_property_card.dart';
 import 'package:provider/provider.dart';
+import 'package:peron_project/core/widgets/custom_arrow_back.dart';
 
 class RecommendedViewBody extends StatelessWidget {
   const RecommendedViewBody({super.key});
@@ -13,6 +14,7 @@ class RecommendedViewBody extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: CustomArrowBack(),
         title: Text("موصى به لك", style: theme.headlineMedium!.copyWith(fontSize: 20)),
         centerTitle: true,
       ),
