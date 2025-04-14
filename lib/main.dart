@@ -59,8 +59,6 @@ void main() async {
       },
     ),
   ],
-  
-
       child: const PeronApp(),
     ),
   );

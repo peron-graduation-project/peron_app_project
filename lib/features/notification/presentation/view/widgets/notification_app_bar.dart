@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/helper/colors.dart';
 import '../../../../../core/widgets/custom_arrow_back.dart';
+import '../../manager/delete notifications/delete_notification_cubit.dart';
 
 class NotificationAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Set<String> selectedNotifications;
+  final Set<int> selectedNotifications;
   final Function(BuildContext)? onDelete;
 
   const NotificationAppBar({
@@ -34,8 +36,18 @@ class NotificationAppBar extends StatelessWidget implements PreferredSizeWidget 
         PopupMenuButton<String>(
           color: AppColors.scaffoldBackgroundColor,
           onSelected: (value) {
-            if (value == "delete" && onDelete != null) {
-              onDelete!(context);
+            if (value == "delete") {
+              if (onDelete != null) {
+                onDelete!(context);
+              } else {
+
+                if (selectedNotifications.isNotEmpty) {
+                  for (var id in selectedNotifications) {
+                    BlocProvider.of<DeleteNotificationCubit>(context)
+                        .deleteNotification(id: id);
+                  }
+                }
+              }
             }
           },
           icon: const Icon(Icons.do_not_disturb_on_outlined, size: 23, color: Colors.black),
@@ -51,8 +63,7 @@ class NotificationAppBar extends StatelessWidget implements PreferredSizeWidget 
               ),
             ),
           ],
-        ),
-      ]
+        ),      ]
           : [],
     );
   }

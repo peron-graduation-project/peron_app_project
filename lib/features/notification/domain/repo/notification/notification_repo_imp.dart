@@ -12,6 +12,7 @@ class NotificationRepoImpl implements NotificationRepo {
   NotificationRepoImpl(this.apiService);
 
   @override
+  @override
   Future<Either<Failure, List<NotificationModel>>> getNotifications() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -24,7 +25,7 @@ class NotificationRepoImpl implements NotificationRepo {
         ));
       }
 
-      final response = await apiService.getNotification(token: token);
+      final Either<Failure, List<NotificationModel>> response = await apiService.getNotification(token: token); // توقعنا إن الـ ApiService هيرجع List<NotificationModel>
 
       print("✅ [DEBUG] NotificationRepoImp Response: $response");
 
@@ -33,17 +34,9 @@ class NotificationRepoImpl implements NotificationRepo {
           print("❌ [DEBUG] Failure in Notification Repo: $failure");
           return Left(failure);
         },
-            (data) {
-          try {
-            final List<NotificationModel> notifications =
-            data.map((item) => NotificationModel.fromJson(item as Map<String, dynamic>)).toList();
-            return Right(notifications);
-          } catch (e) {
-            return Left(ServiceFailure(
-              errorMessage: "خطأ في تحويل بيانات الإشعارات",
-              errors: [e.toString(), "البيانات المستلمة: $data"],
-            ));
-          }
+            (notifications) {
+          print("✅✅✅ [DEBUG] Notifications received from ApiService: $notifications");
+          return Right(notifications);
         },
       );
     } catch (e) {
@@ -54,7 +47,6 @@ class NotificationRepoImpl implements NotificationRepo {
       ));
     }
   }
-
   @override
   Future<Either<Failure, bool>> deleteNotifications({required int selectedId}) async {
     try {

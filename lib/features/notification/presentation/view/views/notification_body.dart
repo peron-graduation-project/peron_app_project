@@ -7,8 +7,8 @@ import '../widgets/empty_notification_widget.dart';
 import '../widgets/shimmer_notification_placeholder.dart';
 
 class NotificationBodyView extends StatelessWidget {
-  final Function(String) onToggleSelection;
-  final Set<String> selectedNotifications;
+  final Function(int) onToggleSelection;
+  final Set<int> selectedNotifications;
   final bool isSelectionMode;
 
   const NotificationBodyView({

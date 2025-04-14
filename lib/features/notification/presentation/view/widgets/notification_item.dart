@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:peron_project/core/helper/colors.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import '../../../data/notification_model.dart';
 
 class NotificationItem extends StatelessWidget {
   final NotificationModel notification;
-  final Function(String) onToggleSelection;
+  final Function(int) onToggleSelection;
   final bool isSelected;
   final bool isSelectionMode;
 
@@ -21,7 +23,7 @@ class NotificationItem extends StatelessWidget {
     final theme = Theme.of(context).textTheme;
 
     return InkWell(
-      onLongPress: () => onToggleSelection(notification.id as String),
+      onLongPress: () => onToggleSelection(notification.id ),
       borderRadius: BorderRadius.circular(10),
       child: Container(
         decoration: BoxDecoration(
@@ -39,7 +41,7 @@ class NotificationItem extends StatelessWidget {
                     fillColor: WidgetStateProperty.all(Colors.white),
                     checkColor: AppColors.primaryColor,
                     value: value,
-                    onChanged: (newValue) => onToggleSelection(notification.id as String),
+                    onChanged: (newValue) => onToggleSelection(notification.id ),
                   );
                 },
               ),
@@ -57,7 +59,26 @@ class NotificationItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        notification.createdAt as String,
+                        notification.createdAt != null
+                            ? () {
+                          if (notification.createdAt is String) {
+                            final parsedDateTime = DateTime.tryParse(notification.createdAt as String);
+                            if (parsedDateTime != null) {
+                              return timeago.format(parsedDateTime, locale: 'ar');
+                            } else {
+                              print("⚠️ [WARNING] Failed to parse createdAt (String): ${notification.createdAt}");
+                              return '';
+                            }
+                          } else if (notification.createdAt is DateTime) {
+                            return timeago.format(notification.createdAt!, locale: 'ar');
+                          } else if (notification.createdAt is int) {
+                            return timeago.format(DateTime.fromMillisecondsSinceEpoch(notification.createdAt as int), locale: 'ar');
+                          } else {
+                            print("⚠️ [WARNING] Unknown createdAt type: ${notification.createdAt.runtimeType}, value: ${notification.createdAt}");
+                            return '';
+                          }
+                        }()
+                            : '',
                         style: theme.bodySmall?.copyWith(color: const Color(0xff818181)),
                       ),
                     ],

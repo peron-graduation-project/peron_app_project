@@ -4,8 +4,8 @@ import 'notification_item.dart';
 
 class NotificationsWidget extends StatelessWidget {
   final List<NotificationModel> notifications;
-  final Function(String) onToggleSelection;
-  final Set<String> selectedNotifications;
+  final Function(int) onToggleSelection;
+  final Set<int> selectedNotifications;
   final bool isSelectionMode;
 
   const NotificationsWidget({
@@ -30,7 +30,7 @@ class NotificationsWidget extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         final notification = notifications[index];
-        final isSelected = selectedNotifications.contains(notification.id as String );
+        final isSelected = selectedNotifications.contains(notification.id  );
         return NotificationItem(
           notification: notification,
           onToggleSelection: onToggleSelection,

@@ -379,22 +379,19 @@ class ApiService {
       }
     } on DioException catch (e) {
       print("❌ [DEBUG] Dio Error أثناء جلب الإشعارات: $e");
-
       final failure = ServiceFailure.fromDioError(e);
       return Left(failure);
     } catch (e) {
       print("❗ [DEBUG] خطأ غير متوقع أثناء جلب الإشعارات في ApiService: $e");
-
       return Left(ServiceFailure(
         errorMessage: "حدث خطأ غير متوقع أثناء جلب الإشعارات",
         errors: [e.toString()],
       ));
     }
-  }
-  Future<Either<Failure, bool>> deleteNotification({required String token, required int id}) async {
+  }  Future<Either<Failure, bool>> deleteNotification({required String token, required int id}) async {
     try {
       final response = await _dio.delete(
-        '/Notifications/Delete',
+        '/Notifications/Delete/$id',
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
