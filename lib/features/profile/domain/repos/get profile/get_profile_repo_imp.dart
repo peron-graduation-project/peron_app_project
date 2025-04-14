@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/error/failure.dart';
-import '../../../../core/network/api_service.dart';
-import '../../data/models/profile_model.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../../../core/network/api_service.dart';
+import '../../../data/models/profile_model.dart';
 import 'get_profile_repo.dart';
 
 class ProfileRepoImp implements ProfileRepo {

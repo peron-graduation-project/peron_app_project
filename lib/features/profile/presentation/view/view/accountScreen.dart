@@ -88,6 +88,12 @@ class AccountScreen extends StatelessWidget {
                 onTap: () {},
               ),
               AccountOption(
+                icon: Icons.library_books,
+                title: "حجوزاتي",
+                screenWidth: screenWidth,
+                onTap: () {},
+              ),
+              AccountOption(
                 icon: Icons.share,
                 title: "مشاركة التطبيق",
                 screenWidth: screenWidth,

@@ -21,6 +21,7 @@ class NotificationBodyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GetNotificationCubit, GetNotificationState>(
+      bloc: BlocProvider.of<GetNotificationCubit>(context),
       listener: (context, state) {
         if (state is GetNotificationStateFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -37,12 +38,16 @@ class NotificationBodyView extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        print("✅ [DEBUG] Current Notification State: $state");
+
         if (state is GetNotificationStateLoading) {
           return const ShimmerNotificationPlaceholder();
         } else if (state is GetNotificationStateSuccess) {
+          print("✅ [DEBUG] Notifications in UI: ${state.notifications}");
           return state.notifications.isEmpty
               ? const EmptyNotificationWidget()
               : NotificationsWidget(
+            key: ValueKey(state.notifications.length),
             notifications: state.notifications,
             onToggleSelection: onToggleSelection,
             selectedNotifications: selectedNotifications,
@@ -51,6 +56,5 @@ class NotificationBodyView extends StatelessWidget {
         }
         return const EmptyNotificationWidget();
       },
-    );
-  }
+    );  }
 }

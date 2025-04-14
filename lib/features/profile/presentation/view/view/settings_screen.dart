@@ -1,7 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
+import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
+import 'package:peron_project/features/profile/domain/repos/delete%20account/delete_account_repo_imp.dart';
+import 'package:peron_project/features/profile/presentation/manager/delete%20account/delete_account_cubit.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/delete_account_dialog.dart';
 
@@ -14,7 +19,7 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme=Theme.of(context).textTheme;
+    var theme = Theme.of(context).textTheme;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -44,9 +49,8 @@ class Settings extends StatelessWidget {
               onTap: () {
                 return showChangeLanguageDialog(context);
               },
-               screenWidth: screenWidth,
+              screenWidth: screenWidth,
             ),
-
             AccountOption(
               title: 'قم بتقييمنا',
               icon: Icons.star_border,
@@ -63,26 +67,27 @@ class Settings extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => AboutUs()),
                 );
-              }, screenWidth: screenWidth,
+              },
+              screenWidth: screenWidth,
             ),
-
             AccountOption(
               title: 'تحتاج إلي المساعدة؟',
               icon: Icons.help_outline,
-               onTap: () {
-              Navigator.pushNamed(context, PageRouteName.helpScreen);
-            }, screenWidth: screenWidth,
+              onTap: () {
+                Navigator.pushNamed(context, PageRouteName.helpScreen);
+              },
+              screenWidth: screenWidth,
             ),
-
             AccountOption(
               showArrow: false,
               textColor: Colors.red,
               iconColor: Colors.red,
               title: 'حذف الحساب',
               icon: Icons.delete_outline,
-               onTap: () {
-              return showDeleteAccountDialog(context);
-            }, screenWidth: screenWidth,
+              onTap: () {
+                showDeleteAccountDialog(context); // Pass this context
+              },
+              screenWidth: screenWidth,
             ),
           ],
         ),

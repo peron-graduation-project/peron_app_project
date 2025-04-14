@@ -30,7 +30,7 @@ class NotificationsWidget extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         final notification = notifications[index];
-        final isSelected = selectedNotifications.contains(notification.id);
+        final isSelected = selectedNotifications.contains(notification.id as String );
         return NotificationItem(
           notification: notification,
           onToggleSelection: onToggleSelection,

@@ -21,7 +21,7 @@ class NotificationItem extends StatelessWidget {
     final theme = Theme.of(context).textTheme;
 
     return InkWell(
-      onLongPress: () => onToggleSelection(notification.id),
+      onLongPress: () => onToggleSelection(notification.id as String),
       borderRadius: BorderRadius.circular(10),
       child: Container(
         decoration: BoxDecoration(
@@ -39,7 +39,7 @@ class NotificationItem extends StatelessWidget {
                     fillColor: WidgetStateProperty.all(Colors.white),
                     checkColor: AppColors.primaryColor,
                     value: value,
-                    onChanged: (newValue) => onToggleSelection(notification.id),
+                    onChanged: (newValue) => onToggleSelection(notification.id as String),
                   );
                 },
               ),
@@ -53,15 +53,11 @@ class NotificationItem extends StatelessWidget {
                       Expanded(
                         child: Text(
                           notification.message,
-                          style: theme.bodyMedium?.copyWith(
-                            fontWeight: notification.isRead ? FontWeight.normal : FontWeight.bold,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                          style: theme.bodyMedium,
                         ),
                       ),
                       Text(
-                        notification.createdAt,
+                        notification.createdAt as String,
                         style: theme.bodySmall?.copyWith(color: const Color(0xff818181)),
                       ),
                     ],

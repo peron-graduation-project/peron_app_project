@@ -1,6 +1,6 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/repos/get_profile_repo.dart';
+import '../../../domain/repos/get profile/get_profile_repo.dart';
 import 'get_profile_state.dart';
 
 class GetProfileCubit extends Cubit<GetProfileState> {

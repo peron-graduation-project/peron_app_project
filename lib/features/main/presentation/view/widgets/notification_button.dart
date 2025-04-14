@@ -15,10 +15,8 @@ class NotificationButton extends StatelessWidget {
     return BlocBuilder<GetNotificationCubit, GetNotificationState>(
       builder: (context, state) {
         bool hasNewNotifications = false;
-
         if (state is GetNotificationStateSuccess) {
-          hasNewNotifications =
-              state.notifications.any((notification) => !notification.isRead);
+          hasNewNotifications = state.notifications.isNotEmpty;
         }
 
         return SizedBox(
@@ -29,7 +27,7 @@ class NotificationButton extends StatelessWidget {
             children: [
               Container(
                 alignment: Alignment.center,
-              width: size,
+                width: size,
                 height: size,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,

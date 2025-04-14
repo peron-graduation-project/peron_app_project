@@ -23,8 +23,10 @@ import 'core/network/api_service.dart';
 import 'features/main/presentation/view/widgets/favorite_manager.dart';
 
 import 'features/notification/presentation/manager/get notifications/notification_cubit.dart';
-import 'features/profile/domain/repos/get_profile_repo_imp.dart';
-import 'features/profile/presentation/manager/get profile/get_profile_cubit.dart'; 
+import 'features/profile/domain/repos/delete account/delete_account_repo_imp.dart';
+import 'features/profile/domain/repos/get profile/get_profile_repo_imp.dart';
+import 'features/profile/presentation/manager/delete account/delete_account_cubit.dart';
+import 'features/profile/presentation/manager/get profile/get_profile_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +40,7 @@ void main() async {
     BlocProvider(
       create: (context) => DeletefavoriteCubit(DeletefavImp(ApiService(Dio()))),
     ),
-
+  BlocProvider( create: (context) => DeleteAccountCubit(DeleteAccountRepoImp(ApiService(Dio()))),),
     
     ChangeNotifierProxyProvider2<AddfavoriteCubit, DeletefavoriteCubit, FavoriteManager>(
       create: (context) => FavoriteManager(),

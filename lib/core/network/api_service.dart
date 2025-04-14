@@ -471,5 +471,43 @@ class ApiService {
     ));
   }
 }
+  Future<Either<Failure, Map<String, dynamic>>> deleteAccount({required String token}) async {
+    try {
+      final response = await _dio.delete(
+        '/Profile/delete-account',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("✅ [DEBUG] delete account API Response: ${response.data}");
+
+      if (response.data is Map<String, dynamic>) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('token');
+        return Right(response.data as Map<String, dynamic>);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error: $e");
+
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] Unexpected Error in ApiService: $e");
+
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء حذف الاكونت",
+        errors: [e.toString()],
+      ));
+    }
+  }
+
 
   }

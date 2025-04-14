@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peron_project/features/notification/presentation/manager/delete%20notifications/delete_notification_cubit.dart';
 import 'package:peron_project/features/notification/presentation/view/views/notification_body.dart';
-import '../../../../../core/network/api_service.dart';
-import '../../../domain/repo/get%20notification/notification_repo_imp.dart';
+import '../../manager/delete notifications/delete_notification_cubit.dart';
+import '../../manager/get notifications/notification_cubit.dart';
 import '../widgets/notification_app_bar.dart';
-import 'package:dio/dio.dart';
 
 class NotificationView extends StatefulWidget {
   const NotificationView({super.key});
@@ -17,6 +15,12 @@ class NotificationView extends StatefulWidget {
 class _NotificationViewState extends State<NotificationView> {
   Set<String> selectedNotifications = {};
   bool isSelectionMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<GetNotificationCubit>(context).getNotifications();
+  }
 
   void _toggleSelection(String notificationId) {
     setState(() {
@@ -31,10 +35,10 @@ class _NotificationViewState extends State<NotificationView> {
 
   void _deleteSelectedNotifications(BuildContext context) {
     if (selectedNotifications.isNotEmpty) {
-      selectedNotifications.forEach((id) {
+      for (var id in selectedNotifications) {
         BlocProvider.of<DeleteNotificationCubit>(context)
             .deleteNotification(id: int.parse(id));
-      });
+      }
       setState(() {
         selectedNotifications.clear();
         isSelectionMode = false;
@@ -44,20 +48,15 @@ class _NotificationViewState extends State<NotificationView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<DeleteNotificationCubit>(
-      create: (context) => DeleteNotificationCubit(
-        NotificationRepoImpl(ApiService(Dio())),
+    return Scaffold(
+      appBar: NotificationAppBar(
+        onDelete: _deleteSelectedNotifications,
+        selectedNotifications: selectedNotifications,
       ),
-      child: Scaffold(
-        appBar: NotificationAppBar(
-          onDelete: _deleteSelectedNotifications,
-          selectedNotifications: selectedNotifications,
-        ),
-        body: NotificationBodyView(
-          onToggleSelection: _toggleSelection,
-          selectedNotifications: selectedNotifications,
-          isSelectionMode: isSelectionMode,
-        ),
+      body: NotificationBodyView(
+        onToggleSelection: _toggleSelection,
+        selectedNotifications: selectedNotifications,
+        isSelectionMode: isSelectionMode,
       ),
     );
   }

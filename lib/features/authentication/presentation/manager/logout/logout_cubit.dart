@@ -10,7 +10,7 @@ class LogoutCubit extends Cubit<LogoutState> {
   Future<void> logout() async {
     emit(LogoutLoading());
 
-    final result = await logoutRepo.logout();
+    final result = await logoutRepo.logout ();
 
     result.fold(
           (failure) {
