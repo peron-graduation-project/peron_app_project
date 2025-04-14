@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:peron_project/features/authentication/presentation/manager/logou
 import 'package:peron_project/features/profile/presentation/view/view/profile_screen.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/profileSection.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../../core/helper/colors.dart';
 import '../../../../authentication/data/repos/logout/logout_repo_imp.dart';
@@ -97,7 +100,20 @@ class AccountScreen extends StatelessWidget {
                 icon: Icons.share,
                 title: "مشاركة التطبيق",
                 screenWidth: screenWidth,
-                onTap: () {},
+                onTap: () async{
+    String appLink = "";
+    if (Platform.isAndroid) {
+    appLink = "https://play.google.com/store/apps/details?id=com.example.your_app_id";
+    } else if (Platform.isIOS) {
+    appLink = "https://apps.apple.com/app/your-app-name/idYOUR_APP_ID";
+    }
+
+    if (appLink.isNotEmpty) {
+    await Share.share('Check out my awesome app! $appLink');
+    } else {
+     print('App link not available for this platform.');
+    }
+    },
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 17.0, right: 17, top: 6),

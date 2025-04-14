@@ -471,6 +471,54 @@ class ApiService {
     ));
   }
 }
+  Future<Either<Failure, Map<String, dynamic>>> changePassword({
+    required String token,
+    required String oldPassword ,
+    required String newPassword ,
+    required String confirmPassword ,
+  }) async {
+    try {
+
+      final response = await _dio.post(
+        '/Profile/change-password',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+        data: {
+         "oldPassword":oldPassword,
+          "newPassword":newPassword,
+          "confirmPassword":confirmPassword
+        },
+      );
+
+
+      print("✅ [DEBUG] change password API Response: ${response.data}");
+
+
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        return Right(response.data as Map<String, dynamic>);
+      } else {
+
+        return Left(ServiceFailure(
+          errorMessage: "فشل في تغيير كلمة المرور: استجابة غير متوقعة",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+
+      print("❌ [DEBUG] Dio Error (change password): $e");
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+
+      print("❗ [DEBUG] Unexpected Error in change password: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء تغيير كلمة المرور",
+        errors: [e.toString()],
+      ));
+    }
+  }
   Future<Either<Failure, Map<String, dynamic>>> deleteAccount({required String token}) async {
     try {
       final response = await _dio.delete(

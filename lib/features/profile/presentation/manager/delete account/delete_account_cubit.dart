@@ -9,19 +9,19 @@ class DeleteAccountCubit extends Cubit<DeleteAccountState> {
 
   Future<void> deleteAccount() async {
     emit(DeleteAccountLoading());
-    print('DeleteAccountCubit: Emitted DeleteAccountLoading'); // إضافة Log
+    print('DeleteAccountCubit: Emitted DeleteAccountLoading');
 
     final result = await deleteAccountRepo.deleteAccount ();
-    print('DeleteAccountCubit: deleteAccountRepo.deleteAccount() completed'); // إضافة Log
+    print('DeleteAccountCubit: deleteAccountRepo.deleteAccount() completed');
 
     result.fold(
           (failure) {
         emit(DeleteAccountFailure(failure.errorMessage));
-        print('DeleteAccountCubit: Emitted DeleteAccountFailure with error: ${failure.errorMessage}'); // إضافة Log
+        print('DeleteAccountCubit: Emitted DeleteAccountFailure with error: ${failure.errorMessage}');
       },
           (message) {
         emit(DeleteAccountSuccess(message));
-        print('DeleteAccountCubit: Emitted DeleteAccountSuccess with message: $message'); // إضافة Log
+        print('DeleteAccountCubit: Emitted DeleteAccountSuccess with message: $message');
       },
     );
   }

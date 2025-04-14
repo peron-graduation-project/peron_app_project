@@ -1,13 +1,17 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/colors.dart';
+import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
+import 'package:peron_project/features/profile/domain/repos/change%20password/change_password_repo_imp.dart';
 import 'package:peron_project/features/profile/presentation/manager/get%20profile/get_profile_cubit.dart';
 import 'package:peron_project/features/profile/presentation/manager/get%20profile/get_profile_state.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/change_password_dialog.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/profileSection.dart';
 
+import '../../manager/change password/change_password_cubit.dart';
 import '../widgets/change_user_name.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -26,79 +30,82 @@ class _ProfileScreenState extends State<ProfileScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
     var theme = Theme.of(context).textTheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "الملف الشخصي",
-          style: theme.headlineMedium!.copyWith(fontSize: 20),
-        ),
-        centerTitle: true,
-        leading: CustomArrowBack(),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(
-            thickness: 1,
-            height: 1,
-            color: AppColors.dividerColor,
+    return BlocProvider(
+      create: (context) => ChangePasswordCubit(ChangePasswordRepoImp(ApiService(Dio()))),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "الملف الشخصي",
+            style: theme.headlineMedium!.copyWith(fontSize: 20),
+          ),
+          centerTitle: true,
+          leading: CustomArrowBack(),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1),
+            child: Divider(
+              thickness: 1,
+              height: 1,
+              color: AppColors.dividerColor,
+            ),
           ),
         ),
-      ),
-      body: BlocBuilder<GetProfileCubit, GetProfileState>(
-        builder: (context, state) {
-          if (state is GetProfileLoading) {
-            return Center(child: CircularProgressIndicator(color: AppColors.primaryColor));
-          } else if (state is GetProfileError) {
-            return Center(child: Text('فشل في تحميل البروفايل: ${state.message}', style: const TextStyle(color: Colors.red)));
-          } else if (state is GetProfileLoaded) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Column(
-                children: [
-                  ProfileSection(
-                    screenWidth: screenWidth,
-                    screenHeight: screenHeight,
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      final newName = await showChangeUserNameDialog(
-                        context,
-                        _editedFullName ?? state.profile.fullName ?? "اسم المستخدم",
-                      );
-                      if (newName != null && newName != state.profile.fullName) {
-                        setState(() {
-                          _editedFullName = newName;
-                        });
-                      }
-                    },
-                    child: AccountOption(
-                      icon: Icons.person,
-                      title: _editedFullName ?? state.profile.fullName ?? "اسم المستخدم",
+        body: BlocBuilder<GetProfileCubit, GetProfileState>(
+          builder: (context, state) {
+            if (state is GetProfileLoading) {
+              return Center(child: CircularProgressIndicator(color: AppColors.primaryColor));
+            } else if (state is GetProfileError) {
+              return Center(child: Text('فشل في تحميل البروفايل: ${state.message}', style: const TextStyle(color: Colors.red)));
+            } else if (state is GetProfileLoaded) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Column(
+                  children: [
+                    ProfileSection(
+                      screenWidth: screenWidth,
+                      screenHeight: screenHeight,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        final newName = await showChangeUserNameDialog(
+                          context,
+                          _editedFullName ?? state.profile.fullName ?? "اسم المستخدم",
+                        );
+                        if (newName != null && newName != state.profile.fullName) {
+                          setState(() {
+                            _editedFullName = newName;
+                          });
+                        }
+                      },
+                      child: AccountOption(
+                        icon: Icons.person,
+                        title: _editedFullName ?? state.profile.fullName ?? "اسم المستخدم",
+                        screenWidth: screenWidth,
+                      ),
+                    ),
+                    AccountOption(
+                      icon: Icons.email_outlined,
+                      title: state.profile.email ?? "البريد الإلكتروني",
                       screenWidth: screenWidth,
                     ),
-                  ),
-                  AccountOption(
-                    icon: Icons.email_outlined,
-                    title: state.profile.email ?? "البريد الإلكتروني",
-                    screenWidth: screenWidth,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      showChangePasswordDialog(context);
-                    },
-                    child: AccountOption(
-                        icon: Icons.lock,
-                        title: 'تغير كلمة المرور',
-                        screenWidth: screenWidth),
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return Center(child: CircularProgressIndicator(
-              color:AppColors.primaryColor ,
-            ));
-          }
-        },
+                    GestureDetector(
+                      onTap: () {
+                        showChangePasswordDialog(context); // استخدام الـ context اللي تحت الـ ChangePasswordCubit Provider
+                      },
+                      child: AccountOption(
+                          icon: Icons.lock,
+                          title: 'تغير كلمة المرور',
+                          screenWidth: screenWidth),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Center(child: CircularProgressIndicator(
+                color:AppColors.primaryColor ,
+              ));
+            }
+          },
+        ),
       ),
     );
   }

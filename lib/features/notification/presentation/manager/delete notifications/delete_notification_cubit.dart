@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/repo/get notification/notification_repo.dart';
+import '../../../domain/repo/notification/notification_repo.dart';
 import 'delete_notification_state.dart';
 
 class DeleteNotificationCubit extends Cubit<DeleteNotificationState> {

@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../../core/error/failure.dart';
 
 import '../../../data/notification_model.dart';
-import '../../../domain/repo/get notification/notification_repo.dart';
+import '../../../domain/repo/notification/notification_repo.dart';
 import 'notification_state.dart';
 
 class GetNotificationCubit extends Cubit<GetNotificationState> {
@@ -22,7 +22,6 @@ class GetNotificationCubit extends Cubit<GetNotificationState> {
       },
           (responseData) {
         try {
-          // تحقق من نوع البيانات
           print("✅✅✅ [DEBUG] Response Data Type: ${responseData.runtimeType}");
 
           if (responseData is List) {
