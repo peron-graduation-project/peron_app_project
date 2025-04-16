@@ -1,12 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
-import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
-import 'package:peron_project/features/profile/domain/repos/delete%20account/delete_account_repo_imp.dart';
-import 'package:peron_project/features/profile/presentation/manager/delete%20account/delete_account_cubit.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/delete_account_dialog.dart';
 
@@ -75,7 +70,7 @@ class Settings extends StatelessWidget {
               icon: Icons.help_outline,
               onTap: () {
                 Navigator.pushNamed(context, PageRouteName.helpScreen);
-              },
+                },
               screenWidth: screenWidth,
             ),
             AccountOption(

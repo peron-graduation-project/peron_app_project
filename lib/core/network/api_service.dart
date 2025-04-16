@@ -571,6 +571,54 @@ class ApiService {
       ));
     }
   }
+  Future<Either<Failure, Map<String, dynamic>>> submitInquiry({
+    required String token,
+    required String name,
+    required String email,
+    required String phone,
+    required String message,
+
+  }) async {
+    try {
+
+      final response = await _dio.post(
+        '/Inquiry/submit-inquiry',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+        data: {
+          "name": name,
+          "email": email,
+          "phone":phone,
+          "message": message
+        },
+      );
+
+      print("✅ [DEBUG] submit Inquiry API Response: ${response.data}");
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        return Right(response.data as Map<String, dynamic>);
+      } else {
+
+        return Left(ServiceFailure(
+          errorMessage: "فشل في إرسال الإستفسار: استجابة غير متوقعة",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+
+      print("❌ [DEBUG] Dio Error (submitInquiry): $e");
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+
+      print("❗️ [DEBUG] Unexpected Error in submitInquiry: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء إرسال الإستفسار",
+        errors: [e.toString()],
+      ));
+    }
+  }
   Future<Either<Failure, Map<String, dynamic>>> deleteAccount({required String token}) async {
     try {
       final response = await _dio.delete(
