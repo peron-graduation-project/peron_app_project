@@ -46,14 +46,6 @@ class ProfileRepoImp implements ProfileRepo {
   @override
   Future<Either<Failure, ProfileModel>> getProfile() async {
     try {
-      final cachedResult = await getCachedProfile();
-      if (cachedResult.isRight()) {
-        final cachedProfile = cachedResult.getOrElse(() => null);
-        if (cachedProfile != null) {
-          return Right(cachedProfile);
-        }
-      }
-
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
 
@@ -78,7 +70,7 @@ class ProfileRepoImp implements ProfileRepo {
           try {
             _cacheProfile(data);
             return Right(data);
-                    } catch (e) {
+          } catch (e) {
             return Left(ServiceFailure(
               errorMessage: "فشل في تحويل بيانات البروفايل",
               errors: [e.toString(), data.toString()],
@@ -92,6 +84,13 @@ class ProfileRepoImp implements ProfileRepo {
         errorMessage: "حدث خطأ غير متوقع أثناء جلب بيانات البروفايل",
         errors: [e.toString()],
       ));
+    }
+  }
+
+  Future<void> clearCachedProfile() async {
+    if (sharedPreferences != null) {
+      await sharedPreferences!.remove('cached_profile');
+      print("🗑️ [DEBUG] Profile cache cleared");
     }
   }
 }

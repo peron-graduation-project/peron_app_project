@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/about_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/helper/images.dart';
 import '../../../../../core/widgets/custom_arrow_back.dart';
 
 class AboutUs extends StatelessWidget {
+  void _launchAccounts(String urlAccount) async {
+    final Uri url = Uri.parse(urlAccount);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
   const AboutUs({super.key});
 
   @override
@@ -48,10 +55,16 @@ crossAxisAlignment: CrossAxisAlignment.center,
               )
             ),
             SizedBox(height: 20,),
-            AboutItem(title: 'موقع الويب',  onTap: () {  },),
-            AboutItem(title: 'فيسبوك', onTap: () {  },),
-            AboutItem(title: 'انستجرام', onTap: () {  },),
-            AboutItem(title: 'شروط الاستخدام', onTap: () {  }, ),
+            AboutItem(title: 'موقع الويب',  onTap: () {},),
+            AboutItem(title: 'فيسبوك', onTap: () {
+              _launchAccounts('https://www.facebook.com/profile.php?id=61573691399425');
+            },),
+            AboutItem(title: 'انستجرام', onTap: () { 
+              _launchAccounts('https://www.instagram.com/pero.n98/profilecard/?igsh=MTQyc3htcDU4Nm90Ng==');
+            },),
+            AboutItem(title: 'تواصل معنا', onTap: () {
+              _launchAccounts("http://wa.me/201119723643");
+            }, ),
           ],
               ),
       ),

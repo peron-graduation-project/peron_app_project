@@ -1,18 +1,20 @@
 import 'dart:io';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peron_project/core/helper/colors.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:peron_project/core/helper/colors.dart';
 import '../../manager/get profile/get_profile_cubit.dart';
 import '../../manager/get profile/get_profile_state.dart';
+import '../../manager/update profile/update_profile_cubit.dart';
+import '../../manager/update profile/update_profile_state.dart';
 
 class ProfileSection extends StatefulWidget {
   final double screenWidth;
   final double screenHeight;
+  final String originalFullName;
 
-  const ProfileSection({super.key, required this.screenWidth, required this.screenHeight});
+  const ProfileSection({super.key, required this.screenWidth, required this.screenHeight, required this.originalFullName});
 
   @override
   State<ProfileSection> createState() => _ProfileSectionState();
@@ -20,6 +22,7 @@ class ProfileSection extends StatefulWidget {
 
 class _ProfileSectionState extends State<ProfileSection> {
   String? _selectedImagePath;
+  String? _oldProfileImageUrl;
 
   Future<void> _showOptions(BuildContext context) async {
     await showModalBottomSheet(
@@ -46,7 +49,13 @@ class _ProfileSectionState extends State<ProfileSection> {
                   setState(() {
                     _selectedImagePath = image.path;
                   });
-                  print('تم اختيار صورة: ${image.path}');
+                  print('ProfileSection: تم اختيار صورة: ${image.path}');
+                  // استدعاء updateProfile هنا
+                  BlocProvider.of<UpdateProfileCubit>(context).updateProfile(
+                    profilePicture: _selectedImagePath!,
+                    fullName: widget.originalFullName,
+                  );
+                  print('ProfileSection: تم استدعاء updateProfile');
                 }
               },
             ),
@@ -58,7 +67,7 @@ class _ProfileSectionState extends State<ProfileSection> {
 
   void _displayProfileImage(BuildContext context) {
     String? profileImageUrl;
-    final state = BlocProvider.of<GetProfileCubit>(context).state;
+    final state = context.read<GetProfileCubit>().state;
     if (state is GetProfileLoaded) {
       profileImageUrl = state.profile.profilePictureUrl;
     }
@@ -82,9 +91,6 @@ class _ProfileSectionState extends State<ProfileSection> {
                   child: Image.network(
                     profileImageUrl,
                     fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Text('فشل في تحميل الصورة', style: TextStyle(color: Colors.white));
-                    },
                   ),
                 )
               else
@@ -108,72 +114,138 @@ class _ProfileSectionState extends State<ProfileSection> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
+    print('ProfileSection: تم بناء الـ Widget');
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: BlocBuilder<GetProfileCubit, GetProfileState>(
-        builder: (context, state) {
-          String profileName = "";
+      child: BlocListener<UpdateProfileCubit, UpdateProfileState>(
+        listener: (context, state) async {
+          if (state is UpdateProfileStateSuccess) {
+            print('ProfileSection: UpdateProfileStateSuccess reached!');
+            // استدعاء getProfile هنا عشان تحديث البيانات في GetProfileCubit
+            context.read<GetProfileCubit>().getProfile();
 
-          if (state is GetProfileLoaded) {
-            profileName = state.profile.fullName ?? "اسم المستخدم";
+            if (_oldProfileImageUrl != null) {
+              await CachedNetworkImage.evictFromCache(_oldProfileImageUrl!);
+              print('ProfileSection: تم مسح كاش الصورة القديمة: $_oldProfileImageUrl');
+            }
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('تم تحديث البروفايل بنجاح')),
+            );
+            setState(() {
+              _selectedImagePath = null;
+              _oldProfileImageUrl = null;
+            });
+          } else if (state is UpdateProfileStateFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('فشل في تحديث البروفايل: ${state.errorMessage}')),
+            );
           }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: widget.screenWidth * 0.15,
-                    backgroundImage: _selectedImagePath != null
-                        ? FileImage(File(_selectedImagePath!)) as ImageProvider
-                        : (state is GetProfileLoaded && state.profile.profilePictureUrl != null
-                        ? NetworkImage(state.profile.profilePictureUrl!) as ImageProvider
-                        : const AssetImage("assets/images/no pic.jpg") as ImageProvider),
-                  ),
-                  Positioned(
-                    bottom: 5,
-                    right: 5,
-                    child: GestureDetector(
-                      onTap: () => _showOptions(context),
-                      child: CircleAvatar(
-                        radius: widget.screenWidth * 0.039,
-                        backgroundColor: const Color.fromARGB(255, 195, 193, 193),
-                        child: Icon(
-                          Icons.camera_alt_rounded,
-                          color: Colors.black,
-                          size: widget.screenWidth * 0.05,
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (state is GetProfileLoading)
-                    Positioned.fill(
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                    ),
-                  if (state is GetProfileError)
-                    Positioned.fill(
-                      child: Center(
-                        child: Text('Failed to load profile: ${state.message}', style: const TextStyle(color: Colors.red)),
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                  profileName,
-                  style: theme.bodyMedium?.copyWith(color: const Color(0xff282929))),
-            ],
-          );
         },
+        child: BlocBuilder<GetProfileCubit, GetProfileState>(
+          builder: (context, state) {
+            print('ProfileSection: تم بناء الـ Widget - URL في الـ build: ${state is GetProfileLoaded ? state.profile.profilePictureUrl : 'Loading/Error'}');
+
+            String profileName = "";
+            String? profileImageUrl;
+
+            if (state is GetProfileLoaded) {
+              if (_oldProfileImageUrl != state.profile.profilePictureUrl) {
+                _oldProfileImageUrl = state.profile.profilePictureUrl;
+                print('ProfileSection: تم تحديث الـ URL القديم: $_oldProfileImageUrl');
+              }
+              profileName = state.profile.fullName ?? widget.originalFullName;
+              profileImageUrl = state.profile.profilePictureUrl;
+              print('ProfileSection: GetProfileLoaded - URL: $profileImageUrl');
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      key: ValueKey(state is GetProfileLoaded ? state.profile.profilePictureUrl : null),
+                      radius: widget.screenWidth * 0.15,
+                      backgroundImage: _selectedImagePath != null
+                          ? FileImage(File(_selectedImagePath!)) as ImageProvider
+                          : null,
+                      child: Stack(
+                        children: [
+                          if (context.read<GetProfileCubit>().state is GetProfileLoaded &&
+                              (context.read<GetProfileCubit>().state as GetProfileLoaded).profile.profilePictureUrl != null &&
+                              _selectedImagePath == null)
+                            CachedNetworkImage(
+                              imageUrl: (context.read<GetProfileCubit>().state as GetProfileLoaded).profile.profilePictureUrl!,
+                              imageBuilder: (context, imageProvider) => Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                ),
+                              ),
+                              placeholder: (context, url) => CircularProgressIndicator(color: AppColors.primaryColor),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                            ),
+                          if (_selectedImagePath != null)
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: FileImage(File(_selectedImagePath!)),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          if (context.read<GetProfileCubit>().state is GetProfileLoading && _selectedImagePath == null)
+                            CircularProgressIndicator(color: AppColors.primaryColor),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      right: 5,
+                      child: GestureDetector(
+                        onTap: () => _showOptions(context),
+                        child: CircleAvatar(
+                          radius: widget.screenWidth * 0.039,
+                          backgroundColor: const Color.fromARGB(255, 195, 193, 193),
+                          child: Icon(
+                            Icons.camera_alt_rounded,
+                            color: Colors.black,
+                            size: widget.screenWidth * 0.05,
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (context.read<GetProfileCubit>().state is GetProfileLoading)
+                      Positioned.fill(
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ),
+                    if (context.read<GetProfileCubit>().state is GetProfileError)
+                      Positioned.fill(
+                        child: Center(
+                          child: Text('Failed to load profile: ${(context.read<GetProfileCubit>().state as GetProfileError).message}', style: const TextStyle(color: Colors.red)),
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                    state is GetProfileLoaded ? state.profile.fullName ?? '' : widget.originalFullName,
+                    style: theme.bodyMedium?.copyWith(color: const Color(0xff282929))),              ],
+            );
+          },
+        ),
       ),
     );
-  }}
+  }
+}

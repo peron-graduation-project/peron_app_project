@@ -295,6 +295,7 @@ class ApiService {
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
+            'Cache-Control': 'no-cache'
           },
         ),
       );
@@ -512,6 +513,60 @@ class ApiService {
       print("❗ [DEBUG] Unexpected Error in change password: $e");
       return Left(ServiceFailure(
         errorMessage: "حدث خطأ غير متوقع أثناء تغيير كلمة المرور",
+        errors: [e.toString()],
+      ));
+    }
+  }
+
+  Future<Either<Failure, Map<String, dynamic>>> updateProfile({
+    required String token,
+    required String fullName,
+    String? profilePicturePath,
+  }) async {
+    try {
+      final formData = FormData();
+      formData.fields.add(MapEntry('FullName', fullName));
+
+      if (profilePicturePath != null && profilePicturePath.isNotEmpty) {
+        formData.files.add(
+          MapEntry(
+            'ProfilePicture',
+            await MultipartFile.fromFile(profilePicturePath),
+          ),
+        );
+      } else {
+
+        formData.fields.add(MapEntry('ProfilePicture', ''));
+      }
+
+      final response = await _dio.put(
+        '/Profile/update',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
+        data: formData,
+      );
+
+      print("✅ [DEBUG] update profile API Response: ${response.data}");
+
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        return Right(response.data as Map<String, dynamic>);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "فشل في تعديل البروفايل: استجابة غير متوقعة",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error (update profile): $e");
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      print("❗ [DEBUG] Unexpected Error in update profile: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء تعديل البروفايل",
         errors: [e.toString()],
       ));
     }

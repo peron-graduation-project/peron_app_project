@@ -12,6 +12,7 @@ import 'package:peron_project/features/profile/presentation/view/widgets/change_
 import 'package:peron_project/features/profile/presentation/view/widgets/profileSection.dart';
 
 import '../../manager/change password/change_password_cubit.dart';
+import '../../manager/update profile/update_profile_cubit.dart';
 import '../widgets/change_user_name.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -21,8 +22,31 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserver {
   String? _editedFullName;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _loadProfile();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadProfile();
+  }
+
+  void _loadProfile() {
+    context.read<GetProfileCubit>().getProfile();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +63,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: theme.headlineMedium!.copyWith(fontSize: 20),
           ),
           centerTitle: true,
-          leading: CustomArrowBack(),
+          leading: CustomArrowBack(
+          ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1),
             child: Divider(
@@ -51,18 +76,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         body: BlocBuilder<GetProfileCubit, GetProfileState>(
           builder: (context, state) {
+            print('ProfileScreen: BlocBuilder تم بناؤه مع State: $state');
             if (state is GetProfileLoading) {
+              print('ProfileScreen: State is GetProfileLoading');
               return Center(child: CircularProgressIndicator(color: AppColors.primaryColor));
             } else if (state is GetProfileError) {
+              print('ProfileScreen: State is GetProfileError: ${state.message}');
               return Center(child: Text('فشل في تحميل البروفايل: ${state.message}', style: const TextStyle(color: Colors.red)));
             } else if (state is GetProfileLoaded) {
+              print('ProfileScreen: State is GetProfileLoaded - Full Name: ${state.profile.fullName}, Image URL: ${state.profile.profilePictureUrl}');
               return Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: Column(
                   children: [
                     ProfileSection(
+                      key: ValueKey(state.profile.profilePictureUrl),
                       screenWidth: screenWidth,
                       screenHeight: screenHeight,
+                      originalFullName: state.profile.fullName ?? '',
                     ),
                     GestureDetector(
                       onTap: () async {
@@ -73,6 +104,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         if (newName != null && newName != state.profile.fullName) {
                           setState(() {
                             _editedFullName = newName;
+                          });
+                          BlocProvider.of<UpdateProfileCubit>(context, listen: false)
+                              .updateProfile(
+                            profilePicture: '',
+                            fullName: newName,
+                          ).then((_) {
+                            context.read<GetProfileCubit>().getProfile(); // تم التأكد من وجود هذا السطر
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('تم تحديث البروفايل بنجاح')),
+                            );
                           });
                         }
                       },
@@ -89,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        showChangePasswordDialog(context); // استخدام الـ context اللي تحت الـ ChangePasswordCubit Provider
+                        showChangePasswordDialog(context);
                       },
                       child: AccountOption(
                           icon: Icons.lock,
@@ -100,6 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               );
             } else {
+              print('ProfileScreen: State is Unknown: $state');
               return Center(child: CircularProgressIndicator(
                 color:AppColors.primaryColor ,
               ));

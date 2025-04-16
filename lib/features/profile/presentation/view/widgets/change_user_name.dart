@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
 import '../../../../../core/widgets/build_text_form_field.dart';
+import '../../../domain/repos/get profile/get_profile_repo_imp.dart';
+import '../../manager/get profile/get_profile_cubit.dart';
+import '../../manager/update profile/update_profile_cubit.dart';
+import '../../manager/update profile/update_profile_state.dart';
 
 Future<String?> showChangeUserNameDialog(BuildContext context, String currentName) async {
   TextEditingController userNameController = TextEditingController(text: currentName);
@@ -57,13 +62,33 @@ Future<String?> showChangeUserNameDialog(BuildContext context, String currentNam
                   SizedBox(height: screenWidth * 0.05),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 55.0),
-                    child: CustomButton(
-                      onPressed: () {
-                        Navigator.pop(context, userNameController.text.trim());
+                    child: BlocBuilder<UpdateProfileCubit, UpdateProfileState>(
+                      builder: (context, state) {
+                        return CustomButton(
+                          isLoading: state is UpdateProfileStateLoading,
+                          onPressed: state is UpdateProfileStateLoading
+                              ? null
+                              : () {
+                            final newUserName = userNameController.text.trim();
+                            if (newUserName.isNotEmpty) {
+                              // استدعي الـ Cubit لتحديث الاسم هنا
+                              BlocProvider.of<UpdateProfileCubit>(context, listen: false)
+                                  .updateProfile(
+                                profilePicture: '',
+                                fullName: newUserName,
+                              ).then((_) {
+                                // بعد التحديث بنجاح، ارجع بالاسم الجديد
+                                Navigator.pop(context, newUserName);
+                              });
+                            }
+                          },
+                          backgroundColor: AppColors.primaryColor,
+                          textColor: Colors.white,
+                          text: state is UpdateProfileStateLoading
+                              ? 'جاري التأكيد...'
+                              : 'تأكيد',
+                        );
                       },
-                      backgroundColor: AppColors.primaryColor,
-                      textColor: Colors.white,
-                      text:'تأكيد' ,
                     ),
                   ),
                 ],
@@ -75,7 +100,6 @@ Future<String?> showChangeUserNameDialog(BuildContext context, String currentNam
     },
   );
 }
-
 Widget buildPasswordField(
     String hint,
     TextEditingController controller,

@@ -20,50 +20,57 @@ import 'features/notification/domain/repo/notification/notification_repo_imp.dar
 import 'features/notification/presentation/manager/get notifications/notification_cubit.dart';
 import 'features/profile/domain/repos/delete account/delete_account_repo_imp.dart';
 import 'features/profile/domain/repos/get profile/get_profile_repo_imp.dart';
+import 'features/profile/domain/repos/update profile/update_profile_repo_imp.dart';
 import 'features/profile/presentation/manager/delete account/delete_account_cubit.dart';
 import 'features/profile/presentation/manager/get profile/get_profile_cubit.dart';
+import 'features/profile/presentation/manager/update profile/update_profile_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPreferences = await SharedPreferences.getInstance();
   runApp(
-  MultiProvider(
-  providers: [
-    BlocProvider(
-      create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
-    ),
-    BlocProvider(
-      create: (context) => DeletefavoriteCubit(DeletefavImp(ApiService(Dio()))),
-    ),
-  BlocProvider( create: (context) => DeleteAccountCubit(DeleteAccountRepoImp(ApiService(Dio()))),),
-    
-    ChangeNotifierProxyProvider2<AddfavoriteCubit, DeletefavoriteCubit, FavoriteManager>(
-      create: (context) => FavoriteManager(),
-      update: (context, addCubit, deleteCubit, favoriteManager) =>
+    MultiProvider(
+      providers: [
+        BlocProvider(
+          create: (context) {
+            final profileRepo = ProfileRepoImp(ApiService(Dio()), sharedPreferences);
+            final profileCubit = GetProfileCubit(profileRepo);
+            return profileCubit..getProfile(); // استدعي getProfile هنا عشان البيانات تكون جاهزة
+          },
+        ),
+        BlocProvider(
+          create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
+        ),
+        BlocProvider(
+          create: (context) => DeletefavoriteCubit(DeletefavImp(ApiService(Dio()))),
+        ),
+        BlocProvider(
+          create: (context) => DeleteAccountCubit(DeleteAccountRepoImp(ApiService(Dio()))),
+        ),
+        BlocProvider(
+          create: (context) =>
+              UpdateProfileCubit(UpdateProfileRepoImp(ApiService(Dio()),
+                context.read<GetProfileCubit>().getProfileRepo as ProfileRepoImp, // استخدام context.read هنا بعد إنشاء GetProfileCubit
+              )
+              ),
+        ),
+        ChangeNotifierProxyProvider2<AddfavoriteCubit, DeletefavoriteCubit, FavoriteManager>(
+          create: (context) => FavoriteManager(),
+          update: (context, addCubit, deleteCubit, favoriteManager) =>
           favoriteManager!
             ..setAddCubit(addCubit)
             ..setDeleteCubit(deleteCubit),
-    ),
-
-    BlocProvider(
-      create: (_) => GetNotificationCubit(
-        NotificationRepoImpl(ApiService(Dio())),
-      )..getNotifications(),
-    ),
-    BlocProvider<GetProfileCubit>(
-      create: (context) {
-        final profileRepo = ProfileRepoImp(ApiService(Dio()), sharedPreferences);
-        final profileCubit = GetProfileCubit(profileRepo);
-        profileCubit.getProfile();
-        return profileCubit;
-      },
-    ),
-  ],
+        ),
+        BlocProvider(
+          create: (_) => GetNotificationCubit(
+            NotificationRepoImpl(ApiService(Dio())),
+          )..getNotifications(),
+        ),
+      ],
       child: const PeronApp(),
     ),
   );
 }
-
 class PeronApp extends StatelessWidget {
   const PeronApp({super.key});
   @override
