@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import '../../../../core/error/failure.dart';
+import '../utils/property_model.dart';
 
 class ApiService {
   final String _baseUrl = 'https://sakaniapi1.runasp.net/api';
@@ -615,6 +616,53 @@ class ApiService {
       print("❗️ [DEBUG] Unexpected Error in submitInquiry: $e");
       return Left(ServiceFailure(
         errorMessage: "حدث خطأ غير متوقع أثناء إرسال الإستفسار",
+        errors: [e.toString()],
+      ));
+    }
+  }
+  Future<Either<Failure, List<Property>>> getNearest({
+    required String token,
+    required double lat,
+    required double lon,
+    int? maxResults=10,
+
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/Property/nearest?lat$lat&lon=$lon&maxResults=$maxResults',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+        data: {
+          "lat":lat,
+          "lon":lon,
+          "maxResults":maxResults??10
+        }
+      );
+
+      print("✅ [DEBUG] get Nearest API Response: ${response.data}");
+
+      if (response.data is List) {
+        final List<Property> properties = (response.data as List)
+            .map((json) => Property.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return Right(properties);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم عند جلب الشقق القريبة",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error أثناء جلب الشقق القريبة: $e");
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء جلب الشقق القريبة في ApiService: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء جلب الشقق القريبة",
         errors: [e.toString()],
       ));
     }

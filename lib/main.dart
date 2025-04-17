@@ -11,10 +11,12 @@ import 'package:peron_project/features/favourite/data/repos/removeFavorite/remov
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
 import 'package:peron_project/features/favourite/presentation/manager/deleteFavorite/deleteFavorite_cubit.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart'; 
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/network/api_service.dart';
 import 'features/main/presentation/view/widgets/favorite_manager.dart';
+import 'features/map/domain/repos/get nearest/get_nearest_repo_imp.dart';
+import 'features/map/presentation/manager/get_nearest_cubit.dart';
 
 import 'features/notification/domain/repo/notification/notification_repo_imp.dart';
 import 'features/notification/presentation/manager/get notifications/notification_cubit.dart';
@@ -35,12 +37,16 @@ void main() async {
           create: (context) {
             final profileRepo = ProfileRepoImp(ApiService(Dio()), sharedPreferences);
             final profileCubit = GetProfileCubit(profileRepo);
-            return profileCubit..getProfile(); // استدعي getProfile هنا عشان البيانات تكون جاهزة
+            return profileCubit..getProfile();
           },
         ),
         BlocProvider(
           create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
         ),
+        BlocProvider<GetNearestCubit>(
+          create: (context) => GetNearestCubit(GetNearestRepoImp(ApiService(Dio()))),
+        ),
+
         BlocProvider(
           create: (context) => DeletefavoriteCubit(DeletefavImp(ApiService(Dio()))),
         ),
@@ -50,7 +56,7 @@ void main() async {
         BlocProvider(
           create: (context) =>
               UpdateProfileCubit(UpdateProfileRepoImp(ApiService(Dio()),
-                context.read<GetProfileCubit>().getProfileRepo as ProfileRepoImp, // استخدام context.read هنا بعد إنشاء GetProfileCubit
+                context.read<GetProfileCubit>().getProfileRepo as ProfileRepoImp,
               )
               ),
         ),
@@ -66,6 +72,7 @@ void main() async {
             NotificationRepoImpl(ApiService(Dio())),
           )..getNotifications(),
         ),
+
       ],
       child: const PeronApp(),
     ),

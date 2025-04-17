@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/helper/colors.dart';
-import '../../../../map/views/location_dialog.dart';
+import '../../../../map/presentation/view/views/location_dialog.dart';
 import 'notification_button.dart';
 
 class LocationSelector extends StatelessWidget {

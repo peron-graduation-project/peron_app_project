@@ -7,6 +7,7 @@ import 'package:peron_project/features/favourite/data/repos/addFavorite/addFav_i
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
 import 'package:peron_project/features/favourite/presentation/view/views/favourite_view.dart';
 import 'package:peron_project/features/main/presentation/view/views/main_view.dart';
+
 import 'package:peron_project/features/profile/domain/repos/get%20profile/get_profile_repo_imp.dart';
 import 'package:peron_project/features/profile/presentation/view/view/accountScreen.dart';
 
@@ -35,15 +36,14 @@ class HomeViewBodyState extends State<HomeViewBody> {
 
     _screens = [
       BlocProvider(
-  create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
-  child: MainView(),
-),
+        create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
+
+        child: MainView(),
+      ),
+
       const FavouriteView(),
       const ChatView(),
-      BlocProvider.value(
-        value: profileCubit,
-        child: AccountScreen(),
-      ),
+      BlocProvider.value(value: profileCubit, child: AccountScreen()),
     ];
   }
 
