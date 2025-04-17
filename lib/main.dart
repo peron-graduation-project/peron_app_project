@@ -10,6 +10,8 @@ import 'package:peron_project/features/favourite/data/repos/addFavorite/addFav_i
 import 'package:peron_project/features/favourite/data/repos/removeFavorite/removeFav_imp.dart';
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
 import 'package:peron_project/features/favourite/presentation/manager/deleteFavorite/deleteFavorite_cubit.dart';
+import 'package:peron_project/features/profile/domain/repos/app%20rating/app_rating_repo_imp.dart';
+import 'package:peron_project/features/profile/presentation/manager/app%20rating/send%20app%20rating/send_app_rating_cubit.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,6 +51,9 @@ void main() async {
 
         BlocProvider(
           create: (context) => DeletefavoriteCubit(DeletefavImp(ApiService(Dio()))),
+        ),
+        BlocProvider(
+          create: (context) => SendAppRatingCubit(AppRatingRepoImp(ApiService(Dio()))),
         ),
         BlocProvider(
           create: (context) => DeleteAccountCubit(DeleteAccountRepoImp(ApiService(Dio()))),

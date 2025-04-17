@@ -30,20 +30,14 @@ class HomeViewBodyState extends State<HomeViewBody> {
   @override
   void initState() {
     super.initState();
-    final profileRepo = ProfileRepoImp(ApiService(Dio()));
-    final profileCubit = GetProfileCubit(profileRepo);
-    profileCubit.getProfile();
-
     _screens = [
       BlocProvider(
         create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
-
         child: MainView(),
       ),
-
       const FavouriteView(),
       const ChatView(),
-      BlocProvider.value(value: profileCubit, child: AccountScreen()),
+    AccountScreen(),
     ];
   }
 

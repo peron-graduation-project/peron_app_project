@@ -572,6 +572,45 @@ class ApiService {
       ));
     }
   }
+  Future<Either<Failure, String>> appRating({
+    required String token,
+    required int star,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/AppRating',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+        data: {
+          "stars": star,
+        },
+      );
+
+      print("✅ [DEBUG] submit appRating API Response: ${response.data}");
+
+      if (response.statusCode == 200 && response.data is String) {
+        return Right(response.data); // ✅ return the success message
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "فشل في إرسال تقييم التطبيق: استجابة غير متوقعة",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error (appRating): $e");
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      print("❗️ [DEBUG] Unexpected Error in appRating: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء إرسال تقييم التطبيق",
+        errors: [e.toString()],
+      ));
+    }
+  }
+
   Future<Either<Failure, Map<String, dynamic>>> submitInquiry({
     required String token,
     required String name,

@@ -10,8 +10,6 @@ import 'package:peron_project/core/helper/images.dart';
 import '../../../../../core/helper/colors.dart';
 import '../../../../../core/network/api_service.dart';
 import '../../../../../core/widgets/custom_button.dart';
-import '../../../domain/repos/get nearest/get_nearest_repo_imp.dart';
-import '../../manager/get_nearest_cubit.dart';
 import 'map_screen.dart';
 
 
