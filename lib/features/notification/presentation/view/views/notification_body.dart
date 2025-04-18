@@ -38,12 +38,9 @@ class NotificationBodyView extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        print("✅ [DEBUG] Current Notification State: $state");
-
         if (state is GetNotificationStateLoading) {
           return const ShimmerNotificationPlaceholder();
         } else if (state is GetNotificationStateSuccess) {
-          print("✅ [DEBUG] Notifications in UI: ${state.notifications}");
           return state.notifications.isEmpty
               ? const EmptyNotificationWidget()
               : NotificationsWidget(
@@ -56,5 +53,6 @@ class NotificationBodyView extends StatelessWidget {
         }
         return const EmptyNotificationWidget();
       },
-    );  }
+    );
+  }
 }

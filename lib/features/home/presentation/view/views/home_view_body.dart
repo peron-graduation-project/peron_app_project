@@ -8,10 +8,8 @@ import 'package:peron_project/features/favourite/presentation/manager/addFavorit
 import 'package:peron_project/features/favourite/presentation/view/views/favourite_view.dart';
 import 'package:peron_project/features/main/presentation/view/views/main_view.dart';
 
-import 'package:peron_project/features/profile/domain/repos/get%20profile/get_profile_repo_imp.dart';
 import 'package:peron_project/features/profile/presentation/view/view/accountScreen.dart';
 
-import '../../../../profile/presentation/manager/get profile/get_profile_cubit.dart';
 import '../widgets/animated_bottom_nav_bar.dart';
 import '../widgets/custom_floating_action_button.dart';
 
@@ -37,7 +35,7 @@ class HomeViewBodyState extends State<HomeViewBody> {
       ),
       const FavouriteView(),
       const ChatView(),
-    AccountScreen(),
+      AccountScreen(key: UniqueKey()),
     ];
   }
 
@@ -52,6 +50,7 @@ class HomeViewBodyState extends State<HomeViewBody> {
         onItemSelected: (index) {
           setState(() {
             _selectedIndex = index;
+
           });
         },
       ),

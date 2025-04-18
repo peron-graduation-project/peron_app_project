@@ -59,12 +59,15 @@ void main() async {
           create: (context) => DeleteAccountCubit(DeleteAccountRepoImp(ApiService(Dio()))),
         ),
         BlocProvider(
-          create: (context) =>
-              UpdateProfileCubit(UpdateProfileRepoImp(ApiService(Dio()),
-                context.read<GetProfileCubit>().getProfileRepo as ProfileRepoImp,
-              )
-              ),
+          create: (context) => UpdateProfileCubit(
+            UpdateProfileRepoImp(
+              ApiService(Dio()),
+              context.read<GetProfileCubit>().getProfileRepo as ProfileRepoImp,
+            ),
+            context.read<GetProfileCubit>(),
+          ),
         ),
+
         ChangeNotifierProxyProvider2<AddfavoriteCubit, DeletefavoriteCubit, FavoriteManager>(
           create: (context) => FavoriteManager(),
           update: (context, addCubit, deleteCubit, favoriteManager) =>

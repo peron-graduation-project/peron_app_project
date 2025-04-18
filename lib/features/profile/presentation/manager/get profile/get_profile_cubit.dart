@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../domain/repos/get profile/get_profile_repo.dart';
 import 'get_profile_state.dart';
 
@@ -9,26 +8,31 @@ class GetProfileCubit extends Cubit<GetProfileState> {
   GetProfileCubit(this.getProfileRepo) : super(GetProfileInitial());
 
   Future<void> getProfile() async {
-    print('GetProfileCubit: About to emit GetProfileLoading');
+    _log('Start fetching profile...');
     emit(GetProfileLoading());
-    print('GetProfileCubit: Emitted GetProfileLoading');
+    _log('State emitted: GetProfileLoading');
 
     final result = await getProfileRepo.getProfile();
+
     result.fold(
           (failure) {
         emit(GetProfileError(message: failure.errorMessage));
-        print('GetProfileCubit: Emitted GetProfileError with error: ${failure.errorMessage}');
+        _log('State emitted: GetProfileError - ${failure.errorMessage}');
       },
           (profile) {
         if (profile != null) {
-          print('GetProfileCubit: Profile data received - Name: ${profile.fullName}, URL: ${profile.profilePictureUrl}'); // <---- Print عند النجاح
           emit(GetProfileLoaded(profile: profile));
-          print('GetProfileCubit: Emitted GetProfileLoaded with profile: ${profile.fullName}, URL: ${profile.profilePictureUrl}');
+          _log('State emitted: GetProfileLoaded - Name: ${profile.fullName}, Image: ${profile.profilePictureUrl}');
         } else {
-          emit(GetProfileError(message: 'بيانات البروفايل غير متوفرة'));
-          print('GetProfileCubit: Emitted GetProfileError with error: بيانات البروفايل غير متوفرة');
+          final errorMsg = 'بيانات البروفايل غير متوفرة';
+          emit(GetProfileError(message: errorMsg));
+          _log('State emitted: GetProfileError - $errorMsg');
         }
       },
     );
+  }
+
+  void _log(String message) {
+    print('[GetProfileCubit] $message');
   }
 }

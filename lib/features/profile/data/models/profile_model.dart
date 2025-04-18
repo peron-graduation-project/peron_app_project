@@ -13,11 +13,21 @@ class ProfileModel {
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel(
-      fullName: json['fullName'] != null ? json['fullName'] as String : null,
-      email: json['email'] != null ? json['email'] as String : null,
-      profilePictureUrl: json['profilePictureUrl'] != null ? json['profilePictureUrl'] as String : null,
-      rating: json['rating'] != null ? (json['rating'] is String ? int.tryParse(json['rating'] as String) : json['rating'] as int) : null,
+      fullName: json['fullName'] as String?,
+      email: json['email'] as String?,
+      profilePictureUrl: json['profilePictureUrl'] as String?,
+      rating: _parseRating(json['rating']),
     );
+  }
+
+  static int? _parseRating(dynamic rating) {
+    if (rating == null) return null;
+    if (rating is String) {
+      return int.tryParse(rating);
+    } else if (rating is int) {
+      return rating;
+    }
+    return null;
   }
 
   Map<String, dynamic> toJson() {
@@ -27,5 +37,14 @@ class ProfileModel {
       'profilePictureUrl': profilePictureUrl,
       'rating': rating,
     };
+  }
+
+  factory ProfileModel.empty() {
+    return ProfileModel(
+      fullName: null,
+      email: null,
+      profilePictureUrl: null,
+      rating: null,
+    );
   }
 }

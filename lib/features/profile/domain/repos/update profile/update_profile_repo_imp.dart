@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:peron_project/features/profile/domain/repos/get%20profile/get_profile_repo.dart'; // استيراد Repo جلب البروفايل
 import 'package:peron_project/features/profile/domain/repos/update%20profile/update_profile_repo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,23 +8,27 @@ import '../get profile/get_profile_repo_imp.dart';
 
 class UpdateProfileRepoImp implements UpdateProfileRepo {
   final ApiService apiService;
-  final ProfileRepoImp profileRepoImp; // إضافة instance من ProfileRepoImp
+  final ProfileRepoImp profileRepoImp;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  UpdateProfileRepoImp(this.apiService, this.profileRepoImp); // تعديل الكونستركتور
+  UpdateProfileRepoImp(this.apiService, this.profileRepoImp);
 
   Future<void> _saveProfileData({
     required String fullName,
     String? profilePicture,
   }) async {
-    final prefs = await _prefs;
-    await prefs.setString('fullName', fullName);
-    if (profilePicture != null) {
-      await prefs.setString('profilePicture', profilePicture);
-    } else {
-      await prefs.remove('profilePicture');
+    try {
+      final prefs = await _prefs;
+      await prefs.setString('fullName', fullName);
+      if (profilePicture != null) {
+        await prefs.setString('profilePicture', profilePicture);
+      } else {
+        await prefs.remove('profilePicture');
+      }
+      print("💾 [DEBUG] Profile data saved to SharedPreferences");
+    } catch (e) {
+      print("❗ [DEBUG] Error saving profile data: $e");
     }
-    print("💾 [DEBUG] Profile data saved to SharedPreferences");
   }
 
   @override
@@ -37,29 +40,36 @@ class UpdateProfileRepoImp implements UpdateProfileRepo {
       final prefs = await _prefs;
       final token = prefs.getString('token');
 
+      // Check if the token is valid
       if (token == null || token.isEmpty) {
         return Left(ServiceFailure(
-          errorMessage: "لا يوجد توكين مسجل لتغيير كلمة المرور",
+          errorMessage: "لا يوجد توكين مسجل لتغيير البروفايل",
           errors: ["التوكين غير موجود"],
         ));
       }
 
-      final response = await apiService.updateProfile(token: token, fullName: fullName, profilePicturePath: profilePicture);
+      // Call the API to update the profile
+      final response = await apiService.updateProfile(
+        token: token,
+        fullName: fullName,
+        profilePicturePath: profilePicture,
+      );
 
-      print("✅ [DEBUG] update profile repo Response: $response");
+      print("✅ [DEBUG] Update profile repo Response: $response");
 
       return response.fold(
             (failure) {
           print("❌ [DEBUG] Failure in Repo: $failure");
           return Left(failure);
         },
-            (data) async { // جعلنا الدالة async
+            (data) async { // Handle successful response
           if (data is Map<String, dynamic>) {
             if (data.containsKey("message")) {
-              _saveProfileData(fullName: fullName, profilePicture: profilePicture);
+              // Save the profile data to SharedPreferences
+              await _saveProfileData(fullName: fullName, profilePicture: profilePicture);
 
-              // مسح كاش البروفايل بعد التحديث الناجح
-              profileRepoImp.clearCachedProfile();
+              // Clear the cached profile after successful update
+              await profileRepoImp.clearCachedProfile();
               print("🗑️ [DEBUG] Profile cache cleared after update");
 
               return Right(data["message"].toString());

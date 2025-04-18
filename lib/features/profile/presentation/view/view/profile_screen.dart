@@ -90,10 +90,10 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
                 child: Column(
                   children: [
                     ProfileSection(
+                      isShown: true,
                       key: ValueKey(state.profile.profilePictureUrl),
                       screenWidth: screenWidth,
                       screenHeight: screenHeight,
-                      originalFullName: state.profile.fullName ?? '',
                     ),
                     GestureDetector(
                       onTap: () async {

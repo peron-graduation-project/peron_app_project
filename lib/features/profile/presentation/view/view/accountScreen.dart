@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,8 +6,6 @@ import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
 import 'package:peron_project/features/authentication/presentation/manager/logout/logout_cubit.dart';
-import 'package:peron_project/features/profile/presentation/manager/get%20profile/get_profile_cubit.dart';
-import 'package:peron_project/features/profile/presentation/manager/get%20profile/get_profile_state.dart';
 import 'package:peron_project/features/profile/presentation/view/view/profile_screen.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/profileSection.dart';
@@ -17,8 +14,11 @@ import 'package:share_plus/share_plus.dart';
 import '../../../../../core/helper/colors.dart';
 import '../../../../authentication/data/repos/logout/logout_repo_imp.dart';
 import '../../../../authentication/presentation/manager/logout/logout_state.dart';
+
 import '../../../domain/repos/get profile/get_profile_repo_imp.dart';
 import '../../../domain/repos/update profile/update_profile_repo_imp.dart';
+import '../../manager/get profile/get_profile_cubit.dart';
+import '../../manager/get profile/get_profile_state.dart';
 import '../../manager/update profile/update_profile_cubit.dart';
 import 'settings_screen.dart';
 
@@ -29,7 +29,29 @@ class AccountScreen extends StatefulWidget {
   State<AccountScreen> createState() => _AccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _AccountScreenState extends State<AccountScreen> with RouteAware {
+  late GetProfileCubit _getProfileCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+    });
+  }
+
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    _getProfileCubit.getProfile(); // إعادة تحميل البيانات عند العودة من شاشة أخرى
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
@@ -38,19 +60,24 @@ class _AccountScreenState extends State<AccountScreen> {
 
     return MultiBlocProvider(
       providers: [
+        BlocProvider<GetProfileCubit>(
+          create: (context) {
+            _getProfileCubit = GetProfileCubit(ProfileRepoImp(ApiService(Dio())));
+            _getProfileCubit.getProfile();
+            return _getProfileCubit;
+          },
+        ),
         BlocProvider(
           create: (context) => UpdateProfileCubit(
             UpdateProfileRepoImp(
               ApiService(Dio()),
-              context.read<GetProfileCubit>().getProfileRepo as ProfileRepoImp,
+              _getProfileCubit.getProfileRepo as ProfileRepoImp,
             ),
+            _getProfileCubit,
           ),
         ),
         BlocProvider(
           create: (context) => LogoutCubit(LogoutRepoImp(ApiService(Dio()))),
-        ),
-        BlocProvider(
-          create: (context) => GetProfileCubit(ProfileRepoImp(ApiService(Dio())))..getProfile(),
         ),
       ],
       child: Scaffold(
@@ -71,29 +98,26 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         body: BlocBuilder<GetProfileCubit, GetProfileState>(
           builder: (context, state) {
-            print('AccountScreen: BlocBuilder (Full Screen) تم إعادة بنائه مع State: $state');
-            String originalFullName = state is GetProfileLoaded ? state.profile.fullName ?? '' : '';
-            String? profilePictureUrl = state is GetProfileLoaded ? state.profile.profilePictureUrl : null;
-
             return Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: ListView(
                 children: [
                   ProfileSection(
-                    key: ValueKey(profilePictureUrl),
+                    isShown: false,
+                    key: UniqueKey(),
                     screenWidth: screenWidth,
                     screenHeight: screenHeight,
-                    originalFullName: originalFullName,
                   ),
                   AccountOption(
                     icon: Icons.person,
                     title: "الملف الشخصي",
                     screenWidth: screenWidth,
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => const ProfileScreen()),
                       );
+                      _getProfileCubit.getProfile();
                     },
                   ),
                   AccountOption(
@@ -148,9 +172,10 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: BlocConsumer<LogoutCubit, LogoutState>(
                       listener: (context, state) {
                         if (state is LogoutSuccess) {
-                          Navigator.of(
-                            context,
-                          ).pushNamedAndRemoveUntil(PageRouteName.afterExit, (route) => false);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            PageRouteName.afterExit,
+                                (route) => false,
+                          );
                         } else if (state is LogoutFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -185,3 +210,5 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 }
+
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();

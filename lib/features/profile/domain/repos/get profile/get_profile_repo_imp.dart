@@ -56,6 +56,17 @@ class ProfileRepoImp implements ProfileRepo {
         ));
       }
 
+      // First, try to get the cached profile.
+      final cachedProfileResult = await getCachedProfile();
+
+      // Check if the cached profile exists and is not null.
+      if (cachedProfileResult.isRight() && cachedProfileResult.getOrElse(() => null) != null) {
+        final cachedProfile = cachedProfileResult.getOrElse(() => ProfileModel.empty());  // Default if null
+        print("🔄 Returning cached profile data");
+        return Right(cachedProfile!);  // Return the non-null profile model
+      }
+
+      // Fetch profile data from the API if no cached profile found
       final response = await apiService.getProfile(token: token);
 
       print("✅ [DEBUG] ProfileRepoImp Response: $response");
@@ -68,8 +79,8 @@ class ProfileRepoImp implements ProfileRepo {
             (data) {
           print("✅ [DEBUG] Data before conversion: $data");
           try {
-            _cacheProfile(data);
-            return Right(data);
+            _cacheProfile(data);  // Cache the profile
+            return Right(data);  // Return the profile model
           } catch (e) {
             return Left(ServiceFailure(
               errorMessage: "فشل في تحويل بيانات البروفايل",
