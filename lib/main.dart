@@ -11,7 +11,9 @@ import 'package:peron_project/features/favourite/data/repos/removeFavorite/remov
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
 import 'package:peron_project/features/favourite/presentation/manager/deleteFavorite/deleteFavorite_cubit.dart';
 import 'package:peron_project/features/profile/domain/repos/app%20rating/app_rating_repo_imp.dart';
+import 'package:peron_project/features/profile/domain/repos/get%20inquiry/get_inquiry_repo_imp.dart';
 import 'package:peron_project/features/profile/presentation/manager/app%20rating/send%20app%20rating/send_app_rating_cubit.dart';
+import 'package:peron_project/features/profile/presentation/manager/get%20inquiry/get_inquiry_cubit.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -79,6 +81,11 @@ void main() async {
           create: (_) => GetNotificationCubit(
             NotificationRepoImpl(ApiService(Dio())),
           )..getNotifications(),
+        ),
+        BlocProvider(
+          create: (_) => GetInquiryCubit(
+            GetInquiryRepoImp(ApiService(Dio())),
+          )..getInquires(),
         ),
 
       ],

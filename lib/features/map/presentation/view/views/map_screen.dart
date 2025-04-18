@@ -123,7 +123,6 @@ class _MapScreenState extends State<MapScreen> {
       setState(() {
         // تحديث الـ polylines فقط إذا كانت هناك مواقع جديدة للشقق.
         for (int i = 0; i < propertyLocations.length; i++) {
-          // نضيف الـ polyline للـ property الذي يحتاجها فقط.
           _polylines.add(Polyline(
             polylineId: PolylineId('route_to_property_$i'),
             color: Colors.green,
@@ -190,7 +189,6 @@ class _MapScreenState extends State<MapScreen> {
     return BlocConsumer<GetNearestCubit, GetNearestState>(
       listener: (context, state) async {
         if (state is GetNearestStateSuccess) {
-          // عدم مسح الـ polylines بشكل مفرط
           List<LatLng> propertyLocations = [];
           for (var property in state.properties) {
             if (property.latitude != null && property.longitude != null) {

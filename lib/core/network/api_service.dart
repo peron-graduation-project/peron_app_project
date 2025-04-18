@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import '../../../../core/error/failure.dart';
+import '../../features/profile/data/models/inquiry_model.dart';
 import '../utils/property_model.dart';
 
 class ApiService {
@@ -659,6 +660,45 @@ class ApiService {
       ));
     }
   }
+  Future<Either<Failure, List<InquiryModel>>> getInquiry({
+    required String token,
+  }) async {
+    try {
+      final response = await _dio.get(
+          '/Inquiry/my-inquiries',
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ),
+      );
+
+      print("✅ [DEBUG] get Inquiry API Response: ${response.data}");
+
+      if (response.data is List) {
+        final List<InquiryModel> inquires = (response.data as List)
+            .map((json) => InquiryModel.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return Right(inquires);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم عند جلب رد تحتاج الي مساعده",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error أثناء جلب رد تحتاج الي مساعدة: $e");
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء جلب رد تحتاج الي مساعده في ApiService: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء جلب رد تحتاج الي مساعده",
+        errors: [e.toString()],
+      ));
+    }
+  }
+
   Future<Either<Failure, List<Property>>> getNearest({
     required String token,
     required double lat,
