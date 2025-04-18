@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:peron_project/core/helper/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../manager/get profile/get_profile_cubit.dart';
@@ -170,8 +171,35 @@ class _ProfileSectionState extends State<ProfileSection> {
                   children: [
                     CircleAvatar(
                       radius: widget.screenWidth * 0.17,
-                      backgroundImage: imageProvider,
                       backgroundColor: Colors.grey[300],
+                      child: ClipOval(
+                        child: _selectedImagePath != null
+                            ? Image.file(
+                          File(_selectedImagePath!),
+                          fit: BoxFit.cover,
+                          width: widget.screenWidth * 0.34,
+                          height: widget.screenWidth * 0.34,
+                        )
+                            : (profileImageUrl != null && profileImageUrl.isNotEmpty
+                            ? CachedNetworkImage(
+                          imageUrl: profileImageUrl,
+                          fit: BoxFit.cover,
+                          width: widget.screenWidth * 0.34,
+                          height: widget.screenWidth * 0.34,
+                          placeholder: (context, url) =>  Center(
+                            child: CircularProgressIndicator(
+                              backgroundColor: AppColors.primaryColor,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        )
+                            : Image.asset(
+                          "assets/images/no pic.jpg",
+                          fit: BoxFit.cover,
+                          width: widget.screenWidth * 0.34,
+                          height: widget.screenWidth * 0.34,
+                        )),
+                      ),
                     ),
                     if (widget.isShown)
                       Positioned(

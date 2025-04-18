@@ -27,12 +27,6 @@ class NotificationBodyView extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.errorMessage),
-              backgroundColor: Colors.red,
-              action: SnackBarAction(
-                label: 'إعادة المحاولة',
-                textColor: Colors.white,
-                onPressed: () => context.read<GetNotificationCubit>().getNotifications(),
-              ),
             ),
           );
         }

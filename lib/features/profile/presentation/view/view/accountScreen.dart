@@ -43,7 +43,7 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
   @override
   void didPopNext() {
     super.didPopNext();
-    _getProfileCubit.getProfile(); // إعادة تحميل البيانات عند العودة من شاشة أخرى
+    _getProfileCubit.getProfile();
   }
 
   @override
@@ -98,6 +98,21 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
         ),
         body: BlocBuilder<GetProfileCubit, GetProfileState>(
           builder: (context, state) {
+            if (state is GetProfileLoading) {
+              return  Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: AppColors.primaryColor,
+                ),
+              );
+            } else if (state is GetProfileError) {
+              return Center(
+                child: Text(
+                  'حدث خطأ أثناء تحميل البيانات ${state.message}',
+                  style: theme.titleMedium,
+                ),
+              );
+            }
+
             return Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: ListView(

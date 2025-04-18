@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -29,11 +31,20 @@ class _MapScreenState extends State<MapScreen> {
   Marker? _userSelectedMarker;
   String _locationDetails = '';
   LatLng? _currentLatLng;
+  StreamSubscription<loc.LocationData>? _locationSubscription;
+  String _propertyCountMessage = '';
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
+    _startTrackingUserLocation();
+  }
+
+  @override
+  void dispose() {
+    _locationSubscription?.cancel();
+    super.dispose();
   }
 
   Future<void> _getCurrentLocation() async {
@@ -60,9 +71,9 @@ class _MapScreenState extends State<MapScreen> {
       }
     }
 
-    setState(() => _isLoading = true); // Set loading to true before getting location
+    setState(() => _isLoading = true);
     try {
-      _currentLocation = await _location.getLocation(); // استخدام getLocation() بدلاً من getCurrentLocation()
+      _currentLocation = await _location.getLocation();
       if (_currentLocation != null) {
         _currentLatLng = LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!);
         _currentLocationMarker = Marker(
@@ -80,6 +91,23 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  void _startTrackingUserLocation() {
+    _locationSubscription = _location.onLocationChanged.listen((loc.LocationData newLocation) {
+      setState(() {
+        _currentLocation = newLocation;
+        _currentLatLng = LatLng(newLocation.latitude!, newLocation.longitude!);
+
+        _currentLocationMarker = Marker(
+          markerId: const MarkerId("current_location"),
+          position: _currentLatLng!,
+          infoWindow: const InfoWindow(title: "موقعك الحالي"),
+        );
+        _markers.removeWhere((m) => m.markerId == const MarkerId("current_location"));
+        _markers.add(_currentLocationMarker!);
+      });
+    });
+  }
+
   Future<double?> _calculateDistance(LatLng target) async {
     if (_currentLocation == null) return null;
     return geo.Geolocator.distanceBetween(
@@ -93,8 +121,9 @@ class _MapScreenState extends State<MapScreen> {
   void _updatePolylinesToProperties(List<LatLng> propertyLocations) {
     if (_currentLocation != null) {
       setState(() {
-        _polylines.clear();
+        // تحديث الـ polylines فقط إذا كانت هناك مواقع جديدة للشقق.
         for (int i = 0; i < propertyLocations.length; i++) {
+          // نضيف الـ polyline للـ property الذي يحتاجها فقط.
           _polylines.add(Polyline(
             polylineId: PolylineId('route_to_property_$i'),
             color: Colors.green,
@@ -108,6 +137,22 @@ class _MapScreenState extends State<MapScreen> {
       });
     }
   }
+
+  void _drawPolylineToPoint(LatLng destination) {
+    if (_currentLatLng != null) {
+      setState(() {
+        // مسح polylines فقط من أجل الرسم الجديد
+        _polylines.clear(); // تأكدي من أن هذا يتم فقط عندما تكون هناك حاجة لذلك
+        _polylines.add(Polyline(
+          polylineId: const PolylineId("to_selected_location"),
+          color: Colors.blue,
+          width: 4,
+          points: [_currentLatLng!, destination],
+        ));
+      });
+    }
+  }
+
 
   void _onMapTapped(LatLng position) async {
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
@@ -124,6 +169,7 @@ class _MapScreenState extends State<MapScreen> {
       _markers.add(_userSelectedMarker!);
 
       _locationDetails = locationName;
+      _drawPolylineToPoint(position);
 
       context.read<GetNearestCubit>().getNearest(lat: position.latitude, lon: position.longitude);
     });
@@ -139,19 +185,15 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<GetNearestCubit, GetNearestState>(
       listener: (context, state) async {
-        print('Listener triggered with state: $state'); // Debugging
         if (state is GetNearestStateSuccess) {
-          print('GetNearestStateSuccess - Properties count: ${state.properties.length}'); // Debugging
-          _markers.removeWhere((marker) => marker.markerId.value.startsWith('property_'));
+          // عدم مسح الـ polylines بشكل مفرط
           List<LatLng> propertyLocations = [];
           for (var property in state.properties) {
-            print('Property Latitude: ${property.latitude}, Longitude: ${property.longitude}'); // Debugging
             if (property.latitude != null && property.longitude != null) {
-              final distance = await _calculateDistance(LatLng(property.latitude, property.longitude));
-              final distanceFormatted = distance != null ? '${distance.toStringAsFixed(2)} متر' : 'غير معروف';
               final propertyLatLng = LatLng(property.latitude, property.longitude);
               _markers.add(
                 Marker(
@@ -159,25 +201,22 @@ class _MapScreenState extends State<MapScreen> {
                   position: propertyLatLng,
                   infoWindow: InfoWindow(
                     title: property.title,
-                    snippet: '${property.location} ($distanceFormatted)',
+                    snippet: '${property.location}',
                   ),
                 ),
               );
               propertyLocations.add(propertyLatLng);
-            } else {
-              print('Skipping property due to null latitude or longitude'); // Debugging
             }
           }
+          // تحديث الـ polylines
           _updatePolylinesToProperties(propertyLocations);
+
+          // رسالة حول عدد الشقق
+          setState(() {
+            _propertyCountMessage = 'تم العثور على ${state.properties.length}  شقق بالقرب منك';
+          });
+
           setState(() {});
-          print('_markers count after setState: ${_markers.length}'); // Debugging
-        } else if (state is GetNearestStateFailure) {
-          print('GetNearestStateFailure: ${state.errorMessage}'); // Debugging
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('خطأ في تحميل الشقق القريبة: ${state.errorMessage}')),
-          );
-        } else if (state is GetNearestStateStateLoading) {
-          print('GetNearestStateStateLoading'); // Debugging
         }
       },
       builder: (context, state) {
@@ -198,9 +237,7 @@ class _MapScreenState extends State<MapScreen> {
         ),
       ),
       body: _isLoading
-          ? Center(
-        child: CircularProgressIndicator(color: AppColors.primaryColor),
-      )
+          ? Center(child: CircularProgressIndicator(color: AppColors.primaryColor))
           : Column(
         children: [
           Expanded(
@@ -217,9 +254,15 @@ class _MapScreenState extends State<MapScreen> {
               myLocationButtonEnabled: false,
             ),
           ),
-          if (state is GetNearestStateStateLoading)
-            const LinearProgressIndicator(),
-          Text('Number of markers: ${_markers.length}'), // Debugging
+          if (_propertyCountMessage.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                _propertyCountMessage,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          if (state is GetNearestStateStateLoading) const LinearProgressIndicator(),
         ],
       ),
     );
