@@ -1,11 +1,13 @@
 
-
+import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
 import 'package:peron_project/features/myAds/presentation/view/widgets/dottedBorderBox.dart';
 import 'package:peron_project/features/myAds/presentation/view/widgets/successDialog.dart';
+import 'package:peron_project/features/payment/presentation/view/views/otp.dart';
+import 'package:peron_project/features/payment/presentation/view/widgets/successDialogOTP.dart';
 
 class EditPropertyScreen extends StatefulWidget {
   const EditPropertyScreen({super.key});
