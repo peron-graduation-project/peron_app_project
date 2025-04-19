@@ -21,13 +21,23 @@ class ServiceFailure extends Failure {
     List<String> errorsList = [];
     int? statusCode = e.response?.statusCode;
 
+    // ✅ التحقق من عدم وجود إنترنت
+    if (e.type == DioExceptionType.connectionError ||
+        e.type == DioExceptionType.unknown) {
+      message = "لا يوجد اتصال بالإنترنت، يرجى التحقق من الشبكة";
+      return ServiceFailure(
+        errorMessage: message,
+        statusCode: null,
+        errors: [message],
+      );
+    }
+
     dynamic data = e.response?.data;
 
     if (data is String) {
       try {
         data = jsonDecode(data);
       } catch (_) {
-        // إذا فشل الـ jsonDecode، نعتبر الـ String هو الرسالة
         message = data;
       }
     }
@@ -68,4 +78,5 @@ class ServiceFailure extends Failure {
       statusCode: statusCode,
       errors: errorsList,
     );
-  }}
+  }
+}

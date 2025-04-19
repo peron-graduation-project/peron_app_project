@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/core/utils/launch_accounts.dart';
 import '../../../../../core/helper/colors.dart';
 import '../../../../../core/widgets/custom_arrow_back.dart';
+import '../widgets/about_item.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
@@ -159,7 +161,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
               children: [
                 Icon(Icons.email,color: AppColors.primaryColor,size: 20,),
                 SizedBox(width: 10,),
-                Text('البريد الالكتروني:peron@gmail.com',style: theme.labelLarge?.copyWith(color: AppColors.primaryColor),)
+                AboutItem(title: 'البريد الالكتروني:', onTap: () {
+                  LaunchAccounts.launchAccounts("peron7728@gmail.com");
+                }, ),
+
+                Text(':peron@gmail.com',style: theme.labelLarge?.copyWith(color: AppColors.primaryColor),)
               ],
             ),
             SizedBox(height: 8,),
@@ -167,7 +173,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
               children: [
                 Icon(Icons.phone,color: AppColors.primaryColor,size: 20,),
                 SizedBox(width: 10,),
-                Text('رقم الهاتف:0116625783',style: theme.labelLarge?.copyWith(color: AppColors.primaryColor),)
+                AboutItem(title: 'رقم الهاتف:', onTap: () {
+                  LaunchAccounts.launchAccounts("http://wa.me/201119723643");
+                }, ),
               ],
             )
           ],
