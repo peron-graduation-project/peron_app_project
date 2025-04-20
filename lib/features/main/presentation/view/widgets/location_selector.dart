@@ -5,7 +5,8 @@ import '../../../../map/presentation/view/views/location_dialog.dart';
 import 'notification_button.dart';
 
 class LocationSelector extends StatelessWidget {
-  const LocationSelector({super.key});
+  final bool isShown;
+  const LocationSelector({super.key,  this.isShown=true});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class LocationSelector extends StatelessWidget {
         ),
         Text("قم بتحديد موقعك الحالى", style: theme.bodySmall!.copyWith(color: Color(0xff292828))),
         Spacer(),
-        NotificationButton(),
+        isShown?NotificationButton():SizedBox(),
       ],
     );
   }

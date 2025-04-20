@@ -21,6 +21,9 @@ class CustomSearchBar extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              cursorColor: AppColors.primaryColor,
+              onTap: (){
+              },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search, color: Colors.grey),
                 hintText: "ابحث عن اسم المنطقة او المكان",

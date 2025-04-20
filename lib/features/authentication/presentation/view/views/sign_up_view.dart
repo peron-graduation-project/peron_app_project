@@ -43,16 +43,16 @@ class _SignupViewState extends State<SignupView> {
 
           if (state is SignupSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+              SnackBar(content: Text(state.message),),
             );
-            Navigator.pushNamedAndRemoveUntil(context, PageRouteName.verificationOtp, (context)=>false,arguments: _emailController.text,);
+            Navigator.pushNamed(context, PageRouteName.verificationOtp,arguments: _emailController.text,);
           } else if (state is SignupFailure) {
             String errorMessage = (state.errors != null && state.errors!.isNotEmpty)
                 ? state.errors!.map((e) => e.toString()).join('\n')
                 : state.errorMessage ?? 'حدث خطأ غير متوقع';
 
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
+              SnackBar(content: Text(errorMessage), ),
             );
           }
         },
@@ -110,7 +110,7 @@ class _SignupViewState extends State<SignupView> {
                             : () {
                           if (_passwordController.text.trim() != _confirmPasswordController.text.trim()) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('كلمتا السر غير متطابقتين!'), backgroundColor: Colors.red),
+                              SnackBar(content: Text('كلمتا السر غير متطابقتين!'),),
                             );
                             return;
                           }

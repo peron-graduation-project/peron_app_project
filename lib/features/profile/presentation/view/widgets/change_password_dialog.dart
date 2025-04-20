@@ -208,6 +208,7 @@ Widget buildPasswordField(
       color: Colors.white,
     ),
     child: TextFormField(
+      cursorColor: AppColors.primaryColor,
       controller: controller,
       obscureText: obscureText,
       style: TextStyle(fontSize: screenWidth * 0.045, color: Colors.black54),

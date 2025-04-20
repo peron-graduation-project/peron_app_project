@@ -110,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
                             profilePicture: '',
                             fullName: newName,
                           ).then((_) {
-                            context.read<GetProfileCubit>().getProfile(); // تم التأكد من وجود هذا السطر
+                            context.read<GetProfileCubit>().getProfile();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('تم تحديث البروفايل بنجاح')),
                             );

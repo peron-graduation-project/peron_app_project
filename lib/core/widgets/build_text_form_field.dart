@@ -33,7 +33,6 @@ Widget buildTextField(String label, TextInputType type, {bool obscureText = fals
 }
 Widget buildTextFieldPattern({required String label, required TextInputType type, required String pattern,required String text,bool obscureText = false,TextEditingController? controller}) {
   return TextFormField(
-
     cursorColor: AppColors.primaryColor,
     controller: controller,
     keyboardType: type,

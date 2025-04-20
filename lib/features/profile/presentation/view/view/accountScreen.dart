@@ -195,7 +195,6 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(state.errorMessage),
-                              backgroundColor: Colors.red,
                             ),
                           );
                         }

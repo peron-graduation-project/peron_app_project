@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
 import '../../../../../core/widgets/build_text_form_field.dart';
-import '../../../domain/repos/get profile/get_profile_repo_imp.dart';
-import '../../manager/get profile/get_profile_cubit.dart';
 import '../../manager/update profile/update_profile_cubit.dart';
 import '../../manager/update profile/update_profile_state.dart';
 

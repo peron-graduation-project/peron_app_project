@@ -1,9 +1,4 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../core/network/api_service.dart';
-import '../../../../map/domain/repos/get nearest/get_nearest_repo_imp.dart';
-import '../../../../map/presentation/manager/get_nearest_cubit.dart';
 import '../widgets/location_notification_header .dart';
 import '../widgets/most_rent_property_widget.dart';
 import '../widgets/recommended_property_widget.dart';
