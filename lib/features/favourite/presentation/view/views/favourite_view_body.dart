@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/most_rent_property_card.dart';
-import 'package:peron_project/features/main/presentation/view/widgets/recommend_property_card.dart';    
-
+import 'package:peron_project/features/main/presentation/view/widgets/recommend_property_card.dart';
 import '../../../../main/presentation/view/widgets/favorite_manager.dart';
 
 class FavouriteViewBody extends StatelessWidget {
@@ -21,7 +20,6 @@ class FavouriteViewBody extends StatelessWidget {
         centerTitle: true,
       ),
       body: Consumer<FavoriteManager>(
-
         builder: (context, favoriteManager, child) {
           final favoriteProperties = favoriteManager.favorites;
           print("قائمة المفضلة في صفحة FavouriteViewBody: $favoriteProperties");
@@ -49,23 +47,26 @@ class FavouriteViewBody extends StatelessWidget {
                         ),
                         itemCount: favoriteProperties.length,
                         itemBuilder: (context, index) {
-                        final property = favoriteProperties[index];
-                        final aspectRatio = (property['source'] == 'recommendation') ? 0.7 : 0.55;
-                        return AspectRatio(
-                          aspectRatio: aspectRatio,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: (property['source'] == 'most_rent')
-                                ? MostRentPropertyCard(property: property)
-                                : RecommendedPropertyCard(property: property),
-                          ),
-                        );
-                      },
+                          final favoriteItem = favoriteProperties[index];
+                          final property = favoriteItem['property'];
+                          final category = favoriteItem['category'];
+                          final aspectRatio = (category == 'recommended') ? 0.7 : 0.55;
+                          return AspectRatio(
+                            aspectRatio: aspectRatio,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: (category == 'most_rent')
+                                  ? MostRentPropertyCard(property: property)
+                                  : RecommendedPropertyCard(property: property),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
                 ),
-              ),            ],
+              ),
+            ],
           );
         },
       ),

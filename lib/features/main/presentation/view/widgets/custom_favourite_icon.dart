@@ -5,10 +5,11 @@ import 'package:peron_project/features/favourite/presentation/manager/addFavorit
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_state.dart';
 import 'package:peron_project/features/favourite/presentation/manager/deleteFavorite/deleteFavorite_cubit.dart';
 import 'package:peron_project/features/favourite/presentation/manager/deleteFavorite/deleteFavorite_state.dart';
+import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/favorite_manager.dart';
 import 'package:provider/provider.dart';
 class CustomFavouriteIcon extends StatelessWidget {
-  final Map<String, dynamic> property;
+  final RecommendedProperty property;
   final String category;
 
   const CustomFavouriteIcon({
@@ -49,15 +50,13 @@ class CustomFavouriteIcon extends StatelessWidget {
               return GestureDetector(
                 onTap: () async {
                   if (isFavorite) {
-                    // إزالة من المفضلة
-                    context.read<DeletefavoriteCubit>().deleteFavorite(id: property['id']);
-                    favoriteManager.removeFavoriteById(property['id']);
-                    debugPrint("Removed from favorites: ${property['title']}");
+                    context.read<DeletefavoriteCubit>().deleteFavorite(id: property.propertyId);
+                    favoriteManager.removeFavoriteById(property.propertyId);
+                    debugPrint("Removed from favorites: ${property.propertyId}");
                   } else {
-                    // إضافة إلى المفضلة
-                    context.read<AddfavoriteCubit>().addFavorite(id: property['id']);
-                    favoriteManager.addFavorite(property, category);
-                    debugPrint("Added to favorites: ${property['title']}");
+                    context.read<AddfavoriteCubit>().addFavorite(id: property.propertyId);
+                    favoriteManager.addFavorite(property,category);
+                    debugPrint("Added to favorites: ${property.propertyId}");
                   }
                 },
                 child: AnimatedSwitcher(

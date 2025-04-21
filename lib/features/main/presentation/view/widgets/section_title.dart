@@ -22,8 +22,8 @@ class SectionTitle extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: screenWidth * 0.03, // Dynamic horizontal padding based on screen width
-        vertical: screenHeight * 0.01, // Dynamic vertical padding based on screen height
+        horizontal: screenWidth * 0.03,
+        vertical: screenHeight * 0.01,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,7 +32,7 @@ class SectionTitle extends StatelessWidget {
             title,
             style: theme.labelLarge!.copyWith(
               color: Color(0xff282929),
-              fontSize: screenWidth > 600 ? 20 : 16, // Adjust font size based on screen width
+              fontSize: screenWidth > 600 ? 20 : 16,
             ),
           ),
           showViewAll
@@ -42,6 +42,7 @@ class SectionTitle extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => RecommendedViewBody()),
               );
+
             },
             child: Text(
               "عرض الكل",

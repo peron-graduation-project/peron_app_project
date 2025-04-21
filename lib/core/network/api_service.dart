@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/notification/data/notification_model.dart';
 import 'package:peron_project/features/profile/data/models/profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -423,6 +424,37 @@ class ApiService {
       print("❗ [DEBUG] خطأ غير متوقع أثناء حذف الإشعار في ApiService: $e");
       return Left(ServiceFailure(
         errorMessage: "حدث خطأ غير متوقع أثناء حذف الإشعار",
+        errors: [e.toString()],
+      ));
+    }
+  }
+  Future<Either<Failure, List<RecommendedProperty>>> getRecommendedProperty() async {
+    try {
+      final response = await _dio.get(
+          '/Rating/most-rating',
+      );
+
+      print("✅ [DEBUG] get Recommended Property API Response: ${response.data}");
+
+      if (response.data is List) {
+        final List<RecommendedProperty> properties = (response.data as List)
+            .map((json) => RecommendedProperty.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return Right(properties);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم عند جلب الشقق المقترحة",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error أثناء جلب الشقق المقترحة: $e");
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء جلب الشقق المقترحة في ApiService: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء جلب الشقق المقترحة",
         errors: [e.toString()],
       ));
     }

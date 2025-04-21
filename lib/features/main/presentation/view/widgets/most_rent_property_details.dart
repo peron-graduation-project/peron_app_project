@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/property_image.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/property_location.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/property_rating.dart';
@@ -7,7 +8,7 @@ import 'package:peron_project/features/main/presentation/view/widgets/property_t
 import 'custom_price_widget.dart';
 
 class MostRentPropertyDetails extends StatelessWidget {
-  final Map<String, dynamic> property;
+  final RecommendedProperty property;
   final double itemWidth;
 
   const MostRentPropertyDetails({
@@ -31,8 +32,8 @@ class MostRentPropertyDetails extends StatelessWidget {
           children: [
             Stack(
               children: [
-                PropertyImage(image: property['image'], itemWidth: itemWidth),
-                CustomPriceWidget(propertyPrice: property['price']),
+                PropertyImage(imageUrl: property.images[0], itemWidth: itemWidth),
+                CustomPriceWidget(propertyPrice: property.price),
               ],
             ),
             SizedBox(height: paddingSize),
@@ -42,11 +43,11 @@ class MostRentPropertyDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  PropertyTitle(title: property['title']),
+                  PropertyTitle(title: 'شقة سكنية ${property.title}'),
                   SizedBox(height: paddingSize * 0.5),
-                  PropertyRating(rating: property['rating'], iconSize: iconSize),
+                  PropertyRating(rating: property.averageRating??0.0, iconSize: iconSize),
                   SizedBox(height: paddingSize * 0.5),
-                  PropertyLocation(location: property['location'], iconSize: iconSize),
+                  PropertyLocation(location: property.title, iconSize: iconSize),
                   const Divider(),
                   PropertyStats(
                     property: property,

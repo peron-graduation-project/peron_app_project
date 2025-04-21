@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/property_image.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/recommended_property_info_details.dart';
 import 'custom_favourite_icon.dart';
 
 class RecommendedPropertyDetails extends StatelessWidget {
-  final Map<String, dynamic> property;
+  final RecommendedProperty property;
   final double iconSize;
   final double textSize;
   final double paddingSize;
@@ -29,8 +30,8 @@ class RecommendedPropertyDetails extends StatelessWidget {
       children: [
         Stack(
           children: [
-            PropertyImage(image: property['image'], itemWidth: itemWidth),
-            CustomFavouriteIcon(property: property, category: "recommended"),
+            PropertyImage(imageUrl: property.images[0], itemWidth: itemWidth),
+            CustomFavouriteIcon(property: property, category: 'recommended'),
           ],
         ),
         SizedBox(height: 5),
@@ -44,20 +45,20 @@ class RecommendedPropertyDetails extends StatelessWidget {
                 icon: Symbols.home,
                 iconColor: Color(0xff818181),
                 title: 'النوع',
-                label: property['title'],
+                label: 'شقه سكنيه',
               ),
               SizedBox(height: 5),
               RecommendedPropertyInfoDetails(
                 icon: Icons.location_on,
                 title: 'الموقع',
-                label: property['location'],
+                label: property.title,
               ),
               SizedBox(height:5),
               RecommendedPropertyInfoDetails(
                 icon: Symbols.shoppingmode,
                 title: 'السعر',
                 iconColor: Color(0xff818181),
-                label: property['price'],
+                label: property.price.toString() ,
               ),
             ],
           ),

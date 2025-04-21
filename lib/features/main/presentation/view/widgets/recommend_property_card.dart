@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/utils/property_model.dart';
+import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/custom_favourite_icon.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/property_border.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/recommended_property_details.dart';
 
 class RecommendedPropertyCard extends StatefulWidget {
-  final Map<String, dynamic> property;
+  final RecommendedProperty property;
   const RecommendedPropertyCard({super.key, required this.property});
 
   @override
@@ -21,7 +23,7 @@ class _RecommendedPropertyCardState extends State<RecommendedPropertyCard> {
     return LayoutBuilder(
       builder: (context, constraints) {
         double itemWidth = constraints.maxWidth > 0 ? constraints.maxWidth : screenWidth * 0.45;
-        print("RecommendedPropertyCard - constraints.maxWidth: ${constraints.maxWidth}, itemWidth: $itemWidth"); // هنطبع القيم دي
+        print("RecommendedPropertyCard - constraints.maxWidth: ${constraints.maxWidth}, itemWidth: $itemWidth");
         double iconSize = itemWidth * 0.1;
         double textSize = itemWidth * 0.08;
         double paddingSize = itemWidth * 0.05;

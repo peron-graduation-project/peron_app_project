@@ -24,7 +24,7 @@ class MainBodyView extends StatelessWidget {
               const SizedBox(height: 20),
               CustomSearchBar(),
               const SizedBox(height: 20),
-              const SectionTitle(title: "الأكثر ايجاراً"),
+              const SectionTitle(title: "الأكثر تقييما"),
               MostRentPropertyWidget(),
               const SectionTitle(title: "موصى به لك",showViewAll: true, ),
               RecommendedPropertyWidget(),

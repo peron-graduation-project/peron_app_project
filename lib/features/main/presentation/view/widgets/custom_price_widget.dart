@@ -4,7 +4,7 @@ import '../../../../../core/helper/colors.dart';
 
 class CustomPriceWidget extends StatelessWidget {
   const CustomPriceWidget({super.key, required this.propertyPrice});
-  final String propertyPrice;
+  final double propertyPrice;
 
   @override
   Widget build(BuildContext context) {

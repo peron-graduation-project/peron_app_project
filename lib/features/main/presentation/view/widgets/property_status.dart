@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/features/main/data/models/recommended_property.dart';
 
 import '../../../../../core/helper/colors.dart';
 import '../../../../../core/helper/fonts.dart';
 
 
 class PropertyStats extends StatelessWidget {
-  final Map<String, dynamic> property;
+  final RecommendedProperty property;
   final double iconSize;
   final double textSize;
 
@@ -17,10 +18,10 @@ class PropertyStats extends StatelessWidget {
       spacing: 9,
       runSpacing: 4,
       children: [
-        buildPropertyInfoRow(Icons.chair, "${property["rooms"]} غرف", iconSize, textSize),
-        buildPropertyInfoRow(Icons.bathtub, "${property["bathrooms"]} حمام", iconSize, textSize),
-        buildPropertyInfoRow(Icons.bed, "${property["beds"]} سرير", iconSize, textSize),
-        buildPropertyInfoRow(Icons.square_foot, "${property["area"]} م²", iconSize, textSize),
+        buildPropertyInfoRow(Icons.chair, "${property.bedrooms} غرف", iconSize, textSize),
+        buildPropertyInfoRow(Icons.bathtub, "${property.bathrooms} حمام", iconSize, textSize),
+        buildPropertyInfoRow(Icons.bed, "${property.bedrooms} سرير", iconSize, textSize),
+        buildPropertyInfoRow(Icons.square_foot, "${property.area} م²", iconSize, textSize),
       ],
     );
   }

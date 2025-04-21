@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/utils/property_model.dart';
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
 import 'package:peron_project/features/favourite/presentation/manager/deleteFavorite/deleteFavorite_cubit.dart';
+import 'package:peron_project/features/main/data/models/recommended_property.dart';
 
 class FavoriteManager extends ChangeNotifier {
   final List<Map<String, dynamic>> _favorites = [];
@@ -20,17 +22,17 @@ class FavoriteManager extends ChangeNotifier {
   List<Map<String, dynamic>> get favorites => _favorites;
 
 
-  void addFavorite(Map<String, dynamic> property, String category) {
-    _favorites.add({...property, 'source': category});
+  void addFavorite(RecommendedProperty property, String category) {
+    _favorites.add({'property': property, 'category': category});
     notifyListeners();
 
     if (_addFavoriteCubit != null) {
-      _addFavoriteCubit!.addFavorite(id: property['id']);
+      _addFavoriteCubit!.addFavorite(id: property.propertyId);
     }
   }
 
   void removeFavoriteById(int id) {
-    _favorites.removeWhere((item) => item['id'] == id);
+    _favorites.removeWhere((item) => (item['property'] as Property).propertyId == id);
     notifyListeners();
 
     if (_deleteFavoriteCubit != null) {
@@ -38,10 +40,10 @@ class FavoriteManager extends ChangeNotifier {
     }
   }
 
-  void toggleFavorite(Map<String, dynamic> property, String category) {
-    final id = property['id'];
+  void toggleFavorite(RecommendedProperty property, String category) {
+    final id = property.propertyId;
     final isAlreadyFavorite = _favorites.any(
-      (item) => item['id'] == id && item['source'] == category,
+          (item) => (item['property'] as Property).propertyId == id,
     );
 
     if (isAlreadyFavorite) {
@@ -51,10 +53,10 @@ class FavoriteManager extends ChangeNotifier {
     }
   }
 
-  
-  bool isFavorite(Map<String, dynamic> property, String category) {
+
+  bool isFavorite(RecommendedProperty property, String category) {
     return _favorites.any(
-      (item) => item['id'] == property['id'] && item['source'] == category,
+          (item) => (item['property'] as Property).propertyId == property.propertyId ,
     );
   }
 }

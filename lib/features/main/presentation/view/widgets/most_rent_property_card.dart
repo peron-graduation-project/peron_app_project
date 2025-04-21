@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/utils/property_model.dart';
+import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/most_rent_property_details.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/property_border.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/custom_favourite_icon.dart';
 
 class MostRentPropertyCard extends StatefulWidget {
-  final Map<String, dynamic> property;
+  final RecommendedProperty property;
   const MostRentPropertyCard({super.key, required this.property});
 
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PropertyRating extends StatelessWidget {
-  final num rating;
+  final double rating;
   final double iconSize;
   const PropertyRating({super.key, required this.rating, required this.iconSize});
 

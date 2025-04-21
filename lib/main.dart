@@ -10,6 +10,8 @@ import 'package:peron_project/features/favourite/data/repos/addFavorite/addFav_i
 import 'package:peron_project/features/favourite/data/repos/removeFavorite/removeFav_imp.dart';
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
 import 'package:peron_project/features/favourite/presentation/manager/deleteFavorite/deleteFavorite_cubit.dart';
+import 'package:peron_project/features/main/domain/repo/get%20recommended/get_recommended_repo_imp.dart';
+import 'package:peron_project/features/main/presentation/manager/get%20recommended/get_recommended_properties_cubit.dart';
 import 'package:peron_project/features/profile/domain/repos/app%20rating/app_rating_repo_imp.dart';
 import 'package:peron_project/features/profile/domain/repos/get%20inquiry/get_inquiry_repo_imp.dart';
 import 'package:peron_project/features/profile/presentation/manager/app%20rating/send%20app%20rating/send_app_rating_cubit.dart';
@@ -43,6 +45,9 @@ void main() async {
             final profileCubit = GetProfileCubit(profileRepo);
             return profileCubit..getProfile();
           },
+        ),
+        BlocProvider(
+          create: (context) => GetRecommendedPropertiesCubit(GetRecommendedRepoImp(ApiService(Dio())))..getRecommendedProperties(),
         ),
         BlocProvider(
           create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
