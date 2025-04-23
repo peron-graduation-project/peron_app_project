@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 
-import '../../../../../core/helper/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peron_project/core/helper/colors.dart';
+import 'package:peron_project/features/main/presentation/manager/get%20Search/get_search_cubit.dart';
 
 class CustomSearchBar extends StatelessWidget {
   const CustomSearchBar({super.key});
@@ -8,6 +10,8 @@ class CustomSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
+    final TextEditingController searchController = TextEditingController();
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12),
       height: MediaQuery.of(context).size.height * 0.06,
@@ -21,8 +25,13 @@ class CustomSearchBar extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              controller: searchController,
               cursorColor: AppColors.primaryColor,
-              onTap: (){
+              onSubmitted: (value) {
+                
+                if (value.trim().isNotEmpty) {
+                  context.read<GetSearchPropertiesCubit>().getSearchProperties(value.trim());
+                }
               },
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search, color: Colors.grey),
@@ -35,7 +44,12 @@ class CustomSearchBar extends StatelessWidget {
           VerticalDivider(color: Colors.grey.shade400, thickness: 1, width: 20, indent: 10, endIndent: 10),
           IconButton(
             padding: EdgeInsets.zero,
-            onPressed: () {},
+            onPressed: () {
+              final query = searchController.text.trim();
+              if (query.isNotEmpty) {
+                context.read<GetSearchPropertiesCubit>().getSearchProperties(query);
+              }
+            },
             icon: Icon(Icons.tune_outlined, color: AppColors.primaryColor, size: 25),
           ),
         ],

@@ -625,7 +625,7 @@ class ApiService {
       print("✅ [DEBUG] submit appRating API Response: ${response.data}");
 
       if (response.statusCode == 200 && response.data is String) {
-        return Right(response.data); // ✅ return the success message
+        return Right(response.data); 
       } else {
         return Left(ServiceFailure(
           errorMessage: "فشل في إرسال تقييم التطبيق: استجابة غير متوقعة",
@@ -815,6 +815,41 @@ class ApiService {
       ));
     }
   }
+  Future<Either<Failure, List<Property>>> getSearchProperty(String location,String token) async {
+    try {
+      final response = await _dio.get(
+          '/Property/location/$location',options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ),
+      
+      );
 
+      print("✅ [DEBUG] get Search Property API Response: ${response.data}");
+
+      if (response.data is List) {
+        final List<Property> properties = (response.data as List)
+            .map((json) => Property.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return Right(properties);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم عند البحث  ",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error أثناء   البحث: $e");
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء  البحث ApiService: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء البحث  ",
+        errors: [e.toString()],
+      ));
+    }
+  }
 
   }

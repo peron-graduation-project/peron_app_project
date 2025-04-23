@@ -1,6 +1,6 @@
 class Property {
   final int propertyId;
-  final String ownerId;
+  final String? ownerId;
   final dynamic owner;
   final String title;
   final int area;
@@ -25,8 +25,8 @@ class Property {
   final List<dynamic> images;
   final dynamic bookings;
   final dynamic ratings;
-  final double latitude;
-  final double longitude;
+  final double? latitude;
+final double? longitude;
 
   Property({
     required this.propertyId,
@@ -62,7 +62,7 @@ class Property {
   factory Property.fromJson(Map<String, dynamic> json) {
     return Property(
       propertyId: json['propertyId'],
-      ownerId: json['ownerId'],
+      ownerId: json['ownerId']??"",
       owner: json['owner'],
       title: json['title'],
       area: json['area'],
@@ -83,12 +83,12 @@ class Property {
       availableFrom: DateTime.parse(json['availableFrom']),
       availableTo: DateTime.parse(json['availableTo']),
       minBookingDays: json['minBookingDays'],
-      description: json['description'],
-      images: json['images'],
-      bookings: json['bookings'],
+        bookings: json['bookings'],
       ratings: json['ratings'],
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
+    description: json['description'] ?? '',
+images: List<String>.from(json['images'] ?? []),
+latitude: json['latitude'] != null ? (json['latitude'] as num).toDouble() : 0.0,
+longitude: json['longitude'] != null ? (json['longitude'] as num).toDouble() : 0.0,
     );
   }
 

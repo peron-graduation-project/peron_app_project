@@ -1,3 +1,5 @@
+import 'package:peron_project/core/utils/property_model.dart';
+
 class RecommendedProperty {
   final int propertyId;
   final String? ownerId;
@@ -56,38 +58,71 @@ class RecommendedProperty {
     this.longitude,
     required this.distance,
   });
+factory RecommendedProperty.fromProperty(Property p) {
+  return RecommendedProperty(
+    propertyId: p.propertyId,
+    ownerId: p.ownerId,
+    title: p.title,
+    location: p.location,
+    price: p.price,
+    rentType: p.rentType,
+    area: p.area,
+    bedrooms: p.bedrooms,
+    bathrooms: p.bathrooms,
+    floor: p.floor,
+    isFurnished: p.isFurnished,
+    hasBalcony: p.hasBalcony,
+    hasInternet: p.hasInternet,
+    hasSecurity: p.hasSecurity,
+    hasElevator: p.hasElevator,
+    allowsPets: p.allowsPets,
+    smokingAllowed: p.smokingAllowed,
+    availableFrom: p.availableFrom,
+    availableTo: p.availableTo,
+    minBookingDays: p.minBookingDays,
+    averageRating: p.ratings,
+    description: p.description,
+    images: p.images.map((img) => img.toString()).toList(), 
+    ratings: p.ratings,
+    latitude: p.latitude,
+    longitude: p.longitude,
+    distance: 0, 
+  );
+}
+factory RecommendedProperty.fromJson(Map<String, dynamic> json) {
+  print("📦 JSON INPUT: $json"); 
+  return RecommendedProperty(
+    propertyId: json['propertyId'] ?? 0, 
+    ownerId: json['ownerId'] ?? "", 
+    title: json['title'] ?? "No Title", 
+    location: json['location'] ?? "Unknown Location", 
+    price: (json['price'] as num?)?.toDouble() ?? 0.0, 
+    rentType: json['rentType'] ?? "Unknown", 
+    area: json['area'] ?? 0, 
+    bedrooms: json['bedrooms'] ?? 0, 
+    bathrooms: json['bathrooms'] ?? 0, 
+    floor: json['floor'] ?? 0, 
+    isFurnished: json['isFurnished'] ?? false, 
+    hasBalcony: json['hasBalcony'] ?? false, 
+    hasInternet: json['hasInternet'] ?? false, 
+    hasSecurity: json['hasSecurity'] ?? false, 
+    hasElevator: json['hasElevator'] ?? false, 
+    allowsPets: json['allowsPets'] ?? false, 
+    smokingAllowed: json['smokingAllowed'] ?? false, 
+    availableFrom: DateTime.parse(json['availableFrom'] ?? "1970-01-01"),
+    availableTo: DateTime.parse(json['availableTo'] ?? "1970-01-01"), 
+    minBookingDays: json['minBookingDays'] ?? 1, 
+    averageRating: (json['averageRating'] as num?)?.toDouble(), 
+    description: json['description'] ?? "No Description", 
+    images: List<String>.from(json['images'] ?? []), 
+    latitude: (json['latitude'] as num?)?.toDouble(), 
+    longitude: (json['longitude'] as num?)?.toDouble(),
+    distance: (json['distance'] as num?)?.toDouble() ?? 0.0, 
+  );
+}
 
-  factory RecommendedProperty.fromJson(Map<String, dynamic> json) {
-    return RecommendedProperty(
-      propertyId: json['propertyId'],
-      ownerId: json['ownerId'],
-      title: json['title'],
-      location: json['location'],
-      price: (json['price'] as num).toDouble(),
-      rentType: json['rentType'],
-      area: json['area'],
-      bedrooms: json['bedrooms'],
-      bathrooms: json['bathrooms'],
-      floor: json['floor'],
-      isFurnished: json['isFurnished'],
-      hasBalcony: json['hasBalcony'],
-      hasInternet: json['hasInternet'],
-      hasSecurity: json['hasSecurity'],
-      hasElevator: json['hasElevator'],
-      allowsPets: json['allowsPets'],
-      smokingAllowed: json['smokingAllowed'],
-      availableFrom: DateTime.parse(json['availableFrom']),
-      availableTo: DateTime.parse(json['availableTo']),
-      minBookingDays: json['minBookingDays'],
-      averageRating: (json['averageRating'] as num?)?.toDouble(),
-      description: json['description'],
-      images: List<String>.from(json['images']),
-      ratings: json['ratings'],
-      latitude: (json['latitude'] as num?)?.toDouble(),
-      longitude: (json['longitude'] as num?)?.toDouble(),
-      distance: (json['distance'] as num).toDouble(),
-    );
-  }
+
+
 
   Map<String, dynamic> toJson() {
     return {

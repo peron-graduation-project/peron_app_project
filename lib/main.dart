@@ -11,6 +11,9 @@ import 'package:peron_project/features/favourite/data/repos/removeFavorite/remov
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
 import 'package:peron_project/features/favourite/presentation/manager/deleteFavorite/deleteFavorite_cubit.dart';
 import 'package:peron_project/features/main/domain/repo/get%20recommended/get_recommended_repo_imp.dart';
+import 'package:peron_project/features/main/domain/repo/get%20search/get_search_repo.dart';
+import 'package:peron_project/features/main/domain/repo/get%20search/get_search_repo_imp.dart';
+import 'package:peron_project/features/main/presentation/manager/get%20Search/get_search_cubit.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20recommended/get_recommended_properties_cubit.dart';
 import 'package:peron_project/features/profile/domain/repos/app%20rating/app_rating_repo_imp.dart';
 import 'package:peron_project/features/profile/domain/repos/get%20inquiry/get_inquiry_repo_imp.dart';
@@ -55,6 +58,11 @@ void main() async {
         BlocProvider<GetNearestCubit>(
           create: (context) => GetNearestCubit(GetNearestRepoImp(ApiService(Dio()))),
         ),
+        BlocProvider(
+        create: (context) => GetSearchPropertiesCubit(GetSearchRepoImp(ApiService(Dio()))),
+        
+),
+
 
         BlocProvider(
           create: (context) => DeletefavoriteCubit(DeletefavImp(ApiService(Dio()))),
@@ -115,7 +123,7 @@ class PeronApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: [
-            const Locale('ar', 'AE'), // Arabic
+            const Locale('ar', 'AE'), 
           ],
           initialRoute: PageRouteName.initialRoute,
           onGenerateRoute: RoutesGenerator.onGenerateRoute,

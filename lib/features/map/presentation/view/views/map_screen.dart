@@ -192,7 +192,7 @@ class _MapScreenState extends State<MapScreen> {
           List<LatLng> propertyLocations = [];
           for (var property in state.properties) {
             if (property.latitude != null && property.longitude != null) {
-              final propertyLatLng = LatLng(property.latitude, property.longitude);
+              final propertyLatLng = LatLng(property.latitude!, property.longitude!);
               _markers.add(
                 Marker(
                   markerId: MarkerId('property_${property.propertyId}'),
@@ -206,10 +206,10 @@ class _MapScreenState extends State<MapScreen> {
               propertyLocations.add(propertyLatLng);
             }
           }
-          // تحديث الـ polylines
+          
           _updatePolylinesToProperties(propertyLocations);
 
-          // رسالة حول عدد الشقق
+          
           setState(() {
             _propertyCountMessage = 'تم العثور على ${state.properties.length}  شقق بالقرب منك';
           });
