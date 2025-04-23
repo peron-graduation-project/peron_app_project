@@ -1,74 +1,74 @@
 class Property {
-  final int propertyId;
+  final int? propertyId;
   final String? ownerId;
   final dynamic owner;
-  final String title;
-  final int area;
-  final String location;
-  final double price;
+  final String? title;
+  final int? area;
+  final String? location;
+  final double? price;
   final DateTime? createdAt;
-  final String rentType;
-  final int bedrooms;
-  final int bathrooms;
-  final int floor;
-  final bool isFurnished;
-  final bool hasBalcony;
-  final bool hasInternet;
-  final bool hasSecurity;
-  final bool hasElevator;
-  final bool allowsPets;
-  final bool smokingAllowed;
-  final DateTime availableFrom;
-  final DateTime availableTo;
-  final int minBookingDays;
-  final String description;
-  final List<dynamic> images;
+  final String? rentType;
+  final int? bedrooms;
+  final int? bathrooms;
+  final int? floor;
+  final bool? isFurnished;
+  final bool? hasBalcony;
+  final bool? hasInternet;
+  final bool? hasSecurity;
+  final bool? hasElevator;
+  final bool? allowsPets;
+  final bool? smokingAllowed;
+  final DateTime? availableFrom;
+  final DateTime? availableTo;
+  final int? minBookingDays;
+  final String? description;
+  final List<String>? images;
   final dynamic bookings;
   final dynamic ratings;
   final double? latitude;
-final double? longitude;
+  final double? longitude;
 
   Property({
-    required this.propertyId,
-    required this.ownerId,
+    this.propertyId,
+    this.ownerId,
     this.owner,
-    required this.title,
-    required this.area,
-    required this.location,
-    required this.price,
+    this.title,
+    this.area,
+    this.location,
+    this.price,
     this.createdAt,
-    required this.rentType,
-    required this.bedrooms,
-    required this.bathrooms,
-    required this.floor,
-    required this.isFurnished,
-    required this.hasBalcony,
-    required this.hasInternet,
-    required this.hasSecurity,
-    required this.hasElevator,
-    required this.allowsPets,
-    required this.smokingAllowed,
-    required this.availableFrom,
-    required this.availableTo,
-    required this.minBookingDays,
-    required this.description,
-    required this.images,
+    this.rentType,
+    this.bedrooms,
+    this.bathrooms,
+    this.floor,
+    this.isFurnished,
+    this.hasBalcony,
+    this.hasInternet,
+    this.hasSecurity,
+    this.hasElevator,
+    this.allowsPets,
+    this.smokingAllowed,
+    this.availableFrom,
+    this.availableTo,
+    this.minBookingDays,
+    this.description,
+    this.images,
     this.bookings,
     this.ratings,
-    required this.latitude,
-    required this.longitude,
+    this.latitude,
+    this.longitude,
   });
 
   factory Property.fromJson(Map<String, dynamic> json) {
     return Property(
       propertyId: json['propertyId'],
-      ownerId: json['ownerId']??"",
+      ownerId: json['ownerId'],
       owner: json['owner'],
       title: json['title'],
       area: json['area'],
       location: json['location'],
-      price: (json['price'] as num).toDouble(),
-      createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt']),
+      price: (json['price'] != null) ? (json['price'] as num).toDouble() : null,
+      createdAt: json['createdAt'] != null ? DateTime.tryParse(json['createdAt']) : null,
       rentType: json['rentType'],
       bedrooms: json['bedrooms'],
       bathrooms: json['bathrooms'],
@@ -80,15 +80,15 @@ final double? longitude;
       hasElevator: json['hasElevator'],
       allowsPets: json['allowsPets'],
       smokingAllowed: json['smokingAllowed'],
-      availableFrom: DateTime.parse(json['availableFrom']),
-      availableTo: DateTime.parse(json['availableTo']),
+      availableFrom: json['availableFrom'] != null ? DateTime.tryParse(json['availableFrom']) : null,
+      availableTo: json['availableTo'] != null ? DateTime.tryParse(json['availableTo']) : null,
       minBookingDays: json['minBookingDays'],
-        bookings: json['bookings'],
+      description: json['description'],
+      images: (json['images'] as List?)?.map((e) => e.toString()).toList(),
+      bookings: json['bookings'],
       ratings: json['ratings'],
-    description: json['description'] ?? '',
-images: List<String>.from(json['images'] ?? []),
-latitude: json['latitude'] != null ? (json['latitude'] as num).toDouble() : 0.0,
-longitude: json['longitude'] != null ? (json['longitude'] as num).toDouble() : 0.0,
+      latitude: (json['latitude'] != null) ? (json['latitude'] as num).toDouble() : null,
+      longitude: (json['longitude'] != null) ? (json['longitude'] as num).toDouble() : null,
     );
   }
 
@@ -113,8 +113,8 @@ longitude: json['longitude'] != null ? (json['longitude'] as num).toDouble() : 0
       'hasElevator': hasElevator,
       'allowsPets': allowsPets,
       'smokingAllowed': smokingAllowed,
-      'availableFrom': availableFrom.toIso8601String(),
-      'availableTo': availableTo.toIso8601String(),
+      'availableFrom': availableFrom?.toIso8601String(),
+      'availableTo': availableTo?.toIso8601String(),
       'minBookingDays': minBookingDays,
       'description': description,
       'images': images,
