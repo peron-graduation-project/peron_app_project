@@ -71,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
               thickness: 1,
               height: 1,
               color: AppColors.dividerColor,
-            ),
+            ), 
           ),
         ),
         body: BlocBuilder<GetProfileCubit, GetProfileState>(
