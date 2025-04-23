@@ -52,7 +52,19 @@ class SectionTitle extends StatelessWidget {
               ),
             ),
           )
-              : SortButton(),
+              : SortButton(
+            onSelected: (selectedSort){
+              if (selectedSort == "الأعلى سعرا") {
+                // نفذي فلترة السعر الأعلى هنا
+              } else if (selectedSort == "الأقل سعرا") {
+                // نفذي فلترة السعر الأقل
+              } else if (selectedSort == "الأكثر مساحة") {
+                // نفذي فلترة المساحة
+              } else if (selectedSort == "الأكثر تقييما") {
+                // نفذي فلترة التقييم
+              }
+            },
+          ),
         ],
       ),
     );
