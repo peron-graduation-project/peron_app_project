@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:peron_project/core/utils/property_model.dart';
 import 'package:peron_project/features/main/data/models/recommended_property.dart';
 
 abstract class GetRecommendedPropertiesState extends Equatable {

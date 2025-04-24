@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:peron_project/core/utils/property_model.dart';
-import 'package:peron_project/features/main/data/models/recommended_property.dart';
+
+import '../../../../../core/utils/property_model.dart';
 
 abstract class GetSearchPropertiesState extends Equatable {
   const GetSearchPropertiesState();
@@ -30,3 +30,5 @@ class GetSearchPropertiesStateFailure extends GetSearchPropertiesState {
   @override
   List<Object?> get props => [errorMessage];
 }
+
+class GetSearchPropertiesStateEmpty extends GetSearchPropertiesState {}
