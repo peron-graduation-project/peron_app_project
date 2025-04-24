@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
-import '../../../../../core/widgets/build_text_form_field.dart';
+import '../../../../authentication/presentation/view/widgets/phone_field.dart';
 import '../../manager/update profile/update_profile_cubit.dart';
 import '../../manager/update profile/update_profile_state.dart';
 
-Future<String?> showChangeUserNameDialog(BuildContext context, String currentName) async {
-  TextEditingController userNameController = TextEditingController(text: currentName);
+Future<String?> showChangePhoneNumberDialog(BuildContext context, String phoneNumber) async {
+  TextEditingController phoneNumberController = TextEditingController(text: phoneNumber);
 
   return showDialog<String>(
     context: context,
@@ -52,11 +52,11 @@ Future<String?> showChangeUserNameDialog(BuildContext context, String currentNam
                   ),
                   SizedBox(height: screenWidth * 0.02),
                   Text(
-                      'تغير إسم المستخدم',
+                      'تغير رقم الهاتف',
                       style: theme.titleSmall?.copyWith(color: Color(0xff292828))
                   ),
                   SizedBox(height: screenWidth * 0.03),
-                  buildTextField("إسم المستخدم", TextInputType.name, controller: userNameController),
+                  PhoneFieldInput(controller: phoneNumberController),
                   SizedBox(height: screenWidth * 0.05),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 55.0),
@@ -67,15 +67,15 @@ Future<String?> showChangeUserNameDialog(BuildContext context, String currentNam
                           onPressed: state is UpdateProfileStateLoading
                               ? null
                               : () {
-                            final newUserName = userNameController.text.trim();
-                            if (newUserName.isNotEmpty) {
+                            final newPhoneNumber = phoneNumberController.text.trim();
+                            if (newPhoneNumber.isNotEmpty) {
                               BlocProvider.of<UpdateProfileCubit>(context, listen: false)
                                   .updateProfile(
                                 profilePicture: '',
-                                fullName: newUserName,
-                                phoneNumber: ''
+                                fullName: '',
+                                phoneNumber: newPhoneNumber,
                               ).then((_) {
-                                Navigator.pop(context, newUserName);
+                                Navigator.pop(context, newPhoneNumber);
                               });
                             }
                           },

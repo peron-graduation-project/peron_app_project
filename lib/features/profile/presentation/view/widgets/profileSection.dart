@@ -64,6 +64,7 @@ class _ProfileSectionState extends State<ProfileSection> {
                   BlocProvider.of<UpdateProfileCubit>(context).updateProfile(
                     profilePicture: image.path,
                     fullName: '',
+                    phoneNumber: ''
                   );
                 }
               },

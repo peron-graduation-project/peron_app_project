@@ -654,10 +654,14 @@ class ApiService {
     required String token,
     required String fullName,
     String? profilePicturePath,
+    required String phoneNumber,
+
   }) async {
     try {
       final formData = FormData();
       formData.fields.add(MapEntry('FullName', fullName));
+      formData.fields.add(MapEntry('PhoneNumber', phoneNumber));
+
 
       if (profilePicturePath != null && profilePicturePath.isNotEmpty) {
         formData.files.add(

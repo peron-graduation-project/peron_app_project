@@ -13,6 +13,7 @@ import 'package:peron_project/features/profile/presentation/view/widgets/profile
 
 import '../../manager/change password/change_password_cubit.dart';
 import '../../manager/update profile/update_profile_cubit.dart';
+import '../widgets/change_phone_number_dialog.dart';
 import '../widgets/change_user_name.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -24,6 +25,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserver {
   String? _editedFullName;
+  String? _editedPhone;
+
 
   @override
   void initState() {
@@ -87,57 +90,90 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
               print('ProfileScreen: State is GetProfileLoaded - Full Name: ${state.profile.fullName}, Image URL: ${state.profile.profilePictureUrl}');
               return Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: Column(
-                  children: [
-                    ProfileSection(
-                      isShown: true,
-                      key: ValueKey(state.profile.profilePictureUrl),
-                      screenWidth: screenWidth,
-                      screenHeight: screenHeight,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        final newName = await showChangeUserNameDialog(
-                          context,
-                          _editedFullName ?? state.profile.fullName ?? "اسم المستخدم",
-                        );
-                        if (newName != null && newName != state.profile.fullName) {
-                          setState(() {
-                            _editedFullName = newName;
-                          });
-                          BlocProvider.of<UpdateProfileCubit>(context, listen: false)
-                              .updateProfile(
-                            profilePicture: '',
-                            fullName: newName,
-                          ).then((_) {
-                            context.read<GetProfileCubit>().getProfile();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('تم تحديث البروفايل بنجاح')),
-                            );
-                          });
-                        }
-                      },
-                      child: AccountOption(
-                        icon: Icons.person,
-                        title: _editedFullName ?? state.profile.fullName ?? "اسم المستخدم",
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ProfileSection(
+                        isShown: true,
+                        key: ValueKey(state.profile.profilePictureUrl),
+                        screenWidth: screenWidth,
+                        screenHeight: screenHeight,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          final newName = await showChangeUserNameDialog(
+                            context,
+                            _editedFullName ?? state.profile.fullName ?? "اسم المستخدم",
+                          );
+                          if (newName != null && newName != state.profile.fullName) {
+                            setState(() {
+                              _editedFullName = newName;
+                            });
+                            BlocProvider.of<UpdateProfileCubit>(context, listen: false)
+                                .updateProfile(
+                              profilePicture: '',
+                              fullName: newName,
+                              phoneNumber: ''
+                            ).then((_) {
+                              context.read<GetProfileCubit>().getProfile();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('تم تحديث البروفايل بنجاح')),
+                              );
+                            });
+                          }
+                        },
+                        child: AccountOption(
+                          icon: Icons.person,
+                          title: _editedFullName ?? state.profile.fullName ?? "اسم المستخدم",
+                          screenWidth: screenWidth,
+                        ),
+                      ),
+                      AccountOption(
+                        icon: Icons.email_outlined,
+                        title: state.profile.email ?? "البريد الإلكتروني",
                         screenWidth: screenWidth,
                       ),
-                    ),
-                    AccountOption(
-                      icon: Icons.email_outlined,
-                      title: state.profile.email ?? "البريد الإلكتروني",
-                      screenWidth: screenWidth,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        showChangePasswordDialog(context);
-                      },
-                      child: AccountOption(
-                          icon: Icons.lock,
-                          title: 'تغير كلمة المرور',
-                          screenWidth: screenWidth),
-                    ),
-                  ],
+                      GestureDetector(
+                        onTap: () async {
+                          final newPhone = await showChangePhoneNumberDialog(
+                            context,
+                            _editedPhone ?? state.profile.phoneNumber ?? "رقم الهاتف",
+                          );
+                          if (newPhone != null && newPhone != state.profile.phoneNumber) {
+                            setState(() {
+                              _editedPhone = newPhone;
+                            });
+                            BlocProvider.of<UpdateProfileCubit>(context, listen: false)
+                                .updateProfile(
+                              profilePicture: '',
+                              fullName: '',
+                              phoneNumber: newPhone
+                            ).then((_) {
+                              context.read<GetProfileCubit>().getProfile();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('تم تحديث رقم الهاتف بنجاح')),
+                              );
+                            });
+                          }
+                        },
+                        child: AccountOption(
+                          icon: Icons.phone,
+                          title: _editedPhone ?? state.profile.phoneNumber ?? "رقم الهاتف",
+                          screenWidth: screenWidth,
+                        ),
+                      ),
+                  
+                      GestureDetector(
+                        onTap: () {
+                          showChangePasswordDialog(context);
+                        },
+                        child: AccountOption(
+                            icon: Icons.lock,
+                            title: 'تغير كلمة المرور',
+                            screenWidth: screenWidth),
+                      ),
+                    ],
+                  ),
                 ),
               );
             } else {
