@@ -30,7 +30,10 @@ class RecommendedPropertyDetails extends StatelessWidget {
       children: [
         Stack(
           children: [
-            PropertyImage(imageUrl: property.images[0], itemWidth: itemWidth),
+            PropertyImage(
+              imageUrl: property.images.isNotEmpty ? property.images[0] : 'https://via.placeholder.com/150',
+              itemWidth: itemWidth,
+            ),
             CustomFavouriteIcon(property: property, category: 'recommended'),
           ],
         ),

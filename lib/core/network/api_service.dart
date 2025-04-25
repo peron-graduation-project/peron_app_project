@@ -556,6 +556,44 @@ class ApiService {
       ));
     }
   }
+  Future<Either<Failure, List<RecommendedProperty>>> getFavoriteProperties({
+    required String token,
+  }) async {
+    try {
+      final response = await _dio.get(
+          '/Favorites/user-favorites',
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ),
+      );
+
+      print("✅ [DEBUG] get Favorite API Response: ${response.data}");
+
+      if (response.data is List) {
+        final List<RecommendedProperty> properties = (response.data as List)
+            .map((json) => RecommendedProperty.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return Right(properties);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم عند جلب الشقق المفضلة",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error أثناء جلب الشقق المفضلة: $e");
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء جلب الشقق المفضلة في ApiService: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء جلب الشقق المفضلة",
+        errors: [e.toString()],
+      ));
+    }
+  }
 
   Future<Either<Failure, Map<String, dynamic>>> deleteFavorite({
   required String token,
