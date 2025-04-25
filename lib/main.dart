@@ -10,10 +10,13 @@ import 'package:peron_project/features/favourite/data/repos/addFavorite/addFav_i
 import 'package:peron_project/features/favourite/data/repos/removeFavorite/removeFav_imp.dart';
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
 import 'package:peron_project/features/favourite/presentation/manager/deleteFavorite/deleteFavorite_cubit.dart';
+import 'package:peron_project/features/main/domain/repo/get%20highest%20price/get_highest_price_repo_imp.dart';
+import 'package:peron_project/features/main/domain/repo/get%20most%20area/get_most_area_repo_imp.dart';
 import 'package:peron_project/features/main/domain/repo/get%20recommended/get_recommended_repo_imp.dart';
-import 'package:peron_project/features/main/domain/repo/get%20search/get_search_repo.dart';
 import 'package:peron_project/features/main/domain/repo/get%20search/get_search_repo_imp.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20Search/get_search_cubit.dart';
+import 'package:peron_project/features/main/presentation/manager/get%20lowest%20price/get_lowest_price_cubit.dart';
+import 'package:peron_project/features/main/presentation/manager/get%20most%20area/get_most_area_cubit.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20recommended/get_recommended_properties_cubit.dart';
 import 'package:peron_project/features/myAds/presentation/view/views/modifyProperty.dart';
 import 'package:peron_project/features/profile/domain/repos/app%20rating/app_rating_repo_imp.dart';
@@ -24,6 +27,9 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/network/api_service.dart';
+import 'features/main/domain/repo/get lowest price/get_lowest_price_repo_imp.dart';
+import 'features/main/presentation/manager/get highest price/get_highest_price_properties_cubit.dart';
+import 'features/main/presentation/manager/sort button/sort_button_cubit.dart';
 import 'features/main/presentation/view/widgets/favorite_manager.dart';
 import 'features/map/domain/repos/get nearest/get_nearest_repo_imp.dart';
 import 'features/map/presentation/manager/get_nearest_cubit.dart';
@@ -50,9 +56,20 @@ void main() async {
             return profileCubit..getProfile();
           },
         ),
+        BlocProvider(create: (_) => SortCubit()),
         BlocProvider(
           create: (context) => GetRecommendedPropertiesCubit(GetRecommendedRepoImp(ApiService(Dio())))..getRecommendedProperties(),
         ),
+        BlocProvider(
+          create: (context) => GetMostAreaCubit(GetMostAreaRepoImp(ApiService(Dio())))..getMostArea(),
+        ),
+        BlocProvider(
+          create: (context) => GetLowestPricePropertiesCubit(GetLowestPriceRepoImp(ApiService(Dio())))..getLowestPriceProperties(),
+        ),
+        BlocProvider(
+          create: (context) => GetHighestPricePropertiesCubit(GetHighestPriceRepoImp(ApiService(Dio())))..getHighestPriceProperties(),
+        ),
+
         BlocProvider(
           create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
         ),

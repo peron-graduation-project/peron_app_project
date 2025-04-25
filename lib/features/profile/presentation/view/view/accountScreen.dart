@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
+import 'package:peron_project/features/advertisements/presentation/add_property/no_published_content.dart';
 import 'package:peron_project/features/authentication/presentation/manager/logout/logout_cubit.dart';
 import 'package:peron_project/features/profile/presentation/view/view/profile_screen.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
@@ -62,19 +63,22 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
       providers: [
         BlocProvider<GetProfileCubit>(
           create: (context) {
-            _getProfileCubit = GetProfileCubit(ProfileRepoImp(ApiService(Dio())));
+            _getProfileCubit = GetProfileCubit(
+              ProfileRepoImp(ApiService(Dio())),
+            );
             _getProfileCubit.getProfile();
             return _getProfileCubit;
           },
         ),
         BlocProvider(
-          create: (context) => UpdateProfileCubit(
-            UpdateProfileRepoImp(
-              ApiService(Dio()),
-              _getProfileCubit.getProfileRepo as ProfileRepoImp,
-            ),
-            _getProfileCubit,
-          ),
+          create:
+              (context) => UpdateProfileCubit(
+                UpdateProfileRepoImp(
+                  ApiService(Dio()),
+                  _getProfileCubit.getProfileRepo as ProfileRepoImp,
+                ),
+                _getProfileCubit,
+              ),
         ),
         BlocProvider(
           create: (context) => LogoutCubit(LogoutRepoImp(ApiService(Dio()))),
@@ -99,7 +103,7 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
         body: BlocBuilder<GetProfileCubit, GetProfileState>(
           builder: (context, state) {
             if (state is GetProfileLoading) {
-              return  Center(
+              return Center(
                 child: CircularProgressIndicator(
                   backgroundColor: AppColors.primaryColor,
                 ),
@@ -130,7 +134,9 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
                     onTap: () async {
                       await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const ProfileScreen(),
+                        ),
                       );
                       _getProfileCubit.getProfile();
                     },
@@ -142,7 +148,9 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Settings()),
+                        MaterialPageRoute(
+                          builder: (context) => const Settings(),
+                        ),
                       );
                     },
                   ),
@@ -161,7 +169,14 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
                     icon: Icons.list_alt_rounded,
                     title: "إعلاناتي",
                     screenWidth: screenWidth,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyAdvertisementsPage(),
+                        ),
+                      );
+                    },
                   ),
                   AccountOption(
                     icon: Icons.share,
@@ -170,9 +185,11 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
                     onTap: () async {
                       String appLink = "";
                       if (Platform.isAndroid) {
-                        appLink = "https://play.google.com/store/apps/details?id=com.example.your_app_id";
+                        appLink =
+                            "https://play.google.com/store/apps/details?id=com.example.your_app_id";
                       } else if (Platform.isIOS) {
-                        appLink = "https://apps.apple.com/app/your-app-name/idYOUR_APP_ID";
+                        appLink =
+                            "https://apps.apple.com/app/your-app-name/idYOUR_APP_ID";
                       }
 
                       if (appLink.isNotEmpty) {
@@ -183,19 +200,21 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
                     },
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 17.0, right: 17, top: 6),
+                    padding: const EdgeInsets.only(
+                      left: 17.0,
+                      right: 17,
+                      top: 6,
+                    ),
                     child: BlocConsumer<LogoutCubit, LogoutState>(
                       listener: (context, state) {
                         if (state is LogoutSuccess) {
                           Navigator.of(context).pushNamedAndRemoveUntil(
                             PageRouteName.afterExit,
-                                (route) => false,
+                            (route) => false,
                           );
                         } else if (state is LogoutFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(state.errorMessage),
-                            ),
+                            SnackBar(content: Text(state.errorMessage)),
                           );
                         }
                       },
@@ -205,11 +224,12 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
                           textColor: Colors.white,
                           text: 'تسجيل الخروج',
                           backgroundColor: AppColors.primaryColor,
-                          onPressed: state is LogoutLoading
-                              ? null
-                              : () {
-                            context.read<LogoutCubit>().logout();
-                          },
+                          onPressed:
+                              state is LogoutLoading
+                                  ? null
+                                  : () {
+                                    context.read<LogoutCubit>().logout();
+                                  },
                         );
                       },
                     ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/colors.dart';
-import 'package:peron_project/core/utils/property_model.dart';
 import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20Search/get_search_cubit.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20Search/get_search_state.dart';
@@ -9,42 +8,92 @@ import 'package:peron_project/features/main/presentation/manager/get%20recommend
 import 'package:peron_project/features/main/presentation/manager/get%20recommended/get_recommended_properties_state.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/most_rent_property_card.dart';
 
+import '../../manager/get highest price/get_highest_price_properties_cubit.dart';
+import '../../manager/get highest price/get_highest_price_properties_state.dart';
+
+import '../../manager/get lowest price/get_lowest_price_cubit.dart';
+import '../../manager/get lowest price/get_lowest_price_state.dart';
+import '../../manager/get most area/get_most_area_cubit.dart';
+import '../../manager/get most area/get_most_area_state.dart';
+import '../../manager/sort button/sort_button_cubit.dart';
+import '../../manager/sort button/sort_button_state.dart';
+
 class MostRentPropertyWidget extends StatelessWidget {
   const MostRentPropertyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetSearchPropertiesCubit, GetSearchPropertiesState>(
-      builder: (context, searchState) {
-        
-        if (searchState is GetSearchPropertiesStateSuccess) {
-          final List<Property> properties = searchState.properties;
-          if (properties.isEmpty) {
-            return const Center(child: Text('لا توجد نتائج بحث.'));
-          }
+    return BlocBuilder<SortCubit, SortState>(
+      builder: (context, sortState) {
+        final selectedSort = sortState is SortStateInitial
+            ? sortState.selectedSort
+            : (sortState as SortStateUpdated).selectedSort;
 
-          return _buildHorizontalPropertyList(
-            context,
-            properties.map((p) => RecommendedProperty.fromProperty(p)).toList(),
-          );
-        }
+        return BlocBuilder<GetSearchPropertiesCubit, GetSearchPropertiesState>(
+          builder: (context, searchState) {
+            final isSearchActive = searchState is GetSearchPropertiesStateSuccess && searchState.properties.isNotEmpty;
 
-        
-        if (searchState is GetSearchPropertiesStateLoading) {
-          return Center(child: CircularProgressIndicator(color: AppColors.primaryColor));
-        }
+            if (isSearchActive) {
+              final properties = searchState.properties;
+              return _buildHorizontalPropertyList(
+                context,
+                properties.map((p) => RecommendedProperty.fromProperty(p)).toList(),
+              );
+            }
 
-        return BlocBuilder<GetRecommendedPropertiesCubit, GetRecommendedPropertiesState>(
-          builder: (context, state) {
-            if (state is GetRecommendedPropertiesStateLoading) {
-              return Center(child: CircularProgressIndicator(color: AppColors.primaryColor));
-            } else if (state is GetRecommendedPropertiesStateSuccess) {
-              final List<RecommendedProperty> properties = state.properties;
-              return _buildHorizontalPropertyList(context, properties);
-            } else if (state is GetRecommendedPropertiesStateFailure) {
-              return Center(child: Text('حدث خطأ: ${state.errorMessage}'));
+            // إذا تم مسح البحث، أعد تحميل البيانات الأصلية
+            if (searchState is GetSearchPropertiesStateEmpty) {
+              context.read<GetSearchPropertiesCubit>().clearSearch(); // تأكد من أنك أضفت clearSearch في الـCubit
+            }
+
+            if (selectedSort == "الأعلى سعرا") {
+              return BlocBuilder<GetHighestPricePropertiesCubit, GetHighestPricePropertiesState>(
+                builder: (context, state) {
+                  if (state is GetHighestPricePropertiesStateLoading) {
+                    return Center(child: CircularProgressIndicator(color: AppColors.primaryColor));
+                  } else if (state is GetHighestPricePropertiesStateSuccess) {
+                    return _buildHorizontalPropertyList(context, state.properties);
+                  } else {
+                    return const Center(child: Text('لا توجد عقارات متاحة.'));
+                  }
+                },
+              );
+            } else if (selectedSort == "الأقل سعرا") {
+              return BlocBuilder<GetLowestPricePropertiesCubit, GetLowestPricePropertiesState>(
+                builder: (context, state) {
+                  if (state is GetLowestPricePropertiesStateLoading) {
+                    return Center(child: CircularProgressIndicator(color: AppColors.primaryColor));
+                  } else if (state is GetLowestPricePropertiesStateSuccess) {
+                    return _buildHorizontalPropertyList(context, state.properties);
+                  } else {
+                    return const Center(child: Text('لا توجد عقارات متاحة.'));
+                  }
+                },
+              );
+            } else if (selectedSort == "الأكثر مساحة") {
+              return BlocBuilder<GetMostAreaCubit, GetMostAreaState>(
+                builder: (context, state) {
+                  if (state is GetMostAreaStateLoading) {
+                    return Center(child: CircularProgressIndicator(color: AppColors.primaryColor));
+                  } else if (state is GetMostAreaStateSuccess) {
+                    return _buildHorizontalPropertyList(context, state.properties);
+                  } else {
+                    return const Center(child: Text('لا توجد عقارات متاحة.'));
+                  }
+                },
+              );
             } else {
-              return const Center(child: Text('لا توجد عقارات موصى بها.'));
+              return BlocBuilder<GetRecommendedPropertiesCubit, GetRecommendedPropertiesState>(
+                builder: (context, state) {
+                  if (state is GetRecommendedPropertiesStateLoading) {
+                    return Center(child: CircularProgressIndicator(color: AppColors.primaryColor));
+                  } else if (state is GetRecommendedPropertiesStateSuccess) {
+                    return _buildHorizontalPropertyList(context, state.properties);
+                  } else {
+                    return const Center(child: Text('لا توجد عقارات متاحة.'));
+                  }
+                },
+              );
             }
           },
         );

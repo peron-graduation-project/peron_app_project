@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
-import 'package:peron_project/features/main/presentation/manager/get%20recommended/get_recommended_properties_cubit.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/recommend_property_card.dart';
 
+import '../../manager/get recommended/get_recommended_properties_cubit.dart';
 import '../../manager/get recommended/get_recommended_properties_state.dart';
 
 class RecommendedViewBody extends StatelessWidget {

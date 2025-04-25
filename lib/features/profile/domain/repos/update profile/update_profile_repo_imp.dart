@@ -16,10 +16,14 @@ class UpdateProfileRepoImp implements UpdateProfileRepo {
   Future<void> _saveProfileData({
     required String fullName,
     String? profilePicture,
+   required String phoneNumber,
+
   }) async {
     try {
       final prefs = await _prefs;
       await prefs.setString('fullName', fullName);
+      await prefs.setString('phoneNumber', phoneNumber);
+
       if (profilePicture != null) {
         await prefs.setString('profilePicture', profilePicture);
       } else {
@@ -35,12 +39,13 @@ class UpdateProfileRepoImp implements UpdateProfileRepo {
   Future<Either<Failure, String>> updateProfile({
     required String fullName,
     String? profilePicture,
+   required String phoneNumber,
+
   }) async {
     try {
       final prefs = await _prefs;
       final token = prefs.getString('token');
 
-      // Check if the token is valid
       if (token == null || token.isEmpty) {
         return Left(ServiceFailure(
           errorMessage: "لا يوجد توكين مسجل لتغيير البروفايل",
@@ -53,6 +58,7 @@ class UpdateProfileRepoImp implements UpdateProfileRepo {
         token: token,
         fullName: fullName,
         profilePicturePath: profilePicture,
+        phoneNumber:phoneNumber
       );
 
       print("✅ [DEBUG] Update profile repo Response: $response");
@@ -65,10 +71,8 @@ class UpdateProfileRepoImp implements UpdateProfileRepo {
             (data) async { // Handle successful response
           if (data is Map<String, dynamic>) {
             if (data.containsKey("message")) {
-              // Save the profile data to SharedPreferences
-              await _saveProfileData(fullName: fullName, profilePicture: profilePicture);
+              await _saveProfileData(fullName: fullName, profilePicture: profilePicture,phoneNumber:phoneNumber);
 
-              // Clear the cached profile after successful update
               await profileRepoImp.clearCachedProfile();
               print("🗑️ [DEBUG] Profile cache cleared after update");
 

@@ -13,6 +13,8 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
   Future<void> updateProfile({
     String? profilePicture,
     required String fullName,
+   required String phoneNumber,
+
   }) async {
     emit(UpdateProfileStateLoading());
     print('[UpdateProfileCubit] Emitting: UpdateProfileStateLoading');
@@ -20,6 +22,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
     final result = await updateProfileRepo.updateProfile(
       profilePicture: profilePicture,
       fullName: fullName,
+        phoneNumber:phoneNumber
     );
 
     result.fold(

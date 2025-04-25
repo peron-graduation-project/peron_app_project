@@ -459,6 +459,104 @@ class ApiService {
       ));
     }
   }
+  Future<Either<Failure, List<RecommendedProperty>>> getMostAreaProperty({ int? top}) async {
+    try {
+      final response = await _dio.get(
+        '/Rating/most-area?top=$top',
+          data: {
+            "top":top??10
+          },
+
+      );
+
+      print("✅ [DEBUG] get Most Area Property API Response: ${response.data}");
+
+      if (response.data is List) {
+        final List<RecommendedProperty> properties = (response.data as List)
+            .map((json) => RecommendedProperty.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return Right(properties);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم عند جلب الشقق الأكثر مساحة",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error أثناء جلب الشقق الأكثر مساحة: $e");
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء جلب الشقق الأكثر مساحة في ApiService: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء جلب الشقق الأكثر مساحة",
+        errors: [e.toString()],
+      ));
+    }
+  }
+  Future<Either<Failure, List<RecommendedProperty>>> getHighestPriceProperty() async {
+    try {
+      final response = await _dio.get(
+        '/Rating/highest-price',
+      );
+
+      print("✅ [DEBUG] get Highest Price Property API Response: ${response.data}");
+
+      if (response.data is List) {
+        final List<RecommendedProperty> properties = (response.data as List)
+            .map((json) => RecommendedProperty.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return Right(properties);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم عند جلب الشقق الأعلى في السعر",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error أثناء جلب الشقق الأعلى في السعر : $e");
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء جلب الشقق الأعلى في السعر   ApiService: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء جلب الشقق الأعلى في السعر ",
+        errors: [e.toString()],
+      ));
+    }
+  }
+  Future<Either<Failure, List<RecommendedProperty>>> getLowestPriceProperty() async {
+    try {
+      final response = await _dio.get(
+        '/Rating/lowest-price',
+      );
+
+      print("✅ [DEBUG] get Lowest Price Property API Response: ${response.data}");
+
+      if (response.data is List) {
+        final List<RecommendedProperty> properties = (response.data as List)
+            .map((json) => RecommendedProperty.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return Right(properties);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم عند جلب الشقق الأقل في السعر",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error أثناء جلب الشقق الأقل في السعر : $e");
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء جلب الشقق الأقل في السعر   ApiService: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء جلب الشقق الأقل في السعر ",
+        errors: [e.toString()],
+      ));
+    }
+  }
+
   Future<Either<Failure, Map<String, dynamic>>> deleteFavorite({
   required String token,
   required int id,
@@ -556,10 +654,14 @@ class ApiService {
     required String token,
     required String fullName,
     String? profilePicturePath,
+    required String phoneNumber,
+
   }) async {
     try {
       final formData = FormData();
       formData.fields.add(MapEntry('FullName', fullName));
+      formData.fields.add(MapEntry('PhoneNumber', phoneNumber));
+
 
       if (profilePicturePath != null && profilePicturePath.isNotEmpty) {
         formData.files.add(

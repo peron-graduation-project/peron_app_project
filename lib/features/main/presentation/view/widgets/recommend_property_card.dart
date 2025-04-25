@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/utils/property_model.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/views/property_details.dart';
 import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/custom_favourite_icon.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/property_border.dart';
@@ -20,32 +21,45 @@ class _RecommendedPropertyCardState extends State<RecommendedPropertyCard> {
     final property = widget.property;
     var screenWidth = MediaQuery.of(context).size.width;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        double itemWidth = constraints.maxWidth > 0 ? constraints.maxWidth : screenWidth * 0.45;
-        print("RecommendedPropertyCard - constraints.maxWidth: ${constraints.maxWidth}, itemWidth: $itemWidth");
-        double iconSize = itemWidth * 0.1;
-        double textSize = itemWidth * 0.08;
-        double paddingSize = itemWidth * 0.05;
-        return PropertyBorder(
-          paddingSize: paddingSize,
-          child: Stack(
-            children: [
-              RecommendedPropertyDetails(
-                property: property,
-                iconSize: iconSize,
-                textSize: textSize,
-                paddingSize: paddingSize,
-                itemWidth: itemWidth,
-              ),
-              CustomFavouriteIcon(
-                property: property,
-                category: 'recommendation',
-              ),
-            ],
-          ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PropertyDetailScreen()),
         );
       },
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          double itemWidth =
+              constraints.maxWidth > 0
+                  ? constraints.maxWidth
+                  : screenWidth * 0.45;
+          print(
+            "RecommendedPropertyCard - constraints.maxWidth: ${constraints.maxWidth}, itemWidth: $itemWidth",
+          );
+          double iconSize = itemWidth * 0.1;
+          double textSize = itemWidth * 0.08;
+          double paddingSize = itemWidth * 0.05;
+          return PropertyBorder(
+            paddingSize: paddingSize,
+            child: Stack(
+              children: [
+                RecommendedPropertyDetails(
+                  property: property,
+                  iconSize: iconSize,
+                  textSize: textSize,
+                  paddingSize: paddingSize,
+                  itemWidth: itemWidth,
+                ),
+                CustomFavouriteIcon(
+                  property: property,
+                  category: 'recommendation',
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

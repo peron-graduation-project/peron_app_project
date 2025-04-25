@@ -6,10 +6,13 @@ import 'package:peron_project/features/main/presentation/manager/get%20Search/ge
 import '../../../../../core/error/failure.dart';
 class GetSearchPropertiesCubit extends Cubit<GetSearchPropertiesState> {
   final GetSearchRepo getSearchRepo;
+
   GetSearchPropertiesCubit(this.getSearchRepo) : super(GetSearchPropertiesStateInitial());
+
   Future<void> getSearchProperties(String location) async {
     emit(GetSearchPropertiesStateLoading());
     final Either<Failure, List<Property>> result = await getSearchRepo.getSearchProperties(location);
+
     result.fold(
           (failure) {
         emit(GetSearchPropertiesStateFailure(errorMessage: failure.errorMessage));
@@ -19,9 +22,15 @@ class GetSearchPropertiesCubit extends Cubit<GetSearchPropertiesState> {
         if (properties.isNotEmpty) {
           print("✅✅✅ [DEBUG] First properties Type: ${properties.first.runtimeType}");
           print("✅✅✅ [DEBUG] First properties: ${properties.first.toJson()}");
+          emit(GetSearchPropertiesStateSuccess(properties: properties));
+        } else {
+          emit(GetSearchPropertiesStateEmpty());
         }
-        emit(GetSearchPropertiesStateSuccess(properties: properties));
       },
     );
+  }
+
+  void clearSearch() {
+    emit(GetSearchPropertiesStateInitial());
   }
 }

@@ -5,5 +5,7 @@ abstract class UpdateProfileRepo {
   Future<Either<Failure, String>> updateProfile({
     required String fullName,
     String? profilePicture,
+    required String phoneNumber,
+
   });
 }

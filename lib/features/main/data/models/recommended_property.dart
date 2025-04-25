@@ -24,7 +24,7 @@ class RecommendedProperty {
   final double? averageRating;
   final String description;
   final List<String> images;
-  final dynamic ratings;
+  final List<Map<String, dynamic>>? ratings;
   final double? latitude;
   final double? longitude;
   final double distance;
@@ -58,71 +58,78 @@ class RecommendedProperty {
     this.longitude,
     required this.distance,
   });
-factory RecommendedProperty.fromProperty(Property p) {
-  return RecommendedProperty(
-    propertyId: p.propertyId,
-    ownerId: p.ownerId,
-    title: p.title,
-    location: p.location,
-    price: p.price,
-    rentType: p.rentType,
-    area: p.area,
-    bedrooms: p.bedrooms,
-    bathrooms: p.bathrooms,
-    floor: p.floor,
-    isFurnished: p.isFurnished,
-    hasBalcony: p.hasBalcony,
-    hasInternet: p.hasInternet,
-    hasSecurity: p.hasSecurity,
-    hasElevator: p.hasElevator,
-    allowsPets: p.allowsPets,
-    smokingAllowed: p.smokingAllowed,
-    availableFrom: p.availableFrom,
-    availableTo: p.availableTo,
-    minBookingDays: p.minBookingDays,
-    averageRating: p.ratings,
-    description: p.description,
-    images: p.images.map((img) => img.toString()).toList(), 
-    ratings: p.ratings,
-    latitude: p.latitude,
-    longitude: p.longitude,
-    distance: 0, 
-  );
-}
-factory RecommendedProperty.fromJson(Map<String, dynamic> json) {
-  print("📦 JSON INPUT: $json"); 
-  return RecommendedProperty(
-    propertyId: json['propertyId'] ?? 0, 
-    ownerId: json['ownerId'] ?? "", 
-    title: json['title'] ?? "No Title", 
-    location: json['location'] ?? "Unknown Location", 
-    price: (json['price'] as num?)?.toDouble() ?? 0.0, 
-    rentType: json['rentType'] ?? "Unknown", 
-    area: json['area'] ?? 0, 
-    bedrooms: json['bedrooms'] ?? 0, 
-    bathrooms: json['bathrooms'] ?? 0, 
-    floor: json['floor'] ?? 0, 
-    isFurnished: json['isFurnished'] ?? false, 
-    hasBalcony: json['hasBalcony'] ?? false, 
-    hasInternet: json['hasInternet'] ?? false, 
-    hasSecurity: json['hasSecurity'] ?? false, 
-    hasElevator: json['hasElevator'] ?? false, 
-    allowsPets: json['allowsPets'] ?? false, 
-    smokingAllowed: json['smokingAllowed'] ?? false, 
-    availableFrom: DateTime.parse(json['availableFrom'] ?? "1970-01-01"),
-    availableTo: DateTime.parse(json['availableTo'] ?? "1970-01-01"), 
-    minBookingDays: json['minBookingDays'] ?? 1, 
-    averageRating: (json['averageRating'] as num?)?.toDouble(), 
-    description: json['description'] ?? "No Description", 
-    images: List<String>.from(json['images'] ?? []), 
-    latitude: (json['latitude'] as num?)?.toDouble(), 
-    longitude: (json['longitude'] as num?)?.toDouble(),
-    distance: (json['distance'] as num?)?.toDouble() ?? 0.0, 
-  );
-}
 
+  factory RecommendedProperty.fromProperty(Property p) {
+    return RecommendedProperty(
+      propertyId: p.propertyId ?? 0,
+      ownerId: p.ownerId,
+      title: p.title ?? "No Title",
+      location: p.location ?? "Unknown Location",
+      price: p.price ?? 0.0,
+      rentType: p.rentType ?? "Unknown",
+      area: p.area ?? 0,
+      bedrooms: p.bedrooms ?? 0,
+      bathrooms: p.bathrooms ?? 0,
+      floor: p.floor ?? 0,
+      isFurnished: p.isFurnished ?? false,
+      hasBalcony: p.hasBalcony ?? false,
+      hasInternet: p.hasInternet ?? false,
+      hasSecurity: p.hasSecurity ?? false,
+      hasElevator: p.hasElevator ?? false,
+      allowsPets: p.allowsPets ?? false,
+      smokingAllowed: p.smokingAllowed ?? false,
+      availableFrom: p.availableFrom ?? DateTime(1970),
+      availableTo: p.availableTo ?? DateTime(1970),
+      minBookingDays: p.minBookingDays ?? 1,
+      averageRating: (p.ratings is List && (p.ratings as List).isNotEmpty)
+          ? double.tryParse(p.ratings[0]["rating"].toString())
+          : null,
+      description: p.description ?? "No Description",
+      images: p.images ?? [],
+      ratings: p.ratings is List<Map<String, dynamic>> ? p.ratings : null,
+      latitude: p.latitude,
+      longitude: p.longitude,
+      distance: 0,
+    );
+  }
 
-
+  factory RecommendedProperty.fromJson(Map<String, dynamic> json) {
+    return RecommendedProperty(
+      propertyId: json['propertyId'] ?? 0,
+      ownerId: json['ownerId'],
+      title: json['title'] ?? "No Title",
+      location: json['location'] ?? "Unknown Location",
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      rentType: json['rentType'] ?? "Unknown",
+      area: json['area'] ?? 0,
+      bedrooms: json['bedrooms'] ?? 0,
+      bathrooms: json['bathrooms'] ?? 0,
+      floor: json['floor'] ?? 0,
+      isFurnished: json['isFurnished'] ?? false,
+      hasBalcony: json['hasBalcony'] ?? false,
+      hasInternet: json['hasInternet'] ?? false,
+      hasSecurity: json['hasSecurity'] ?? false,
+      hasElevator: json['hasElevator'] ?? false,
+      allowsPets: json['allowsPets'] ?? false,
+      smokingAllowed: json['smokingAllowed'] ?? false,
+      availableFrom: json['availableFrom'] != null
+          ? DateTime.tryParse(json['availableFrom']) ?? DateTime(1970)
+          : DateTime(1970),
+      availableTo: json['availableTo'] != null
+          ? DateTime.tryParse(json['availableTo']) ?? DateTime(1970)
+          : DateTime(1970),
+      minBookingDays: json['minBookingDays'] ?? 1,
+      averageRating: (json['averageRating'] as num?)?.toDouble(),
+      description: json['description'] ?? "No Description",
+      images: List<String>.from(json['images'] ?? []),
+      ratings: (json['ratings'] as List?)
+          ?.map((e) => Map<String, dynamic>.from(e))
+          .toList(),
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
+      distance: (json['distance'] as num?)?.toDouble() ?? 0.0,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
