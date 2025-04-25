@@ -15,6 +15,7 @@ import 'package:peron_project/features/main/domain/repo/get%20search/get_search_
 import 'package:peron_project/features/main/domain/repo/get%20search/get_search_repo_imp.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20Search/get_search_cubit.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20recommended/get_recommended_properties_cubit.dart';
+import 'package:peron_project/features/myAds/presentation/view/views/modifyProperty.dart';
 import 'package:peron_project/features/profile/domain/repos/app%20rating/app_rating_repo_imp.dart';
 import 'package:peron_project/features/profile/domain/repos/get%20inquiry/get_inquiry_repo_imp.dart';
 import 'package:peron_project/features/profile/presentation/manager/app%20rating/send%20app%20rating/send_app_rating_cubit.dart';
@@ -127,7 +128,7 @@ class PeronApp extends StatelessWidget {
           ],
           initialRoute: PageRouteName.initialRoute,
           onGenerateRoute: RoutesGenerator.onGenerateRoute,
-          // home: HomeView(),
+          // home: EditPropertyScreen(),
         );
       },
     );
