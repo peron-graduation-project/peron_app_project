@@ -143,9 +143,9 @@ class PeronApp extends StatelessWidget {
           supportedLocales: [
             const Locale('ar', 'AE'), 
           ],
-          initialRoute: PageRouteName.initialRoute,
-          onGenerateRoute: RoutesGenerator.onGenerateRoute,
-          // home: EditPropertyScreen(),
+          // initialRoute: PageRouteName.initialRoute,
+          // onGenerateRoute: RoutesGenerator.onGenerateRoute,
+          home: EditPropertyScreen(),
         );
       },
     );
