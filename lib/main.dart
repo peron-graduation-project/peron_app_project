@@ -19,7 +19,6 @@ import 'package:peron_project/features/main/presentation/manager/get%20Search/ge
 import 'package:peron_project/features/main/presentation/manager/get%20lowest%20price/get_lowest_price_cubit.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20most%20area/get_most_area_cubit.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20recommended/get_recommended_properties_cubit.dart';
-import 'package:peron_project/features/myAds/presentation/view/views/modifyProperty.dart';
 import 'package:peron_project/features/profile/domain/repos/app%20rating/app_rating_repo_imp.dart';
 import 'package:peron_project/features/profile/domain/repos/get%20inquiry/get_inquiry_repo_imp.dart';
 import 'package:peron_project/features/profile/presentation/manager/app%20rating/send%20app%20rating/send_app_rating_cubit.dart';
@@ -79,7 +78,7 @@ void main() async {
         ),
         BlocProvider(
         create: (context) => GetSearchPropertiesCubit(GetSearchRepoImp(ApiService(Dio()))),
-        
+
 ),
 
 
@@ -142,11 +141,15 @@ class PeronApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: [
-            const Locale('ar', 'AE'), 
+            const Locale('ar', 'AE'),
           ],
           initialRoute: PageRouteName.initialRoute,
           onGenerateRoute: RoutesGenerator.onGenerateRoute,
-          home: HomeView(),
+
+          // home: HomeView(),
+
+          
+
         );
       },
     );
