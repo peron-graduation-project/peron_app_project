@@ -6,6 +6,7 @@ import 'package:peron_project/core/helper/media_query.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/navigator/routes_generator.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/views/property_details.dart';
 import 'package:peron_project/features/favourite/data/repos/addFavorite/addFav_imp.dart';
 import 'package:peron_project/features/favourite/data/repos/removeFavorite/removeFav_imp.dart';
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
@@ -51,79 +52,110 @@ void main() async {
       providers: [
         BlocProvider(
           create: (context) {
-            final profileRepo = ProfileRepoImp(ApiService(Dio()), sharedPreferences);
+            final profileRepo = ProfileRepoImp(
+              ApiService(Dio()),
+              sharedPreferences,
+            );
             final profileCubit = GetProfileCubit(profileRepo);
             return profileCubit..getProfile();
           },
         ),
         BlocProvider(create: (_) => SortCubit()),
         BlocProvider(
-          create: (context) => GetRecommendedPropertiesCubit(GetRecommendedRepoImp(ApiService(Dio())))..getRecommendedProperties(),
+          create:
+              (context) => GetRecommendedPropertiesCubit(
+                GetRecommendedRepoImp(ApiService(Dio())),
+              )..getRecommendedProperties(),
         ),
         BlocProvider(
-          create: (context) => GetMostAreaCubit(GetMostAreaRepoImp(ApiService(Dio())))..getMostArea(),
+          create:
+              (context) =>
+                  GetMostAreaCubit(GetMostAreaRepoImp(ApiService(Dio())))
+                    ..getMostArea(),
         ),
         BlocProvider(
-          create: (context) => GetLowestPricePropertiesCubit(GetLowestPriceRepoImp(ApiService(Dio())))..getLowestPriceProperties(),
+          create:
+              (context) => GetLowestPricePropertiesCubit(
+                GetLowestPriceRepoImp(ApiService(Dio())),
+              )..getLowestPriceProperties(),
         ),
         BlocProvider(
-          create: (context) => GetHighestPricePropertiesCubit(GetHighestPriceRepoImp(ApiService(Dio())))..getHighestPriceProperties(),
+          create:
+              (context) => GetHighestPricePropertiesCubit(
+                GetHighestPriceRepoImp(ApiService(Dio())),
+              )..getHighestPriceProperties(),
         ),
 
         BlocProvider(
           create: (context) => AddfavoriteCubit(AddfavImp(ApiService(Dio()))),
         ),
         BlocProvider<GetNearestCubit>(
-          create: (context) => GetNearestCubit(GetNearestRepoImp(ApiService(Dio()))),
+          create:
+              (context) =>
+                  GetNearestCubit(GetNearestRepoImp(ApiService(Dio()))),
         ),
         BlocProvider(
-        create: (context) => GetSearchPropertiesCubit(GetSearchRepoImp(ApiService(Dio()))),
-
-),
-
-
-        BlocProvider(
-          create: (context) => DeletefavoriteCubit(DeletefavImp(ApiService(Dio()))),
-        ),
-        BlocProvider(
-          create: (context) => SendAppRatingCubit(AppRatingRepoImp(ApiService(Dio()))),
-        ),
-        BlocProvider(
-          create: (context) => DeleteAccountCubit(DeleteAccountRepoImp(ApiService(Dio()))),
-        ),
-        BlocProvider(
-          create: (context) => UpdateProfileCubit(
-            UpdateProfileRepoImp(
-              ApiService(Dio()),
-              context.read<GetProfileCubit>().getProfileRepo as ProfileRepoImp,
-            ),
-            context.read<GetProfileCubit>(),
-          ),
+          create:
+              (context) =>
+                  GetSearchPropertiesCubit(GetSearchRepoImp(ApiService(Dio()))),
         ),
 
-        ChangeNotifierProxyProvider2<AddfavoriteCubit, DeletefavoriteCubit, FavoriteManager>(
+        BlocProvider(
+          create:
+              (context) => DeletefavoriteCubit(DeletefavImp(ApiService(Dio()))),
+        ),
+        BlocProvider(
+          create:
+              (context) =>
+                  SendAppRatingCubit(AppRatingRepoImp(ApiService(Dio()))),
+        ),
+        BlocProvider(
+          create:
+              (context) =>
+                  DeleteAccountCubit(DeleteAccountRepoImp(ApiService(Dio()))),
+        ),
+        BlocProvider(
+          create:
+              (context) => UpdateProfileCubit(
+                UpdateProfileRepoImp(
+                  ApiService(Dio()),
+                  context.read<GetProfileCubit>().getProfileRepo
+                      as ProfileRepoImp,
+                ),
+                context.read<GetProfileCubit>(),
+              ),
+        ),
+
+        ChangeNotifierProxyProvider2<
+          AddfavoriteCubit,
+          DeletefavoriteCubit,
+          FavoriteManager
+        >(
           create: (context) => FavoriteManager(),
-          update: (context, addCubit, deleteCubit, favoriteManager) =>
-          favoriteManager!
-            ..setAddCubit(addCubit)
-            ..setDeleteCubit(deleteCubit),
+          update:
+              (context, addCubit, deleteCubit, favoriteManager) =>
+                  favoriteManager!
+                    ..setAddCubit(addCubit)
+                    ..setDeleteCubit(deleteCubit),
         ),
         BlocProvider(
-          create: (_) => GetNotificationCubit(
-            NotificationRepoImpl(ApiService(Dio())),
-          )..getNotifications(),
+          create:
+              (_) =>
+                  GetNotificationCubit(NotificationRepoImpl(ApiService(Dio())))
+                    ..getNotifications(),
         ),
         BlocProvider(
-          create: (_) => GetInquiryCubit(
-            GetInquiryRepoImp(ApiService(Dio())),
-          )..getInquires(),
+          create:
+              (_) =>
+                  GetInquiryCubit(GetInquiryRepoImp(ApiService(Dio())))
+                    ..getInquires(),
         ),
-
       ],
       child: const PeronApp(),
     ),
   );
 }
+
 class PeronApp extends StatelessWidget {
   const PeronApp({super.key});
   @override
@@ -140,16 +172,11 @@ class PeronApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: [
-            const Locale('ar', 'AE'),
-          ],
-          initialRoute: PageRouteName.initialRoute,
-          onGenerateRoute: RoutesGenerator.onGenerateRoute,
+          supportedLocales: [const Locale('ar', 'AE')],
 
-          // home: HomeView(),
-
-          
-
+          // initialRoute: PageRouteName.initialRoute,
+          // onGenerateRoute: RoutesGenerator.onGenerateRoute,
+          home: PropertyDetailScreen(),
         );
       },
     );

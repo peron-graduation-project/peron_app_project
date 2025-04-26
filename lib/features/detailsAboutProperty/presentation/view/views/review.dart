@@ -10,7 +10,6 @@ class ReviewsScreen extends StatefulWidget {
 class _ReviewsScreenState extends State<ReviewsScreen> {
   final TextEditingController _commentController = TextEditingController();
 
-  // قائمة لتخزين التقييمات
   final List<Map<String, dynamic>> _reviews = [
     {
       'username': 'Eid Said',
@@ -44,17 +43,15 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     },
   ];
 
-  // دالة لإضافة تعليق جديد
   void _addNewComment() {
     if (_commentController.text.isNotEmpty) {
       setState(() {
         _reviews.insert(0, {
           'username': 'أنت',
-          'rating': 5, // افتراضي للمستخدم الحالي
+          'rating': 5,
           'comment': _commentController.text,
           'timeAgo': 'الآن',
-          'avatarUrl':
-              'https://randomuser.me/api/portraits/women/22.jpg', // صورة للمستخدم الحالي
+          'avatarUrl': 'https://randomuser.me/api/portraits/women/22.jpg',
         });
         _commentController.clear();
       });
@@ -141,26 +138,24 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
         ],
       ),
       padding: const EdgeInsets.all(12),
-      child: Row(
-        textDirection: TextDirection.rtl,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          // صورة المستخدم على اليمين
-          CircleAvatar(
-            backgroundImage: NetworkImage(avatarUrl),
-            radius: 16,
-          ),
-          const SizedBox(width: 10),
-          // العمود الأيمن يحتوي الاسم والنجوم والتعليق
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                // صف للاسم والتاريخ
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  textDirection: TextDirection.rtl,
+          Row(
+            textDirection: TextDirection.rtl,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // صورة المستخدم على اليمين
+              CircleAvatar(
+                backgroundImage: NetworkImage(avatarUrl),
+                radius: 16,
+              ),
+              const SizedBox(width: 10),
+              // العمود الأيمن يحتوي الاسم والنجوم والتعليق
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    // اسم المستخدم
                     Text(
                       username,
                       style: const TextStyle(
@@ -168,26 +163,34 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const SizedBox(height: 4),
+                    // النجوم
+                    _buildRatingStars(rating),
+                    const SizedBox(height: 4),
+                    // التعليق
                     Text(
-                      timeAgo,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
+                      comment,
+                      style: const TextStyle(fontSize: 14),
+                      textAlign: TextAlign.right,
                     ),
                   ],
                 ),
-                const SizedBox(height: 4),
-                // النجوم
-                _buildRatingStars(rating),
-                const SizedBox(height: 4),
-                // التعليق
-                Text(
-                  comment,
-                  style: const TextStyle(fontSize: 14),
-                  textAlign: TextAlign.right,
+              ),
+            ],
+          ),
+          // وقت التعليق على اليسار أسفل البطاقة
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                timeAgo,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
                 ),
-              ],
+                textAlign: TextAlign.left,
+              ),
             ),
           ),
         ],
@@ -221,8 +224,6 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
       child: Row(
         textDirection: TextDirection.rtl,
         children: [
-          const SizedBox(width: 12),
-
           // حقل كتابة التعليق
           Expanded(
             child: Container(
@@ -245,6 +246,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               ),
             ),
           ),
+          const SizedBox(width: 12),
           Container(
             width: 48,
             height: 48,

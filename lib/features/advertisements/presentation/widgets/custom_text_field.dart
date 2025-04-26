@@ -11,7 +11,7 @@ class CustomTextField extends StatelessWidget {
     Key? key,
     this.hintText,
     this.maxLines = 1,
-    this.controller,
+    this.controller, required String labelText, required bool isNumeric, required int maxLength,
   }) : super(key: key);
 
   @override
