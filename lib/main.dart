@@ -10,6 +10,7 @@ import 'package:peron_project/features/favourite/data/repos/addFavorite/addFav_i
 import 'package:peron_project/features/favourite/data/repos/removeFavorite/removeFav_imp.dart';
 import 'package:peron_project/features/favourite/presentation/manager/addFavorite/addFavorite_cubit.dart';
 import 'package:peron_project/features/favourite/presentation/manager/deleteFavorite/deleteFavorite_cubit.dart';
+import 'package:peron_project/features/home/presentation/view/views/home_view.dart';
 import 'package:peron_project/features/main/domain/repo/get%20highest%20price/get_highest_price_repo_imp.dart';
 import 'package:peron_project/features/main/domain/repo/get%20most%20area/get_most_area_repo_imp.dart';
 import 'package:peron_project/features/main/domain/repo/get%20recommended/get_recommended_repo_imp.dart';
@@ -143,9 +144,9 @@ class PeronApp extends StatelessWidget {
           supportedLocales: [
             const Locale('ar', 'AE'), 
           ],
-          // initialRoute: PageRouteName.initialRoute,
-          // onGenerateRoute: RoutesGenerator.onGenerateRoute,
-          home: EditPropertyScreen(),
+          initialRoute: PageRouteName.initialRoute,
+          onGenerateRoute: RoutesGenerator.onGenerateRoute,
+          home: HomeView(),
         );
       },
     );
