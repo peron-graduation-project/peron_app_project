@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/features/home/presentation/view/views/home_view_body.dart';
-
-
 class SuccessDialog extends StatelessWidget {
   final String message;
   final String buttonText;
@@ -14,7 +12,6 @@ class SuccessDialog extends StatelessWidget {
     this.onButtonPressed,
   }) : super(key: key);
 
-  // طريقة لعرض الـ dialog مباشرة بدون الحاجة لإنشاء instance
   static Future<void> show({
     required BuildContext context,
     required String message,

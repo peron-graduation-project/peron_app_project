@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peron_project/features/payment/presentation/view/views/creditCard.dart';
-import 'package:peron_project/features/payment/presentation/view/widgets/emptyScreen.dart';
+import 'package:peron_project/features/payment/presentation/view/widgets/emptyscreen.dart';
 import 'package:peron_project/features/payment/presentation/view/widgets/paymentMethodItem.dart';
 import 'continuePayment.dart';
 import 'creditcard.dart';
@@ -87,7 +86,6 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               ),
             ),
           ),
-          // Payment methods list using the new PaymentMethodItem widget
           PaymentMethodItem(
             index: 0,
             selectedIndex: _selectedPaymentMethod,

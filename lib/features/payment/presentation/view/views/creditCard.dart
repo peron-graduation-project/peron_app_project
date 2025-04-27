@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field.dart';
 import 'package:peron_project/features/myAds/presentation/view/widgets/successDialog.dart';
-import 'package:peron_project/features/payment/presentation/view/widgets/creditDetails.dart';
+import 'package:peron_project/features/payment/presentation/view/widgets/creditdetails.dart';
+import 'package:peron_project/features/payment/presentation/view/widgets/customField.dart';
+
 
 class CreditCardPaymentScreen extends StatefulWidget {
   const CreditCardPaymentScreen({Key? key}) : super(key: key);
@@ -29,14 +30,17 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // استخدام MediaQuery للحصول على أبعاد الشاشة
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
     final double screenHeight = screenSize.height;
 
-    final double horizontalPadding = screenWidth * 0.05;
-    final double verticalSpacing = screenHeight * 0.02; 
+    // تحديد حجم الهوامش بناءً على حجم الشاشة
+    final double horizontalPadding = screenWidth * 0.05; // 5% من عرض الشاشة
+    final double verticalSpacing = screenHeight * 0.02; // 2% من ارتفاع الشاشة
 
-    final double titleFontSize = screenWidth * 0.045; 
+    // تعديل حجم الخط بناءً على حجم الشاشة
+    final double titleFontSize = screenWidth * 0.045; // يتكيف مع عرض الشاشة
     final double labelFontSize = screenWidth * 0.04;
     final double buttonFontSize = screenWidth * 0.04;
 
@@ -84,12 +88,13 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                     SizedBox(height: verticalSpacing),
 
                     SizedBox(
-                      height: screenHeight * 0.25,
+                      height: screenHeight * 0.25, 
                       child: CreditDetails(),
                     ),
 
                     SizedBox(height: verticalSpacing),
 
+                    // Card Details Text
                     Text(
                       'بيانات البطاقة',
                       style: TextStyle(
@@ -102,15 +107,15 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                     SizedBox(height: verticalSpacing * 0.75),
 
                     // Cardholder Name Field
-                    CustomTextField(
+                    CustomField(
                       controller: _cardholderNameController,
-                      labelText: 'اسم صاحب البطاقة', isNumeric: false, maxLength: 16,
+                      labelText: 'اسم صاحب البطاقة',
                     ),
 
                     SizedBox(height: verticalSpacing * 0.75),
 
                     // Card Number Field
-                    CustomTextField(
+                    CustomField(
                       controller: _cardNumberController,
                       labelText: 'رقم البطاقة',
                       isNumeric: true,
@@ -123,7 +128,7 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: CustomTextField(
+                          child: CustomField(
                             controller: _expiryDateController,
                             labelText: 'رقم الصلاحية',
                             isNumeric: true,
@@ -132,7 +137,7 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                         ),
                         SizedBox(width: screenWidth * 0.05), // 5% من عرض الشاشة
                         Expanded(
-                          child: CustomTextField(
+                          child: CustomField(
                             controller: _cvvController,
                             labelText: 'CVV',
                             isNumeric: true,
