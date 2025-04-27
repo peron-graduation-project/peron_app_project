@@ -1,9 +1,11 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:peron_project/core/helper/colors.dart';
 
 class DottedBorderBox extends StatelessWidget {
   final double screenHeight;
+
   const DottedBorderBox({super.key, required this.screenHeight});
 
   @override
@@ -33,7 +35,14 @@ class DottedBorderBox extends StatelessWidget {
               const Text('باختيار ملف', style: TextStyle(color: Colors.black54)),
               const SizedBox(height: 8),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  ImagePicker().pickImage(source: ImageSource.gallery).then((image) {
+                    if (image != null) {
+                      print("تم اختيار الصورة: ${image.path}");
+                      // ممكن تبعتيها لـ Bloc أو تخزنيها حسب المطلوب
+                    }
+                  });
+                },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: AppColors.primaryColor),
                   shape: RoundedRectangleBorder(
@@ -57,4 +66,3 @@ class DottedBorderBox extends StatelessWidget {
     );
   }
 }
-
