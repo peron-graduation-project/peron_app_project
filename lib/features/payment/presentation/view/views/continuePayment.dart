@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/payment/presentation/view/views/verification.dart';
 
 class PhoneVerificationScreen extends StatefulWidget {
@@ -21,24 +22,27 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black, 
+            size: 18
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: const [],
+        title: Text(
           'استكمال الدفع',
           style: TextStyle(
             color: Colors.black,
+            fontFamily: Fonts.primaryFontFamily,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_forward_ios,
-                color: Colors.black, size: 18),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-        leading: const SizedBox(),
+        
       ),
       body: SafeArea(
         child: Directionality(
@@ -55,19 +59,20 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[800],
+                    fontFamily: Fonts.primaryFontFamily,
+                    color: const Color.fromARGB(255, 120, 120, 120),
                     height: 1.4,
                   ),
                 ),
               ),
 
-              // عنوان حقل الهاتف بنفس المكان في الصورة
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                 child: Text(
                   'الهاتف',
                   style: TextStyle(
                     fontSize: 14,
+                    fontFamily: Fonts.primaryFontFamily,
                     color: Colors.grey[800],
                   ),
                 ),
@@ -85,14 +90,20 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                       Expanded(
                         child: TextField(
                           controller: _phoneController,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             border: InputBorder.none,
                             contentPadding:
                                 EdgeInsets.symmetric(horizontal: 12),
                             hintText: '',
+                            hintStyle: TextStyle(
+                              fontFamily: Fonts.primaryFontFamily,
+                            ),
                           ),
                           textAlign: TextAlign.right,
                           keyboardType: TextInputType.phone,
+                          style: TextStyle(
+                            fontFamily: Fonts.primaryFontFamily,
+                          ),
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly
                           ],
@@ -108,9 +119,13 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                             horizontal: 12, vertical: 12),
                         child: Row(
                           children: [
-                            const Text(
+                            Text(
                               '(+20)',
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontFamily: Fonts.primaryFontFamily,
+                              ),
                             ),
                             const SizedBox(width: 4),
                             Icon(Icons.keyboard_arrow_down,
@@ -160,18 +175,18 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
+                  child: Text(
                     "استكمال",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: Fonts.primaryFontFamily,
                     ),
                   ),
                 ),
               ),
 
-              // المساحة المتبقية
               const Spacer(),
             ],
           ),

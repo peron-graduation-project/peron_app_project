@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class PaymentMethodItem extends StatelessWidget {
   final int index;
   final int selectedIndex;
-  final String title;
+  final String? title; 
   final String? cardNumber;
   final String icon;
   final bool isCustomIcon;
@@ -14,7 +15,7 @@ class PaymentMethodItem extends StatelessWidget {
     Key? key,
     required this.index,
     required this.selectedIndex,
-    required this.title,
+    this.title, 
     this.cardNumber,
     required this.icon,
     this.isCustomIcon = false,
@@ -38,9 +39,9 @@ class PaymentMethodItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
-            textDirection: TextDirection.rtl,
+            textDirection: TextDirection.rtl, // Set text direction to right-to-left
             children: [
-              // Custom icon or logo
+              // Icon on the right side
               Container(
                 width: 40,
                 height: 40,
@@ -64,28 +65,32 @@ class PaymentMethodItem extends StatelessWidget {
               // Title and card number if available
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start, // Align to start (which will be right due to RTL)
                   children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                    if (title != null) 
+                      Text(
+                        title!,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: Fonts.primaryFontFamily,
+                        ),
                       ),
-                    ),
                     if (cardNumber != null)
                       Text(
                         cardNumber!,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey[600],
+                          color: Colors.black,
+                          fontFamily: Fonts.primaryFontFamily,
                         ),
                       ),
                   ],
                 ),
               ),
               const SizedBox(width: 16),
-              // Checkbox
+              // Checkbox on the left side
               Container(
                 width: 24,
                 height: 24,

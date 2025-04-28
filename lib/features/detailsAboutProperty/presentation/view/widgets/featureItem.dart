@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class FeatureItem extends StatelessWidget {
   final String text;
   final IconData icon;
   final double screenWidth;
 
-  const FeatureItem({
+  FeatureItem({
     Key? key,
     required this.text,
     required this.icon,
@@ -34,6 +35,7 @@ class FeatureItem extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: featureFontSize,
+              fontFamily: Fonts.primaryFontFamily,
             ),
           ),
           SizedBox(width: featurePadding * 0.3),

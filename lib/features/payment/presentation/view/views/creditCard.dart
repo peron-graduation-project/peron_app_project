@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/myAds/presentation/view/widgets/successDialog.dart';
 import 'package:peron_project/features/payment/presentation/view/widgets/creditdetails.dart';
 import 'package:peron_project/features/payment/presentation/view/widgets/customField.dart';
+import 'package:peron_project/features/payment/presentation/view/widgets/successPaymentDialog.dart';
 
 
 class CreditCardPaymentScreen extends StatefulWidget {
@@ -50,24 +52,27 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black, 
+            size: 18
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: const [],
         title: Text(
           'اضافة بطاقة',
           style: TextStyle(
             color: Colors.black,
             fontSize: titleFontSize,
             fontWeight: FontWeight.bold,
+            fontFamily: Fonts.primaryFontFamily,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_forward_ios,
-                color: Colors.black, size: 18),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-        leading: const SizedBox(),
+        
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
@@ -100,7 +105,8 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                       style: TextStyle(
                         fontSize: labelFontSize,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black54,
+                        color: const Color.fromARGB(137, 0, 0, 0),
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
 
@@ -135,7 +141,7 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                             maxLength: 4,
                           ),
                         ),
-                        SizedBox(width: screenWidth * 0.05), // 5% من عرض الشاشة
+                        SizedBox(width: screenWidth * 0.05),
                         Expanded(
                           child: CustomField(
                             controller: _cvvController,
@@ -151,10 +157,10 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
 
                     // Pay Button
                     SizedBox(
-                      height: screenHeight * 0.065, // 6.5% من ارتفاع الشاشة
+                      height: screenHeight * 0.065, 
                       child: ElevatedButton(
                         onPressed: () {
-                          SuccessDialog.show(
+                          SuccessPaymentDialog.show(
                             context: context,
                             message: 'تم الدفع ونشر العقار بنجاح',
                           );
@@ -179,6 +185,7 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                                     color: Colors.white,
                                     fontSize: buttonFontSize,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: Fonts.primaryFontFamily,
                                   ),
                                 ),
                                 Text(
@@ -187,6 +194,7 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                                     color: Colors.white,
                                     fontSize: buttonFontSize,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: Fonts.primaryFontFamily,
                                   ),
                                 ),
                                 Text(
@@ -195,6 +203,7 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                                     color: Colors.white,
                                     fontSize: buttonFontSize,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: Fonts.primaryFontFamily,
                                   ),
                                 ),
                                 Text(
@@ -203,6 +212,7 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                                     color: Colors.white,
                                     fontSize: buttonFontSize,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: Fonts.primaryFontFamily,
                                   ),
                                 ),
                               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class TabItem extends StatelessWidget {
   final String title;
@@ -27,6 +28,8 @@ class TabItem extends StatelessWidget {
             style: TextStyle(
               color: isSelected ? const Color(0xFF0F8E65) : Colors.black,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              fontFamily: Fonts.primaryFontFamily,
+
               fontSize: 14,
             ),
           ),

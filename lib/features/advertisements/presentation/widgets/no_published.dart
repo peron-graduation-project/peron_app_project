@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class NoPublishedAdsContent extends StatelessWidget {
   final VoidCallback onAddProperty;
@@ -13,28 +14,37 @@ class NoPublishedAdsContent extends StatelessWidget {
     return SingleChildScrollView(
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: screenSize.height * 0.05),
               Image.asset(
                 'assets/images/noAdv.png',
-                width: 120,
-                height: 120,
+                width: 160,
+                height: 160,
                 fit: BoxFit.contain,
               ),
               const SizedBox(height: 25),
-              const Text(
+               Text(
                 'لا يوجد إعلانات منشوره بعد',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Color.fromARGB(255, 15, 15, 15),            fontFamily: Fonts.primaryFontFamily,
+),
+              ),
+              const SizedBox(height: 5),
+               Text(
+                'بعد',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.black,            fontFamily: Fonts.primaryFontFamily,
+),
               ),
               const SizedBox(height: 10),
               Text(
                 'أضف إعلانات لتصل إلى الاف المستخدمين',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                style: TextStyle(fontSize: 14,            fontFamily: Fonts.primaryFontFamily,
+fontWeight: FontWeight.w200, color: const Color.fromARGB(255, 154, 153, 153)),
               ),
               const SizedBox(height: 30),
               SizedBox(
@@ -48,9 +58,10 @@ class NoPublishedAdsContent extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text(
+                  child:  Text(
                     'اضف عقار',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(color: Colors.white, fontSize: 16,            fontFamily: Fonts.primaryFontFamily,
+),
                   ),
                 ),
               ),

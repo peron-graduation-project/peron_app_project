@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class ReviewsScreen extends StatefulWidget {
   const ReviewsScreen({Key? key}) : super(key: key);
@@ -14,9 +15,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     {
       'username': 'Eid Said',
       'rating': 5,
-      'comment': 'مكان هادي مناسب للعائلة',
+      'comment': 'مكان هادئ مناسب للعائلة',
       'timeAgo': 'منذ يومين',
-      'avatarUrl': 'https://randomuser.me/api/portraits/men/32.jpg',
+      'avatarUrl': 'assets/images/profile_pic.jpg',
     },
     {
       'username': 'Ramadan Mabrouk',
@@ -24,25 +25,25 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
       'comment':
           'الشقة مريحة جدا ونظيفة والموقع ممتاز وقريب من كل حاجة. تجربة إيجار ممتازة!',
       'timeAgo': 'منذ أيام',
-      'avatarUrl': 'https://randomuser.me/api/portraits/men/41.jpg',
+      'avatarUrl': 'assets/images/profile_pic.jpg',
     },
     {
-      'username': 'Eid Said',
+      'username': 'Ahmed Mohamed',
       'rating': 5,
-      'comment': 'مكان هادي مناسب للعائلة',
+      'comment': 'موقع ممتاز وخدمة رائعة',
       'timeAgo': 'منذ 5 أيام',
-      'avatarUrl': 'https://randomuser.me/api/portraits/men/32.jpg',
+      'avatarUrl': 'assets/images/profile_pic.jpg',
     },
     {
-      'username': 'Ramadan Mabrouk',
-      'rating': 4,
-      'comment':
-          'الشقة مريحة جدا ونظيفة والموقع ممتاز وقريب من كل حاجة. تجربة إيجار ممتازة!',
+      'username': 'Sara Ali',
+      'rating': 5,
+      'comment': 'تجربة مميزة جداً',
       'timeAgo': 'منذ أسبوع',
-      'avatarUrl': 'https://randomuser.me/api/portraits/men/41.jpg',
+      'avatarUrl': 'assets/images/profile_pic.jpg',
     },
   ];
 
+  // إضافة تعليق جديد
   void _addNewComment() {
     if (_commentController.text.isNotEmpty) {
       setState(() {
@@ -51,7 +52,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           'rating': 5,
           'comment': _commentController.text,
           'timeAgo': 'الآن',
-          'avatarUrl': 'https://randomuser.me/api/portraits/women/22.jpg',
+          'avatarUrl': 'assets/images/profile_pic.jpg',
         });
         _commentController.clear();
       });
@@ -66,18 +67,24 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double padding = 16.0;
+    final double fontSize = 14.0;
+    final double smallFontSize = 12.0;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'التقييمات',
           style: TextStyle(
             color: Colors.black,
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            fontFamily: Fonts.primaryFontFamily
           ),
         ),
         actions: [
@@ -96,16 +103,21 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           const Divider(height: 1, thickness: 1, color: Colors.grey),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: EdgeInsets.all(padding),
               itemCount: _reviews.length,
               itemBuilder: (context, index) {
                 final review = _reviews[index];
-                return _buildReviewCard(
-                  username: review['username'],
-                  rating: review['rating'],
-                  comment: review['comment'],
-                  timeAgo: review['timeAgo'],
-                  avatarUrl: review['avatarUrl'],
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _buildReviewCard(
+                    name: review['username'],
+                    rating: review['rating'].toDouble(),
+                    comment: review['comment'],
+                    imagePath: review['avatarUrl'],
+                    timeAgo: review['timeAgo'],
+                    fontSize: fontSize,
+                    smallFontSize: smallFontSize,
+                  ),
                 );
               },
             ),
@@ -116,19 +128,24 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     );
   }
 
+  // تصميم بطاقة التقييم مستوحى من ReviewsSection
   Widget _buildReviewCard({
-    required String username,
-    required int rating,
+    required String name,
+    required double rating,
     required String comment,
+    required String imagePath,
     required String timeAgo,
-    required String avatarUrl,
+    required double fontSize,
+    required double smallFontSize,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(12.0),
+        border: Border.all(
+          color: Colors.grey.shade200,
+          width: 1.0,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade100,
@@ -137,60 +154,80 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           ),
         ],
       ),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // الصف العلوي مع صورة الملف الشخصي والاسم جنبًا إلى جنب
           Row(
-            textDirection: TextDirection.rtl,
+            textDirection: TextDirection.rtl, // إجبار اتجاه RTL
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // صورة المستخدم على اليمين
+              // صورة الملف الشخصي - على أقصى اليمين
               CircleAvatar(
-                backgroundImage: NetworkImage(avatarUrl),
-                radius: 16,
+                radius: 20,
+                backgroundImage: AssetImage(imagePath),
               ),
               const SizedBox(width: 10),
-              // العمود الأيمن يحتوي الاسم والنجوم والتعليق
+              // عمود الاسم والمحتوى
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start, // في وضع RTL، هذا يحاذي إلى اليمين
                   children: [
-                    // اسم المستخدم
+                    // الاسم
                     Text(
-                      username,
-                      style: const TextStyle(
-                        fontSize: 14,
+                      name,
+                      style: TextStyle(
+                        fontSize: fontSize,
                         fontWeight: FontWeight.bold,
+                                    fontFamily: Fonts.primaryFontFamily,
+
+                        color: Colors.black,
                       ),
                     ),
+                    // تقييم النجوم - مباشرة تحت الاسم
                     const SizedBox(height: 4),
-                    // النجوم
-                    _buildRatingStars(rating),
-                    const SizedBox(height: 4),
-                    // التعليق
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: List.generate(
+                        5,
+                        (index) => Icon(
+                          index < rating ? Icons.star : Icons.star_border,
+                          color: const Color(0xff0F7757),
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                    // نص التعليق - تحت النجوم
+                    const SizedBox(height: 8),
                     Text(
                       comment,
-                      style: const TextStyle(fontSize: 14),
-                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                                    fontFamily: Fonts.primaryFontFamily
+,
+                        fontSize: fontSize * 0.9,
+                        color: Colors.black87,
+                      ),
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          // وقت التعليق على اليسار أسفل البطاقة
+          // مساحة لدفع الوقت إلى الأسفل
+          const SizedBox(height: 12),
+          // نص الوقت - محاذاة إلى اليسار
           Align(
-            alignment: Alignment.bottomLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                timeAgo,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                ),
-                textAlign: TextAlign.left,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              timeAgo,
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: smallFontSize * 0.9,
+                            fontFamily: Fonts.primaryFontFamily
+
               ),
+              textAlign: TextAlign.left,
             ),
           ),
         ],
@@ -198,23 +235,10 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     );
   }
 
-  Widget _buildRatingStars(int rating) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(
-        5,
-        (index) => Icon(
-          index < rating ? Icons.star : Icons.star_border,
-          color: const Color(0xff0F7757), // لون أخضر
-          size: 16,
-        ),
-      ),
-    );
-  }
-
+  // تعديل تصميم مربع التعليق ليتناسب مع التصميم الجديد
   Widget _buildCommentFooter() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
@@ -227,7 +251,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           // حقل كتابة التعليق
           Expanded(
             child: Container(
-              height: 40,
+              height: 46,
               decoration: BoxDecoration(
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(25),
@@ -236,20 +260,21 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 controller: _commentController,
                 textAlign: TextAlign.right,
                 textDirection: TextDirection.rtl,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: 'اكتب تعليق',
                   hintTextDirection: TextDirection.rtl,
-                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                  contentPadding: EdgeInsets.only(bottom: 10, right: 10),
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14,            fontFamily: Fonts.primaryFontFamily
+),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
               ),
             ),
           ),
           const SizedBox(width: 12),
           Container(
-            width: 48,
-            height: 48,
+            width: 46,
+            height: 46,
             decoration: const BoxDecoration(
               color: Color(0xff0F7757),
               shape: BoxShape.circle,

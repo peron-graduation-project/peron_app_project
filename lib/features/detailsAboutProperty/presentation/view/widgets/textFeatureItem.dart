@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class TextFeatureItem extends StatelessWidget {
   final String text;
@@ -13,18 +14,24 @@ class TextFeatureItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: EdgeInsets.only(bottom: 8.0),
       child: Row(
         textDirection: TextDirection.rtl,
         children: [
-          Text("-"),
+          Text(
+            "-",
+            style: TextStyle(
+              fontFamily: Fonts.primaryFontFamily,
+            ),
+          ),
 
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(
             text,
             style: TextStyle(
               color: Colors.grey[700],
               fontSize: fontSize,
+              fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,
           ),

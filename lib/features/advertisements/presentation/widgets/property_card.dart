@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/features/myAds/presentation/view/views/modifyProperty.dart';
 
 class PropertyCard extends StatefulWidget {
   const PropertyCard({Key? key}) : super(key: key);
@@ -22,13 +24,17 @@ class _PropertyCardState extends State<PropertyCard> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Card(
-          elevation: 2,
-          shape: RoundedRectangleBorder(
+        padding: const EdgeInsets.all(15.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.grey.withOpacity(0.3),
+              width: 1.5,
+            ),
+           
           ),
-          margin: const EdgeInsets.all(4),
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
@@ -39,7 +45,7 @@ class _PropertyCardState extends State<PropertyCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(15.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Stack(
@@ -66,19 +72,29 @@ class _PropertyCardState extends State<PropertyCard> {
                         Positioned(
                           bottom: 10,
                           left: 10,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF0F8E65),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: const Text(
-                              'تعديل',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                          child: GestureDetector(
+                            onTap:(){
+                              Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EditPropertyScreen()),
+                    );
+                            } ,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF0F8E65),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child:  Text(
+                                'تعديل',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                              fontFamily: Fonts.primaryFontFamily,
+                            
+                                ),
                               ),
                             ),
                           ),
@@ -111,19 +127,21 @@ class _PropertyCardState extends State<PropertyCard> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          const Expanded(
+                           Expanded(
                             child: Text(
                               'شقة سكنية بقناة السويس',
                               style: TextStyle(
                                   fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Cairo'),
+                                  fontWeight: FontWeight.w200,
+                                  color: Colors.black,            fontFamily: Fonts.primaryFontFamily,
+
+                                  ),
                             ),
                           ),
                           Container(
@@ -133,12 +151,14 @@ class _PropertyCardState extends State<PropertyCard> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             child: Text(
-                              '222,20 جنيه',
+                              '20,222 جنيه',
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w400,
                                   fontSize: 22,
-                                  fontFamily: 'Cairo'),
+                                              fontFamily: Fonts.primaryFontFamily,
+
+                                  ),
                             ),
                           ),
                         ],
@@ -156,9 +176,10 @@ class _PropertyCardState extends State<PropertyCard> {
                             child: Text(
                               'شارع قناة السويس بجانب مشاوي المحمدي',
                               style: TextStyle(
-                                  color: Color(0xff3d3c3c),
-                                  fontSize: 15,
-                                  fontFamily: 'Cairo'),
+                                  color: Color.fromARGB(255, 69, 69, 69),
+                                  fontSize: 15,fontWeight: FontWeight.w100,            fontFamily: Fonts.primaryFontFamily,
+
+                                  ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -189,9 +210,11 @@ class _PropertyCardState extends State<PropertyCard> {
                           Text(
                             'نُشرت في: 25/2/2025',
                             style: TextStyle(
-                                color: Colors.grey[600],
+                                color: const Color.fromARGB(255, 171, 171, 171),
                                 fontSize: 12,
-                                fontFamily: 'Cairo'),
+                                fontWeight: FontWeight.w100,            fontFamily: Fonts.primaryFontFamily,
+
+                                ),
                           ),
                         ],
                       ),
@@ -230,11 +253,13 @@ class _PropertyCardState extends State<PropertyCard> {
   Widget buildPropertyInfoRow(IconData icon, int value) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: Colors.grey),
+        Icon(icon, size: 18, color: const Color.fromARGB(255, 195, 194, 194)),
         SizedBox(width: 2),
         Text("$value",
             style: TextStyle(
               fontSize: 14,
+              fontWeight: FontWeight.w100,
+              color: Colors.grey
             )),
       ],
     );

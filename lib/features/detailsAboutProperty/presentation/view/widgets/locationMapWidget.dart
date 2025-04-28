@@ -6,6 +6,7 @@ import 'package:location/location.dart' as loc;
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:peron_project/core/helper/colors.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 // كلاس الخريطة المصغر للاستخدام في صفحة تفاصيل العقار
 class LocationMapWidget extends StatefulWidget {
@@ -17,7 +18,7 @@ class LocationMapWidget extends StatefulWidget {
   final double? propertyLongitude;
   final String? propertyTitle;
 
-  const LocationMapWidget({
+  LocationMapWidget({
     Key? key,
     required this.screenWidth,
     required this.padding,
@@ -177,6 +178,7 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
             style: TextStyle(
               fontSize: widget.fontSize,
               fontWeight: FontWeight.bold,
+              fontFamily: Fonts.primaryFontFamily,
             ),
           ),
         ),
@@ -239,6 +241,7 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
               style: TextStyle(
                 color: Colors.white,
                 fontSize: widget.smallFontSize,
+                fontFamily: Fonts.primaryFontFamily,
               ),
             ),
           ),
@@ -254,7 +257,7 @@ class SimpleMapScreen extends StatefulWidget {
   final double? propertyLongitude;
   final String? propertyTitle;
 
-  const SimpleMapScreen({
+  SimpleMapScreen({
     Key? key,
     this.propertyLatitude,
     this.propertyLongitude,
@@ -424,7 +427,10 @@ class _SimpleMapScreenState extends State<SimpleMapScreen> {
       appBar: AppBar(
         title: Text(
           widget.propertyTitle ?? "موقع العقار",
-          style: const TextStyle(fontSize: 16),
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: Fonts.primaryFontFamily,
+          ),
         ),
         backgroundColor: AppColors.primaryColor,
       ),

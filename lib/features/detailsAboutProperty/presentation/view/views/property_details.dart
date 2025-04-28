@@ -12,7 +12,6 @@ import 'package:peron_project/features/detailsAboutProperty/presentation/view/wi
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/recommendedProperties.dart';
 import '../widgets/reviewsSection.dart';
-import '../widgets/showLessButton.dart';
 
 class PropertyDetailScreen extends StatefulWidget {
   const PropertyDetailScreen({Key? key}) : super(key: key);
@@ -181,12 +180,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                       smallFontSize: smallFontSize,
                     ),
 
-                    ShowLessButton(
-                      standardPadding: standardPadding,
-                      smallPadding: smallPadding,
-                      smallFontSize: smallFontSize,
-                      toggleExtendedDetails: _toggleExtendedDetails,
-                    ),
+                   
                   ],
                 ],
               ),

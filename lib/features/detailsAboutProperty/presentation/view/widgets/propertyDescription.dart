@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class PropertyDescription extends StatelessWidget {
   final double standardPadding;
@@ -37,6 +38,7 @@ class PropertyDescription extends StatelessWidget {
               style: TextStyle(
                 fontSize: regularFontSize * 1.2,
                 fontWeight: FontWeight.bold,
+                fontFamily: Fonts.primaryFontFamily,
               ),
               textAlign: TextAlign.right,
             ),
@@ -50,6 +52,7 @@ class PropertyDescription extends StatelessWidget {
               color: Colors.grey[700],
               height: 1.5,
               fontSize: regularFontSize,
+              fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,
@@ -70,9 +73,10 @@ class PropertyDescription extends StatelessWidget {
                 child: Text(
                   'اقرأ المزيد...',
                   style: TextStyle(
-                    color: const Color(0xff0F7757),
+                    color: Color(0xff0F7757),
                     fontWeight: FontWeight.bold,
                     fontSize: smallFontSize,
+                    fontFamily: Fonts.primaryFontFamily,
                   ),
                 ),
               ),

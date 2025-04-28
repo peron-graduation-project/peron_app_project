@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/ratingDialog.dart';
 
 import '../views/review.dart';
@@ -45,6 +46,7 @@ class PropertyHeader extends StatelessWidget {
                     fontSize: titleFontSize,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
+                    fontFamily: Fonts.primaryFontFamily,
                   ),
                   textAlign: TextAlign.right,
                 ),
@@ -56,8 +58,9 @@ class PropertyHeader extends StatelessWidget {
                       "2500",
                       style: TextStyle(
                         fontSize: priceFontSize,
-                        color: const Color(0xff0F7757),
+                        color: Color(0xff0F7757),
                         fontWeight: FontWeight.w900,
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
                     SizedBox(width: smallPadding * 0.2),
@@ -65,8 +68,9 @@ class PropertyHeader extends StatelessWidget {
                       "ج.م",
                       style: TextStyle(
                         fontSize: priceFontSize,
-                        color: const Color(0xff0F7757),
+                        color: Color(0xff0F7757),
                         fontWeight: FontWeight.w900,
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
                   ],
@@ -78,7 +82,7 @@ class PropertyHeader extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.star,
-                      color: const Color(0xff0F7757),
+                      color: Color(0xff0F7757),
                       size: smallIconSize,
                     ),
                     SizedBox(width: smallPadding * 0.8),
@@ -88,6 +92,7 @@ class PropertyHeader extends StatelessWidget {
                         fontSize: regularFontSize,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
                     Row(
@@ -96,7 +101,8 @@ class PropertyHeader extends StatelessWidget {
                           " (",
                           style: TextStyle(
                             fontSize: smallFontSize,
-                            color: const Color(0xff565656),
+                            color: Color(0xff565656),
+                            fontFamily: Fonts.primaryFontFamily,
                           ),
                         ),
                         GestureDetector(
@@ -111,8 +117,9 @@ class PropertyHeader extends StatelessWidget {
                             " تقييم ",
                             style: TextStyle(
                               fontSize: smallFontSize,
-                              color: const Color(0xff565656),
+                              color: Color(0xff565656),
                               decoration: TextDecoration.underline,
+                              fontFamily: Fonts.primaryFontFamily,
                             ),
                           ),
                         ),
@@ -129,8 +136,9 @@ class PropertyHeader extends StatelessWidget {
                             " 25",
                             style: TextStyle(
                               fontSize: smallFontSize,
-                              color: const Color(0xff565656),
+                              color: Color(0xff565656),
                               decoration: TextDecoration.underline,
+                              fontFamily: Fonts.primaryFontFamily,
                             ),
                           ),
                         ),
@@ -138,7 +146,8 @@ class PropertyHeader extends StatelessWidget {
                           " ) ",
                           style: TextStyle(
                             fontSize: smallFontSize,
-                            color: const Color(0xff565656),
+                            color: Color(0xff565656),
+                            fontFamily: Fonts.primaryFontFamily,
                           ),
                         ),
                       ],
@@ -152,7 +161,7 @@ class PropertyHeader extends StatelessWidget {
             width: smallCircleSize,
             height: smallCircleSize,
             decoration: BoxDecoration(
-              color: const Color(0xff0F7757),
+              color: Color(0xff0F7757),
               shape: BoxShape.circle,
             ),
             child: Icon(

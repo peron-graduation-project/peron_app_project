@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class ContactButtons extends StatelessWidget {
   final double standardPadding;
@@ -8,7 +9,7 @@ class ContactButtons extends StatelessWidget {
   final double iconSize;
   final double screenHeight;
 
-  const ContactButtons({
+  ContactButtons({
     Key? key,
     required this.standardPadding,
     required this.regularFontSize,
@@ -54,6 +55,7 @@ class ContactButtons extends StatelessWidget {
                           fontSize: regularFontSize,
                           color: Colors.black54,
                           fontWeight: FontWeight.bold,
+                          fontFamily: Fonts.primaryFontFamily,
                         ),
                       ),
                       SizedBox(width: smallPadding),
@@ -86,6 +88,7 @@ class ContactButtons extends StatelessWidget {
                           fontSize: regularFontSize,
                           color: Colors.black54,
                           fontWeight: FontWeight.bold,
+                          fontFamily: Fonts.primaryFontFamily,
                         ),
                       ),
                       SizedBox(width: smallPadding),

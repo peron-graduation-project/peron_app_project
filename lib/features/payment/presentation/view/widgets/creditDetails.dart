@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class CreditDetails extends StatelessWidget {
   const CreditDetails({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class CreditDetails extends StatelessWidget {
       child: Stack(
         children: [
           // Bank Name
-          const Positioned(
+          Positioned(
             top: 12,
             left: 12,
             child: Text(
@@ -27,11 +28,12 @@ class CreditDetails extends StatelessWidget {
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+                fontFamily: Fonts.primaryFontFamily,
               ),
             ),
           ),
           // Visa Logo
-          const Positioned(
+          Positioned(
             top: 11,
             right: 17,
             child: Text(
@@ -41,6 +43,7 @@ class CreditDetails extends StatelessWidget {
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
+                fontFamily: Fonts.primaryFontFamily,
               ),
             ),
           ),
@@ -51,7 +54,7 @@ class CreditDetails extends StatelessWidget {
               child: Image.asset("assets/images/Chip+wireless.png")),
 
           // Card Number
-          const Positioned(
+          Positioned(
             top: 140,
             left: 20,
             child: Text(
@@ -60,11 +63,12 @@ class CreditDetails extends StatelessWidget {
                 color: Colors.white,
                 fontSize: 16,
                 letterSpacing: 2,
+                fontFamily: Fonts.primaryFontFamily,
               ),
             ),
           ),
           // Cardholder Name and Expiry
-          const Positioned(
+          Positioned(
             bottom: 20,
             left: 20,
             child: Row(
@@ -74,6 +78,7 @@ class CreditDetails extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,
+                    fontFamily: Fonts.primaryFontFamily,
                   ),
                 ),
                 SizedBox(
@@ -84,6 +89,7 @@ class CreditDetails extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,
+                    fontFamily: Fonts.primaryFontFamily,
                   ),
                 ),
               ],

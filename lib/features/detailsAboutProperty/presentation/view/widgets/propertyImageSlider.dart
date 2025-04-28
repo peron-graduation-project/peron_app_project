@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/features/home/presentation/view/views/home_view_body.dart';
 
 import 'curvedtopclipper.dart';
 
@@ -89,11 +90,16 @@ class PropertyImageSlider extends StatelessWidget {
             child: IconButton(
               padding: EdgeInsets.zero,
               icon: Icon(
-                Icons.chevron_right,
+                Icons.chevron_left,
                 color: Colors.grey[800],
                 size: 25,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeViewBody()),
+            );
+              },
             ),
           ),
         ),
