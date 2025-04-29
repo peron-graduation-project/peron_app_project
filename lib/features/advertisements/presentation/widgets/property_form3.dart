@@ -10,7 +10,7 @@ import 'package:peron_project/core/widgets/custom_button.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_alert_dialog.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_dropdown.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_multi_select_dropdown.dart';
-import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field.dart';
+import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field2.dart';
 import 'package:peron_project/features/payment/presentation/view/views/paymentMethods.dart';
 
 class PropertyForm3 extends StatefulWidget {
