@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/myAds/presentation/view/widgets/successDialog.dart';
+import 'package:peron_project/features/payment/presentation/view/widgets/successPaymentDialog.dart';
 
 class VerificationCodeScreen extends StatefulWidget {
   const VerificationCodeScreen({Key? key}) : super(key: key);
@@ -79,7 +81,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   }
 
   void _showSuccessDialog() {
-    SuccessDialog.show(
+    SuccessPaymentDialog.show(
       context: context,
       message: 'تم الدفع ونشر العقار بنجاح',
     );
@@ -105,24 +107,28 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios, // استخدم سهم يتجه لليمين للرجوع في واجهة RTL
+            color: Colors.black, 
+            size: 18
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        // بدون أي أزرار في جانب الأيسر (actions)
+        actions: const [],
+        title: Text(
           'كود التحقق',
           style: TextStyle(
             color: Colors.black,
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            fontFamily: Fonts.primaryFontFamily,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_forward_ios,
-                color: Colors.black, size: 18),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-        leading: const SizedBox(),
+       
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -131,12 +137,14 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
           children: [
             Divider(height: 1, color: Colors.grey[200]),
             const SizedBox(height: 20),
-            const Center(
+            Center(
               child: Text(
                 'قم بإدخال رمز التحقق المرسل إليك',
                 style: TextStyle(
                   fontSize: 16,
+                  color: const Color.fromARGB(255, 120, 120, 120),
                   fontWeight: FontWeight.w500,
+                  fontFamily: Fonts.primaryFontFamily,
                 ),
               ),
             ),
@@ -154,6 +162,9 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
                     maxLength: 1,
+                    style: TextStyle(
+                      fontFamily: Fonts.primaryFontFamily,
+                    ),
                     decoration: InputDecoration(
                       counterText: '',
                       enabledBorder: OutlineInputBorder(
@@ -187,9 +198,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
               children: [
                 Text(
                   '${_remainingSeconds.toString().padLeft(2, '0')}:00',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     color: Colors.black54,
+                    fontFamily: Fonts.primaryFontFamily,
                   ),
                 ),
                 GestureDetector(
@@ -202,6 +214,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                           ? const Color(0xFF0F7757)
                           : Colors.grey,
                       fontWeight: FontWeight.w500,
+                      fontFamily: Fonts.primaryFontFamily,
                     ),
                   ),
                 ),
@@ -218,12 +231,13 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Text(
+              child: Text(
                 'تحقق',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: Fonts.primaryFontFamily,
                 ),
               ),
             ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final bool isNumeric;
@@ -9,7 +10,7 @@ class CustomTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final String? Function(String?)? validator;
 
-  const CustomTextField({
+  const CustomField({
     Key? key,
     required this.controller,
     required this.labelText,
@@ -32,9 +33,15 @@ class CustomTextField extends StatelessWidget {
             ]
           : null,
       onChanged: onChanged,
+      style: TextStyle(
+        fontFamily: Fonts.primaryFontFamily,
+      ),
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: const TextStyle(color: Colors.grey),
+        labelStyle: TextStyle(
+          color: Colors.grey,
+          fontFamily: Fonts.primaryFontFamily,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: Colors.grey[300]!),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/textFeatureItem.dart';
 
 class PropertyFeatures extends StatelessWidget {
@@ -27,10 +28,11 @@ class PropertyFeatures extends StatelessWidget {
             style: TextStyle(
               fontSize: fontSize * 1.2,
               fontWeight: FontWeight.bold,
+              fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,
           ),
-          const SizedBox(height: 15),
+          SizedBox(height: 15),
           TextFeatureItem(text: 'أمن وحراسة 24 ساعة', fontSize: smallFontSize),
           TextFeatureItem(text: 'مناظر طبيعية', fontSize: smallFontSize),
           TextFeatureItem(

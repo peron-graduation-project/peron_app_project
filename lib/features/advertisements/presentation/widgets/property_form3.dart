@@ -10,7 +10,8 @@ import 'package:peron_project/core/widgets/custom_button.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_alert_dialog.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_dropdown.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_multi_select_dropdown.dart';
-import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field.dart'; 
+import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field.dart';
+import 'package:peron_project/features/payment/presentation/view/views/paymentMethods.dart';
 
 class PropertyForm3 extends StatefulWidget {
   const PropertyForm3({super.key});
@@ -23,7 +24,14 @@ class _PropertyForm3State extends State<PropertyForm3> {
   File? _selectedImage;
 
   final List<String> statusOptions = ['مجهزه', 'مجهزه جزئيا', 'غير مجهزه'];
-  final List<String> featuresOptions = ['مصعد', 'برج', 'بلكونه', 'واي فاي', 'تدفئه مركزيه', 'حراسه/امان'];
+  final List<String> featuresOptions = [
+    'مصعد',
+    'برج',
+    'بلكونه',
+    'واي فاي',
+    'تدفئه مركزيه',
+    'حراسه/امان',
+  ];
 
   String? selectedStatus;
   List<String> selectedFeatures = [];
@@ -45,19 +53,23 @@ class _PropertyForm3State extends State<PropertyForm3> {
       context: context,
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.4),
-      builder: (context) => CustomAlertDialog(
-        iconPath: 'assets/images/alert.svg',
-        title: 'لنشر الإعلان يجب الدفع',
-        description: 'قم بالدفع لنشر اعلانك',
-        confirmText: 'دفع',
-        cancelText: 'إلغاء',
-        onConfirm: () {
-          Navigator.pop(context);
-        },
-        onCancel: () {
-          Navigator.pop(context);
-        },
-      ),
+      builder:
+          (context) => CustomAlertDialog(
+            iconPath: 'assets/images/alert.svg',
+            title: 'لنشر الإعلان يجب الدفع',
+            description: 'قم بالدفع لنشر اعلانك',
+            confirmText: 'دفع',
+            cancelText: 'إلغاء',
+            onConfirm: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PaymentMethodScreen()),
+              );
+            },
+            onCancel: () {
+              Navigator.pop(context);
+            },
+          ),
     );
   }
 
@@ -109,9 +121,7 @@ class _PropertyForm3State extends State<PropertyForm3> {
 
           buildLabel('عنوان العقار', screenWidth),
           const SizedBox(height: 8),
-          CustomTextField(
-            controller: addressController,
-          ),
+          CustomTextField(controller: addressController),
 
           buildLabel('مواصفات أخرى', screenWidth),
           const SizedBox(height: 8),
@@ -143,89 +153,96 @@ class _PropertyForm3State extends State<PropertyForm3> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: _selectedImage == null
-                    ? Center(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                Images.uploadIcon,
-                                width: iconSize,
-                                height: iconSize,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(height: screenHeight * 0.015),
-                              Text(
-                                'قم بسحب الصوره هنا',
-                                style: TextStyle(
-                                  fontFamily: 'Tajawal',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: textFontSize,
-                                  height: 1.0,
-                                  color: Colors.grey.shade600,
+                child:
+                    _selectedImage == null
+                        ? Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.05,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  Images.uploadIcon,
+                                  width: iconSize,
+                                  height: iconSize,
+                                  color: Colors.grey,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                'او',
-                                style: TextStyle(
-                                  fontFamily: 'Tajawal',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: textFontSize,
-                                  height: 1.0,
-                                  color: Colors.grey.shade600,
+                                SizedBox(height: screenHeight * 0.015),
+                                Text(
+                                  'قم بسحب الصوره هنا',
+                                  style: TextStyle(
+                                    fontFamily: 'Tajawal',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: textFontSize,
+                                    height: 1.0,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                'باختيار ملف',
-                                style: TextStyle(
-                                  fontFamily: 'Tajawal',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: textFontSize,
-                                  height: 1.0,
-                                  color: Colors.grey.shade600,
+                                Text(
+                                  'او',
+                                  style: TextStyle(
+                                    fontFamily: 'Tajawal',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: textFontSize,
+                                    height: 1.0,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: screenHeight * 0.015),
-                              SizedBox(
-                                width: screenWidth * 0.314,
-                                height: screenHeight * 0.06,
-                                child: TextButton(
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.all(screenWidth * 0.025),
-                                    side: BorderSide(color: AppColors.primaryColor),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
+                                Text(
+                                  'باختيار ملف',
+                                  style: TextStyle(
+                                    fontFamily: 'Tajawal',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: textFontSize,
+                                    height: 1.0,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(height: screenHeight * 0.015),
+                                SizedBox(
+                                  width: screenWidth * 0.314,
+                                  height: screenHeight * 0.06,
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.all(
+                                        screenWidth * 0.025,
+                                      ),
+                                      side: BorderSide(
+                                        color: AppColors.primaryColor,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    onPressed: _pickImage,
+                                    child: Text(
+                                      'تصفح',
+                                      style: TextStyle(
+                                        fontFamily: Fonts.primaryFontFamily,
+                                        fontSize: screenWidth * 0.037,
+                                        color: AppColors.primaryColor,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: _pickImage,
-                                  child: Text(
-                                    'تصفح',
-                                    style: TextStyle(
-                                      fontFamily: Fonts.primaryFontFamily,
-                                      fontSize: screenWidth * 0.037,
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          ),
+                        )
+                        : ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.file(
+                            _selectedImage!,
+                            width: boxWidth,
+                            height: boxHeight,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      )
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.file(
-                          _selectedImage!,
-                          width: boxWidth,
-                          height: boxHeight,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
               ),
             ),
           ),

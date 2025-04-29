@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class RecommendedProperties extends StatefulWidget {
   final double screenWidth;
@@ -45,9 +46,10 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
                 child: Text(
                   'عرض الكل',
                   style: TextStyle(
-                    color: const Color(0xff0F7757),
+                    color: Color(0xff0F7757),
                     fontWeight: FontWeight.bold,
                     fontSize: widget.smallFontSize,
+                    fontFamily: Fonts.primaryFontFamily,
                   ),
                 ),
               ),
@@ -56,13 +58,14 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
                 style: TextStyle(
                   fontSize: widget.fontSize * 1.2,
                   fontWeight: FontWeight.bold,
+                  fontFamily: Fonts.primaryFontFamily,
                 ),
                 textAlign: TextAlign.right,
               ),
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         SizedBox(
           height: 180, // Further reduced height
           child: ListView(
@@ -78,7 +81,7 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
                 location: 'توريل',
                 price: '2200.00',
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               _buildPropertyCard(
                 context,
                 index: 1,
@@ -87,7 +90,7 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
                 location: 'توريل',
                 price: '2200.00',
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               _buildPropertyCard(
                 context,
                 index: 2,
@@ -122,7 +125,7 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
             color: Colors.grey.withOpacity(0.2),
             spreadRadius: 1,
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -131,15 +134,14 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
         children: [
           // Property Image with Favorite button
           Container(
-            margin: const EdgeInsets.all(
-                8), // Increased space between image and border
+            margin: EdgeInsets.all(8),
             child: Stack(
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
                     imagePath,
-                    height: 90, // Reduced image height more
+                    height: 90,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
@@ -161,7 +163,7 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
           ),
           // Property Details
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -174,17 +176,18 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
                       style: TextStyle(
                         fontSize: widget.smallFontSize * 0.85,
                         fontWeight: FontWeight.bold,
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    const Icon(
+                    SizedBox(width: 4),
+                    Icon(
                       Icons.home,
                       color: Colors.grey,
                       size: 14,
                     ),
                   ],
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 // Location
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -194,17 +197,18 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
                       style: TextStyle(
                         fontSize: widget.smallFontSize * 0.75,
                         color: Colors.grey[600],
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    const Icon(
+                    SizedBox(width: 4),
+                    Icon(
                       Icons.location_on,
                       color: Colors.grey,
                       size: 14,
                     ),
                   ],
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 // Price
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -214,7 +218,8 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
                       style: TextStyle(
                         fontSize: widget.smallFontSize * 0.75,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xff0F7757),
+                        color: Color(0xff0F7757),
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
                     Text(
@@ -222,19 +227,21 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
                       style: TextStyle(
                         fontSize: widget.smallFontSize * 0.75,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xff0F7757),
+                        color: Color(0xff0F7757),
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4),
                     Text(
                       'السعر:',
                       style: TextStyle(
                         fontSize: widget.smallFontSize * 0.75,
                         color: Colors.grey[600],
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    const Icon(
+                    SizedBox(width: 4),
+                    Icon(
                       Icons.monetization_on,
                       color: Colors.grey,
                       size: 14,

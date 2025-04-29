@@ -89,7 +89,7 @@ class AddPropertyScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
+      ), 
     );
   }
 }

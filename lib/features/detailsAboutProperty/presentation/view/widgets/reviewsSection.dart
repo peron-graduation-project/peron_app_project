@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/views/review.dart';
 
 class ReviewsSection extends StatelessWidget {
@@ -39,9 +40,10 @@ class ReviewsSection extends StatelessWidget {
                 child: Text(
                   'عرض الكل',
                   style: TextStyle(
-                    color: const Color(0xff0F7757),
+                    color: Color(0xff0F7757),
                     fontWeight: FontWeight.bold,
                     fontSize: smallFontSize,
+                    fontFamily: Fonts.primaryFontFamily,
                   ),
                 ),
               ),
@@ -51,12 +53,13 @@ class ReviewsSection extends StatelessWidget {
                 style: TextStyle(
                   fontSize: fontSize * 1.2,
                   fontWeight: FontWeight.bold,
+                  fontFamily: Fonts.primaryFontFamily,
                 ),
                 textAlign: TextAlign.right,
               ),
             ],
           ),
-          const SizedBox(height: 15),
+          SizedBox(height: 15),
           _buildReviewItem(
             'Eid Said',
             5.0,
@@ -94,7 +97,7 @@ class ReviewsSection extends StatelessWidget {
                 radius: fontSize,
                 backgroundImage: AssetImage(imagePath),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               // Content column
               Expanded(
                 child: Column(
@@ -106,10 +109,11 @@ class ReviewsSection extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: fontSize,
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                       textAlign: TextAlign.right,
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     // Stars row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -117,17 +121,18 @@ class ReviewsSection extends StatelessWidget {
                         5,
                         (index) => Icon(
                           Icons.star,
-                          color: const Color(0xff0F7757),
+                          color: Color(0xff0F7757),
                           size: smallFontSize * 1.3,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6),
                     // Comment text
                     Text(
                       comment,
                       style: TextStyle(
                         fontSize: smallFontSize,
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                       textAlign: TextAlign.right,
                     ),
@@ -145,6 +150,7 @@ class ReviewsSection extends StatelessWidget {
               style: TextStyle(
                 color: Colors.grey[600],
                 fontSize: smallFontSize * 0.9,
+                fontFamily: Fonts.primaryFontFamily,
               ),
               textAlign: TextAlign.left,
             ),

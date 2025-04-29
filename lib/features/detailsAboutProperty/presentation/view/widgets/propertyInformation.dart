@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class PropertyInformation extends StatelessWidget {
   final double screenWidth;
@@ -24,24 +25,27 @@ class PropertyInformation extends StatelessWidget {
             style: TextStyle(
               color: Colors.grey[700],
               fontSize: fontSize,
+              fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Text(
             'الطابق: الثالث',
             style: TextStyle(
               color: Colors.grey[700],
               fontSize: fontSize,
+              fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Text(
             'الموقع: على الطريق الدائري وبجوار المسجد الكبير',
             style: TextStyle(
               color: Colors.grey[700],
               fontSize: fontSize,
+              fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,
           ),

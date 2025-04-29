@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/myAds/presentation/view/widgets/successDialog.dart';
-import 'package:peron_project/features/payment/presentation/view/widgets/creditDetails.dart';
+import 'package:peron_project/features/payment/presentation/view/widgets/creditdetails.dart';
+import 'package:peron_project/features/payment/presentation/view/widgets/customField.dart';
+import 'package:peron_project/features/payment/presentation/view/widgets/successPaymentDialog.dart';
+
 
 class CreditCardPaymentScreen extends StatefulWidget {
   const CreditCardPaymentScreen({Key? key}) : super(key: key);
@@ -29,14 +32,17 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // استخدام MediaQuery للحصول على أبعاد الشاشة
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
     final double screenHeight = screenSize.height;
 
-    final double horizontalPadding = screenWidth * 0.05;
-    final double verticalSpacing = screenHeight * 0.02; 
+    // تحديد حجم الهوامش بناءً على حجم الشاشة
+    final double horizontalPadding = screenWidth * 0.05; // 5% من عرض الشاشة
+    final double verticalSpacing = screenHeight * 0.02; // 2% من ارتفاع الشاشة
 
-    final double titleFontSize = screenWidth * 0.045; 
+    // تعديل حجم الخط بناءً على حجم الشاشة
+    final double titleFontSize = screenWidth * 0.045; // يتكيف مع عرض الشاشة
     final double labelFontSize = screenWidth * 0.04;
     final double buttonFontSize = screenWidth * 0.04;
 
@@ -46,24 +52,27 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black, 
+            size: 18
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: const [],
         title: Text(
           'اضافة بطاقة',
           style: TextStyle(
             color: Colors.black,
             fontSize: titleFontSize,
             fontWeight: FontWeight.bold,
+            fontFamily: Fonts.primaryFontFamily,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_forward_ios,
-                color: Colors.black, size: 18),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-        leading: const SizedBox(),
+        
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
@@ -84,33 +93,35 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                     SizedBox(height: verticalSpacing),
 
                     SizedBox(
-                      height: screenHeight * 0.25,
+                      height: screenHeight * 0.25, 
                       child: CreditDetails(),
                     ),
 
                     SizedBox(height: verticalSpacing),
 
+                    // Card Details Text
                     Text(
                       'بيانات البطاقة',
                       style: TextStyle(
                         fontSize: labelFontSize,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black54,
+                        color: const Color.fromARGB(137, 0, 0, 0),
+                        fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
 
                     SizedBox(height: verticalSpacing * 0.75),
 
                     // Cardholder Name Field
-                    CustomTextField(
+                    CustomField(
                       controller: _cardholderNameController,
-                      labelText: 'اسم صاحب البطاقة', isNumeric: false, maxLength: 16,
+                      labelText: 'اسم صاحب البطاقة',
                     ),
 
                     SizedBox(height: verticalSpacing * 0.75),
 
                     // Card Number Field
-                    CustomTextField(
+                    CustomField(
                       controller: _cardNumberController,
                       labelText: 'رقم البطاقة',
                       isNumeric: true,
@@ -123,16 +134,16 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: CustomTextField(
+                          child: CustomField(
                             controller: _expiryDateController,
                             labelText: 'رقم الصلاحية',
                             isNumeric: true,
                             maxLength: 4,
                           ),
                         ),
-                        SizedBox(width: screenWidth * 0.05), // 5% من عرض الشاشة
+                        SizedBox(width: screenWidth * 0.05),
                         Expanded(
-                          child: CustomTextField(
+                          child: CustomField(
                             controller: _cvvController,
                             labelText: 'CVV',
                             isNumeric: true,
@@ -146,10 +157,10 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
 
                     // Pay Button
                     SizedBox(
-                      height: screenHeight * 0.065, // 6.5% من ارتفاع الشاشة
+                      height: screenHeight * 0.065, 
                       child: ElevatedButton(
                         onPressed: () {
-                          SuccessDialog.show(
+                          SuccessPaymentDialog.show(
                             context: context,
                             message: 'تم الدفع ونشر العقار بنجاح',
                           );
@@ -174,6 +185,7 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                                     color: Colors.white,
                                     fontSize: buttonFontSize,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: Fonts.primaryFontFamily,
                                   ),
                                 ),
                                 Text(
@@ -182,6 +194,7 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                                     color: Colors.white,
                                     fontSize: buttonFontSize,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: Fonts.primaryFontFamily,
                                   ),
                                 ),
                                 Text(
@@ -190,6 +203,7 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                                     color: Colors.white,
                                     fontSize: buttonFontSize,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: Fonts.primaryFontFamily,
                                   ),
                                 ),
                                 Text(
@@ -198,6 +212,7 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
                                     color: Colors.white,
                                     fontSize: buttonFontSize,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: Fonts.primaryFontFamily,
                                   ),
                                 ),
                               ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/textFeatureItem.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class PropertyComponents extends StatelessWidget {
   final double screenWidth;
@@ -7,7 +8,7 @@ class PropertyComponents extends StatelessWidget {
   final double fontSize;
   final double smallFontSize;
 
-  const PropertyComponents({
+  PropertyComponents({
     Key? key,
     required this.screenWidth,
     required this.padding,
@@ -27,10 +28,11 @@ class PropertyComponents extends StatelessWidget {
             style: TextStyle(
               fontSize: fontSize * 1.2,
               fontWeight: FontWeight.bold,
+              fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,
           ),
-          const SizedBox(height: 15),
+          SizedBox(height: 15),
           TextFeatureItem(text: 'غرف: 3', fontSize: smallFontSize),
           TextFeatureItem(text: 'حمام: 2', fontSize: smallFontSize),
           TextFeatureItem(text: 'مطبخ', fontSize: smallFontSize),

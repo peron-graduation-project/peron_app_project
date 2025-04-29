@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:peron_project/features/payment/presentation/view/views/creditCard.dart';
-import 'package:peron_project/features/payment/presentation/view/widgets/emptyScreen.dart';
+import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/features/advertisements/presentation/widgets/property_form3.dart';
 import 'package:peron_project/features/payment/presentation/view/widgets/paymentMethodItem.dart';
 import 'continuePayment.dart';
 import 'creditcard.dart';
@@ -16,10 +16,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   int _selectedPaymentMethod = 1;
 
   void _navigateToPayPalScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const EmptyScreen()),
-    );
+    
   }
 
   void _navigateToVisaScreen() {
@@ -50,24 +47,30 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios, // استخدم سهم يتجه لليمين للرجوع في واجهة RTL
+            color: Colors.black, 
+            size: 18
+          ),
+          onPressed: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => PropertyForm3()),
+            // );
+          },
+        ),
+        // بدون أي أزرار في جانب الأيسر (actions)
+        actions: const [], 
+        title: Text(
           'طريقة الدفع',
           style: TextStyle(
             color: Colors.black,
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            fontFamily: Fonts.primaryFontFamily,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_forward_ios,
-                color: Colors.black, size: 18),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-        leading: const SizedBox(),
       ),
       body: Column(
         children: [
@@ -77,17 +80,17 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 const EdgeInsets.only(top: 16, bottom: 16, right: 16, left: 16),
             child: Align(
               alignment: Alignment.centerRight,
-              child: const Text(
+              child: Text(
                 'اختر الطريقة التي تفضلها لإستكمال عملية الدفع',
                 textDirection: TextDirection.rtl,
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: Colors.grey[700],
                   fontSize: 14,
+                  fontFamily: Fonts.primaryFontFamily,
                 ),
               ),
             ),
           ),
-          // Payment methods list using the new PaymentMethodItem widget
           PaymentMethodItem(
             index: 0,
             selectedIndex: _selectedPaymentMethod,
@@ -99,7 +102,6 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           PaymentMethodItem(
             index: 1,
             selectedIndex: _selectedPaymentMethod,
-            title: 'VISA',
             cardNumber: '•••• •••• •••• 5567',
             icon: 'assets/images/visa.png',
             isCustomIcon: true,
@@ -137,12 +139,13 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Text(
+              child: Text(
                 'استكمال',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
+                  fontFamily: Fonts.primaryFontFamily,
                 ),
               ),
             ),
