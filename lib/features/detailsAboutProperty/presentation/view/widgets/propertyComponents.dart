@@ -21,13 +21,14 @@ class PropertyComponents extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(padding),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'مكونات الشقة',
             style: TextStyle(
+              color: Colors.black,
               fontSize: fontSize * 1.2,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,

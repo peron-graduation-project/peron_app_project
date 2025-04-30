@@ -25,21 +25,23 @@ class FeatureItem extends StatelessWidget {
         vertical: featurePadding * 0.65,
       ),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]!),
+        border: Border.all(color: const Color.fromARGB(255, 87, 86, 86)!),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
+                    Icon(icon, size: featureIconSize, color: Colors.grey),
+          SizedBox(width: featurePadding * 0.3),
+
           Text(
             text,
             style: TextStyle(
-              fontWeight: FontWeight.bold,
+              // fontWeight: FontWeight.bold,
+              color: const Color.fromARGB(255, 126, 126, 126),
               fontSize: featureFontSize,
               fontFamily: Fonts.primaryFontFamily,
             ),
           ),
-          SizedBox(width: featurePadding * 0.3),
-          Icon(icon, size: featureIconSize, color: Colors.grey),
         ],
       ),
     );

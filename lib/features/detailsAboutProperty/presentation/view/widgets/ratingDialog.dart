@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 
 class RatingDialog extends StatefulWidget {
@@ -14,6 +16,7 @@ class _RatingDialogState extends State<RatingDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Directionality(
         textDirection: TextDirection.rtl,
@@ -48,6 +51,7 @@ class _RatingDialogState extends State<RatingDialog> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontFamily: Fonts.primaryFontFamily,
                 ),
@@ -58,6 +62,7 @@ class _RatingDialogState extends State<RatingDialog> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18, 
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontFamily: Fonts.primaryFontFamily,
                 ),
@@ -72,10 +77,16 @@ class _RatingDialogState extends State<RatingDialog> {
                         selectedRating = index + 1;
                       });
                     },
-                    child: Icon(
-                      selectedRating > index ? Icons.star : Icons.star_border,
-                      color: Color(0xFF006A4E),
-                      size: 30,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: SvgPicture.asset(
+                        selectedRating > index 
+                          ? "assets/icons/star.svg" 
+                          : "assets/icons/starborder.svg",
+                        width: 30,
+                        height: 30,
+                        color: Color(0xFF006A4E),
+                      ),
                     ),
                   );
                 }),

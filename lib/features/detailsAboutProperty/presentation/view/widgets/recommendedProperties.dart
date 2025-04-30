@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 
 class RecommendedProperties extends StatefulWidget {
@@ -36,86 +37,91 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Divider(thickness: 0.3),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: widget.padding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Text(
+                'مقترح به لك',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: Fonts.primaryFontFamily,
+                ),
+                textAlign: TextAlign.right,
+              ),
               TextButton(
                 onPressed: () {},
                 child: Text(
                   'عرض الكل',
                   style: TextStyle(
-                    color: Color(0xff0F7757),
-                    fontWeight: FontWeight.bold,
-                    fontSize: widget.smallFontSize,
+                    color: const Color(0xff0F7757),
                     fontFamily: Fonts.primaryFontFamily,
                   ),
                 ),
-              ),
-              Text(
-                'مقترح لك',
-                style: TextStyle(
-                  fontSize: widget.fontSize * 1.2,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Fonts.primaryFontFamily,
-                ),
-                textAlign: TextAlign.right,
               ),
             ],
           ),
         ),
         SizedBox(height: 12),
-        SizedBox(
-          height: 180, // Further reduced height
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            reverse: true, // RTL direction
-            padding: EdgeInsets.symmetric(horizontal: widget.padding),
-            children: [
-              _buildPropertyCard(
-                context,
-                index: 0,
-                imagePath: 'assets/images/appartment.jpg',
-                propertyType: 'شقة سكنية',
-                location: 'توريل',
-                price: '2200.00',
-              ),
-              SizedBox(width: 12),
-              _buildPropertyCard(
-                context,
-                index: 1,
-                imagePath: 'assets/images/appartment2.jpg',
-                propertyType: 'شقة سكنية',
-                location: 'توريل',
-                price: '2200.00',
-              ),
-              SizedBox(width: 12),
-              _buildPropertyCard(
-                context,
-                index: 2,
-                imagePath: 'assets/images/appartment3.jpg',
-                propertyType: 'شقة سكنية',
-                location: 'توريل',
-                price: '2200.00',
-              ),
-            ],
+        Directionality(
+          textDirection: TextDirection.rtl,
+          child: SizedBox(
+            height: 180,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              // تم إزالة reverse: true لجعل التمرير من اليمين لليسار
+              padding: EdgeInsets.symmetric(horizontal: widget.padding),
+              children: [
+                _buildPropertyCard(
+                  context,
+                  index: 0,
+                  imagePath: 'assets/images/appartment.jpg',
+                  propertyType: 'شقة سكنية',
+                  location: 'توريل',
+                  price: '2200.00',
+                ),
+                SizedBox(width: 12),
+                _buildPropertyCard(
+                  context,
+                  index: 1,
+                  imagePath: 'assets/images/appartment2.jpg',
+                  propertyType: 'شقة سكنية',
+                  location: 'توريل',
+                  price: '2200.00',
+                ),
+                SizedBox(width: 12),
+                _buildPropertyCard(
+                  context,
+                  index: 2,
+                  imagePath: 'assets/images/appartment3.jpg',
+                  propertyType: 'شقة سكنية',
+                  location: 'توريل',
+                  price: '2200.00',
+                ),
+              ],
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildPropertyCard(BuildContext context,
-      {required int index,
-      required String imagePath,
-      required String propertyType,
-      required String location,
-      required String price}) {
+  Widget _buildPropertyCard(
+    BuildContext context, {
+    required int index,
+    required String imagePath,
+    required String propertyType,
+    required String location,
+    required String price,
+  }) {
     bool isFavorite = _favoriteIndices.contains(index);
 
     return Container(
-      width: 140, // Smaller width for the card
+      width: 140,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -132,119 +138,128 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Property Image with Favorite button
-          Container(
-            margin: EdgeInsets.all(8),
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    imagePath,
-                    height: 90,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Positioned(
-                  top: 5,
-                  left: 5,
-                  child: GestureDetector(
-                    onTap: () => _toggleFavorite(index),
-                    child: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite ? Colors.red : Colors.white,
-                      size: 20,
+          Padding(
+            padding: EdgeInsets.only(top: 12),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 8),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      imagePath,
+                      height: 90,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                ),
-              ],
+                  Positioned(
+                    top: 5,
+                    left: 5,
+                    child: GestureDetector(
+                      onTap: () => _toggleFavorite(index),
+                      child: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: isFavorite ? Colors.red : Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          // Property Details
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                // Property Type
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    Icon(Icons.home, color: Colors.grey, size: 14),
+                    SizedBox(width: 4),
                     Text(
-                      propertyType,
+                      "النوع",
                       style: TextStyle(
-                        fontSize: widget.smallFontSize * 0.85,
+                        fontSize: widget.smallFontSize * 0.75,
                         fontWeight: FontWeight.bold,
+                        color: const Color.fromARGB(255, 225, 223, 223),
                         fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
                     SizedBox(width: 4),
-                    Icon(
-                      Icons.home,
-                      color: Colors.grey,
-                      size: 14,
+                    Text(
+                      propertyType,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: widget.smallFontSize * 0.85,
+                        fontWeight: FontWeight.normal,
+                        fontFamily: Fonts.primaryFontFamily,
+                      ),
                     ),
                   ],
                 ),
                 SizedBox(height: 2),
-                // Location
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    Icon(Icons.location_on, color: Colors.grey, size: 14),
+                    Text(
+                      "الموقع",
+                      style: TextStyle(
+                        fontSize: widget.smallFontSize * 0.75,
+                        fontWeight: FontWeight.bold,
+                        color: const Color.fromARGB(255, 225, 223, 223),
+                        fontFamily: Fonts.primaryFontFamily,
+                      ),
+                    ),
+                    SizedBox(width: 4),
                     Text(
                       location,
                       style: TextStyle(
                         fontSize: widget.smallFontSize * 0.75,
-                        color: Colors.grey[600],
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
                         fontFamily: Fonts.primaryFontFamily,
                       ),
-                    ),
-                    SizedBox(width: 4),
-                    Icon(
-                      Icons.location_on,
-                      color: Colors.grey,
-                      size: 14,
                     ),
                   ],
                 ),
                 SizedBox(height: 2),
-                // Price
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      'ج.م',
-                      style: TextStyle(
-                        fontSize: widget.smallFontSize * 0.75,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff0F7757),
-                        fontFamily: Fonts.primaryFontFamily,
-                      ),
-                    ),
-                    Text(
-                      price,
-                      style: TextStyle(
-                        fontSize: widget.smallFontSize * 0.75,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff0F7757),
-                        fontFamily: Fonts.primaryFontFamily,
-                      ),
-                    ),
+                    Icon(Icons.monetization_on, color: Colors.grey, size: 14),
                     SizedBox(width: 4),
                     Text(
                       'السعر:',
                       style: TextStyle(
                         fontSize: widget.smallFontSize * 0.75,
-                        color: Colors.grey[600],
+                        color: const Color.fromARGB(255, 225, 223, 223),
+                        fontWeight: FontWeight.normal,
                         fontFamily: Fonts.primaryFontFamily,
                       ),
                     ),
                     SizedBox(width: 4),
-                    Icon(
-                      Icons.monetization_on,
-                      color: Colors.grey,
-                      size: 14,
+                    Text(
+                      price,
+                      style: TextStyle(
+                        fontSize: widget.smallFontSize * 0.75,
+                        fontWeight: FontWeight.w200,
+                        color: Color(0xff0F7757),
+                        fontFamily: Fonts.primaryFontFamily,
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      'ج.م',
+                      style: TextStyle(
+                        fontSize: widget.smallFontSize * 0.75,
+                        fontWeight: FontWeight.w200,
+                        color: Color(0xff0F7757),
+                        fontFamily: Fonts.primaryFontFamily,
+                      ),
                     ),
                   ],
                 ),

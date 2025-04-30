@@ -78,8 +78,8 @@ class PropertyImageSlider extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: screenHeight * 0.05,
-          right: standardPadding,
+          top:  30,
+          right: 20,
           child: Container(
             width: smallCircleSize,
             height: smallCircleSize,

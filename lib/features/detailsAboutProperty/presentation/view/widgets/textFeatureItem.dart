@@ -30,7 +30,9 @@ class TextFeatureItem extends StatelessWidget {
             text,
             style: TextStyle(
               color: Colors.grey[700],
-              fontSize: fontSize,
+              height: 1.5,
+              fontWeight: FontWeight.w100,
+              fontSize: 17,
               fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,

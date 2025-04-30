@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/reviewsSection.dart';
 
 class ReviewsScreen extends StatefulWidget {
   const ReviewsScreen({Key? key}) : super(key: key);
@@ -109,6 +110,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 final review = _reviews[index];
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
+                  // استخدام بطاقة التقييم مباشرة بدلاً من استدعائها من كلاس آخر
                   child: _buildReviewCard(
                     name: review['username'],
                     rating: review['rating'].toDouble(),
@@ -128,7 +130,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     );
   }
 
-  // تصميم بطاقة التقييم مستوحى من ReviewsSection
+  // إعادة تعريف دالة بناء بطاقة التقييم في هذا الكلاس
   Widget _buildReviewCard({
     required String name,
     required double rating,
@@ -180,8 +182,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                       style: TextStyle(
                         fontSize: fontSize,
                         fontWeight: FontWeight.bold,
-                                    fontFamily: Fonts.primaryFontFamily,
-
+                        fontFamily: Fonts.primaryFontFamily,
                         color: Colors.black,
                       ),
                     ),
@@ -203,8 +204,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                     Text(
                       comment,
                       style: TextStyle(
-                                    fontFamily: Fonts.primaryFontFamily
-,
+                        fontFamily: Fonts.primaryFontFamily,
                         fontSize: fontSize * 0.9,
                         color: Colors.black87,
                       ),
@@ -224,8 +224,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               style: TextStyle(
                 color: Colors.grey[600],
                 fontSize: smallFontSize * 0.9,
-                            fontFamily: Fonts.primaryFontFamily
-
+                fontFamily: Fonts.primaryFontFamily
               ),
               textAlign: TextAlign.left,
             ),
@@ -264,8 +263,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                   border: InputBorder.none,
                   hintText: 'اكتب تعليق',
                   hintTextDirection: TextDirection.rtl,
-                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14,            fontFamily: Fonts.primaryFontFamily
-),
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14, fontFamily: Fonts.primaryFontFamily),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
               ),

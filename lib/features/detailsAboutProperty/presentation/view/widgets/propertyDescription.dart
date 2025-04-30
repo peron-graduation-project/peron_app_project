@@ -37,7 +37,8 @@ class PropertyDescription extends StatelessWidget {
               'وصف الشقة',
               style: TextStyle(
                 fontSize: regularFontSize * 1.2,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
                 fontFamily: Fonts.primaryFontFamily,
               ),
               textAlign: TextAlign.right,
@@ -47,11 +48,12 @@ class PropertyDescription extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: standardPadding),
           child: Text(
-            'النوع: شقة مميزة في موقع هادي وسكني راقي، تطل على شارع واسع. تتكون من 3 غرف نوم رئيسية، غرفتين حمام، مطبخ، ومغلقة كلياً في الدور الثالث في عمارة حديثة مزودة بأساسنسير. العمارة نظيفة وآمنة.\n\nالمساحة: مساحة واسعة تبلغ 150 م\n\nالتشطيب: سوبر لوكس',
+            'النوع: شقة مميزة في موقع هادي وسكني راقي، تطل على شارع واسع. تتكون من 3 غرف نوم رئيسية، غرفتين حمام، مطبخ، ومغلقة كلياً في الدور الثالث في عمارة حديثة مزودة بأساسنسير. العمارة نظيفة وآمنة.\nالمساحة: مساحة واسعة تبلغ 150 م\nالتشطيب: سوبر لوكس',
             style: TextStyle(
               color: Colors.grey[700],
               height: 1.5,
-              fontSize: regularFontSize,
+              fontWeight: FontWeight.normal,
+              fontSize: 17,
               fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,
