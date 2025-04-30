@@ -6,6 +6,7 @@ import 'package:peron_project/core/helper/media_query.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/navigator/routes_generator.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:peron_project/features/chatPot/presentation/view/views/chatPot_body_screen.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/views/property_details.dart';
 import 'package:peron_project/features/favourite/data/repos/addFavorite/addFav_imp.dart';
 import 'package:peron_project/features/favourite/data/repos/removeFavorite/removeFav_imp.dart';
@@ -176,6 +177,7 @@ class PeronApp extends StatelessWidget {
 
           initialRoute: PageRouteName.initialRoute,
           onGenerateRoute: RoutesGenerator.onGenerateRoute,
+        
         );
       },
     );

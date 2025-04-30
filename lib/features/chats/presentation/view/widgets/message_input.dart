@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/colors.dart';
 
 class MessageInput extends StatelessWidget {
   final TextEditingController controller;
@@ -31,7 +32,7 @@ class MessageInput extends StatelessWidget {
           SizedBox(width: screenWidth * 0.03),
           CircleAvatar(
             radius: screenWidth * 0.06,
-            backgroundColor: const Color.fromARGB(255, 76, 141, 95),
+            backgroundColor: AppColors.primaryColor,
             child: IconButton(onPressed: sendMessage, icon: const Icon(Icons.send, color: Colors.white)),
           ),
         ],
