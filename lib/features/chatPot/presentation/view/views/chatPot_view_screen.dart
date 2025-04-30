@@ -18,9 +18,7 @@ class ChatpotViewScreen extends StatelessWidget {
           leading: CustomArrowBack(),
           title: Text(
             "مساعد بيرون",
-            style: theme.headlineMedium!.copyWith(
-              fontSize: screenWidth * 0.05,
-            ),
+            style: theme.headlineMedium!.copyWith(fontSize: screenWidth * 0.05),
           ),
           centerTitle: true,
         ),
@@ -51,45 +49,50 @@ class ChatpotViewScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: screenHeight * 0.025),
+
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.06,
+                          ),
                           child: Column(
                             children: [
-                              SizedBox(
+                              Container(
                                 height: screenHeight * 0.055,
                                 width: screenWidth * 0.85,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(screenWidth * 0.02),
-                                    ),
-                                    backgroundColor: Colors.grey[200],
-                                    foregroundColor: Colors.grey[700],
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(
+                                    screenWidth * 0.02,
                                   ),
-                                  onPressed: () {},
-                                  child: Text(
-                                    'ابحث عن شقق للإيجار بسهولة.',
-                                    style: TextStyle(fontSize: screenWidth * 0.038),
+                                ),
+                                child: Text(
+                                  'ابحث عن شقق للإيجار بسهولة.',
+                                  style: TextStyle(
+                                    fontSize: screenWidth * 0.038,
+                                    color: Colors.grey[600],
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               SizedBox(height: screenHeight * 0.015),
-                              SizedBox(
+                              Container(
                                 height: screenHeight * 0.055,
                                 width: screenWidth * 0.85,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(screenWidth * 0.02),
-                                    ),
-                                    backgroundColor: Colors.grey[200],
-                                    foregroundColor: Colors.grey[700],
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(
+                                    screenWidth * 0.02,
                                   ),
-                                  onPressed: () {},
-                                  child: Text(
-                                    'استفسر عن الأسعار والشروط بكل سهولة.',
-                                    style: TextStyle(fontSize: screenWidth * 0.038),
+                                ),
+                                child: Text(
+                                  'استفسر عن الأسعار والشروط بكل سهولة.',
+                                  style: TextStyle(
+                                    fontSize: screenWidth * 0.038,
+                                    color: Colors.grey[600],
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               SizedBox(height: screenHeight * 0.03),
@@ -126,11 +129,15 @@ class ChatpotViewScreen extends StatelessWidget {
                             border: InputBorder.none,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                              borderRadius: BorderRadius.circular(
+                                screenWidth * 0.03,
+                              ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                              borderRadius: BorderRadius.circular(
+                                screenWidth * 0.03,
+                              ),
                             ),
                             contentPadding: EdgeInsetsDirectional.only(
                               start: screenWidth * 0.04,
@@ -138,7 +145,11 @@ class ChatpotViewScreen extends StatelessWidget {
                               bottom: screenHeight * 0.015,
                             ),
                             suffixIcon: IconButton(
-                              icon: Icon(Icons.attach_file, color: Colors.grey[600], size: screenWidth * 0.06),
+                              icon: Icon(
+                                Icons.attach_file,
+                                color: Colors.grey[600],
+                                size: screenWidth * 0.06,
+                              ),
                               onPressed: () {},
                             ),
                           ),
@@ -154,7 +165,11 @@ class ChatpotViewScreen extends StatelessWidget {
                         ),
                         child: IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.send, color: Colors.white, size: screenWidth * 0.05),
+                          icon: Icon(
+                            Icons.send,
+                            color: Colors.white,
+                            size: screenWidth * 0.05,
+                          ),
                         ),
                       ),
                     ],
