@@ -39,7 +39,7 @@ class DottedBorderBox extends StatelessWidget {
                   ImagePicker().pickImage(source: ImageSource.gallery).then((image) {
                     if (image != null) {
                       print("تم اختيار الصورة: ${image.path}");
-                      // ممكن تبعتيها لـ Bloc أو تخزنيها حسب المطلوب
+                      
                     }
                   });
                 },

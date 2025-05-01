@@ -60,6 +60,4 @@ class SuccessDialog extends StatelessWidget {
       ),
     );
   }
-
-  static void show({required BuildContext context, required String message}) {}
 }

@@ -147,38 +147,6 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                _buildTextField("رابط الفيديو يوتيوب", youtubeLinkController),
-                Row(
-                  children: [
-                    Text(
-                      "إذا أردت تعديل رقم الهاتف برجاء الذهاب إلى ",
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const ProfileScreen(),
-                          ),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size(0, 0),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: Text(
-                        "الملف الشخصى",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
                 IntlPhoneField(
                   controller: phoneController,
                   decoration: InputDecoration(
@@ -209,64 +177,8 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                     print(phone.completeNumber);
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'الرقم يحتوى على واتساب',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                      Transform.scale(
-                        scale: 0.9,
-                        child: Switch(
-                          value: allowPets,
-                          activeColor: Colors.white,
-                          activeTrackColor: AppColors.primaryColor,
-                          inactiveThumbColor: Colors.white,
-                          inactiveTrackColor: Colors.grey.shade400,
-                          onChanged: (val) {
-                            setState(() {
-                              allowPets = val;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          'تواصل معى عن طريق البريد الإلكترونى',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Checkbox(
-                      value: acceptAllTerms,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          acceptAllTerms = value ?? false;
-                        });
-                      },
-                      activeColor: AppColors.primaryColor,
-                    ),
-                  ],
-                ),
+              
+              
                 const SizedBox(height: 8),
                 _buildTextField(
                   'المساحة (بالمتر)',
@@ -274,18 +186,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                   height: 36,
                 ),
                 _buildTextField('السعر - جنيه', priceController, height: 36),
-                _buildDropdown(
-                  'تطل على',
-                  ["شارع رئيسى", "شارع فرعي", "ناصيه", "خلفي", "أخري"],
-                  selectedView,
-                  (val) => setState(() => selectedView = val),
-                ),
-                _buildDropdown(
-                  'طريقة الدفع',
-                  ['نقدا  ', '  تقسيط', ' نقدا أو تقسيط'],
-                  selectedPayment,
-                  (val) => setState(() => selectedPayment = val),
-                ),
+              
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: Row(
@@ -318,15 +219,8 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                 ),
                 _buildTextField('الغرف', roomsController, height: 36),
                 _buildTextField('الحمامات', bathroomsController, height: 36),
-                _buildTextField('الطابق', floorController, height: 36),
-                _buildTextField('المطبخ', kitchenController, height: 36),
-                _buildDropdown(
-                  'الحاله',
-                  ["مجهزه", "مجهزه جزئيا", "غير مجهزه"],
-                  selectedState,
-                  (val) => setState(() => selectedState = val),
-                ),
                 _buildTextField('عنوان العقار', addressController, height: 36),
+                
                 const SizedBox(height: 8),
                 const Text(
                   'أضف صور العقار',

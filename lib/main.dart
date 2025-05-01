@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:peron_project/features/myAds/presentation/view/views/modifyProperty.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,8 +43,9 @@ class PeronApp extends StatelessWidget {
           supportedLocales: const [
             Locale('ar', 'AE'),
           ],
-          initialRoute: PageRouteName.initialRoute,
-          onGenerateRoute: RoutesGenerator.onGenerateRoute,
+          // initialRoute: PageRouteName.initialRoute,
+          // onGenerateRoute: RoutesGenerator.onGenerateRoute,
+          home:EditPropertyScreen(),
        );
       },
     );
