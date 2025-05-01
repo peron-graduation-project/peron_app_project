@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/views/review.dart';
 
@@ -7,6 +8,7 @@ class ReviewsSection extends StatelessWidget {
   final double padding;
   final double fontSize;
   final double smallFontSize;
+  final List<Map<String, dynamic>> reviews;
 
   const ReviewsSection({
     Key? key,
@@ -14,143 +16,209 @@ class ReviewsSection extends StatelessWidget {
     required this.padding,
     required this.fontSize,
     required this.smallFontSize,
+    this.reviews = const [
+      {
+        'username': 'Eid Said',
+        'rating': 5,
+        'comment': 'مكان هادئ مناسب للعائلة',
+        'timeAgo': 'منذ يومين',
+        'avatarUrl': 'assets/images/profile_pic.jpg',
+      },
+      {
+        'username': 'Ramadan Mabrouk',
+        'rating': 4,
+        'comment': 'الشقة مريحة جدا ونظيفة والموقع ممتاز وقريب من كل حاجة',
+        'timeAgo': 'منذ أيام',
+        'avatarUrl': 'assets/images/profile_pic.jpg',
+      },
+      {
+        'username': 'Ahmed Mohamed',
+        'rating': 5,
+        'comment': 'موقع ممتاز وخدمة رائعة',
+        'timeAgo': 'منذ 5 أيام',
+        'avatarUrl': 'assets/images/profile_pic.jpg',
+      },
+      {
+        'username': 'Sara Ali',
+        'rating': 5,
+        'comment': 'تجربة مميزة جداً',
+        'timeAgo': 'منذ أسبوع',
+        'avatarUrl': 'assets/images/profile_pic.jpg',
+      },
+    ],
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(padding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Divider(
-            thickness: 0.3,
-            color: Colors.grey.shade200,
-          ),
-          // Header row with title and "View All" button
-          Row(
+    return Column(
+      children: [
+        Divider(thickness: 0.3,),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: padding),
+          child: Row(
+            textDirection: TextDirection.rtl,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // View All button (Left side)
+              
+              Text(
+                'آراء العملاء',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: fontSize * 1.2,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: Fonts.primaryFontFamily,
+                ),
+              ),
               TextButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ReviewsScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ReviewsScreen(),
+                    ),
+                  );
                 },
                 child: Text(
                   'عرض الكل',
                   style: TextStyle(
-                    color: Color(0xff0F7757),
-                    fontWeight: FontWeight.bold,
-                    fontSize: smallFontSize,
+                    color: const Color(0xff0F7757),
+                    fontSize: fontSize * 0.9,
                     fontFamily: Fonts.primaryFontFamily,
                   ),
                 ),
               ),
-              // Section title (Right side)
-              Text(
-                'آراء العملاء',
-                style: TextStyle(
-                  fontSize: fontSize * 1.2,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Fonts.primaryFontFamily,
-                ),
-                textAlign: TextAlign.right,
-              ),
             ],
           ),
-          SizedBox(height: 15),
-          _buildReviewItem(
-            'Eid Said',
-            5.0,
-            'مكان هادئ مناسب للعائلة',
-            'assets/images/profile_pic.jpg',
-            'منذ يومين',
+        ),
+        const SizedBox(height: 12),
+        Directionality(
+          textDirection: TextDirection.rtl,
+          child: SizedBox(
+            height: 140,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              reverse: false,
+              padding: EdgeInsets.symmetric(horizontal: padding),
+              itemCount: reviews.length,
+              itemBuilder: (context, index) {
+                final review = reviews[index];
+                return Container(
+                  width: 320,
+                  margin: const EdgeInsets.only(left: 12),
+                  child: buildReviewCard(
+                    name: review['username'],
+                    rating: review['rating'].toDouble(),
+                    comment: review['comment'],
+                    imagePath: review['avatarUrl'],
+                    timeAgo: review['timeAgo'],
+                    fontSize: fontSize,
+                    smallFontSize: smallFontSize,
+                  ),
+                );
+              },
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  // Modified review item with better alignment
-  Widget _buildReviewItem(String name, double rating, String comment,
-      String imagePath, String timeAgo) {
+  Widget buildReviewCard({
+    required String name,
+    required double rating,
+    required String comment,
+    required String imagePath,
+    required String timeAgo,
+    required double fontSize,
+    required double smallFontSize,
+  }) {
     return Container(
       decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
         border: Border.all(
           color: Colors.grey.shade200,
           width: 1.0,
         ),
-        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade100,
+            blurRadius: 1,
+            spreadRadius: 0,
+          ),
+        ],
       ),
-      padding: EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(12.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Single row with profile image, name, rating and comment
           Row(
             textDirection: TextDirection.rtl,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Profile image
               CircleAvatar(
-                radius: fontSize,
+                radius: 18,
                 backgroundImage: AssetImage(imagePath),
               ),
-              SizedBox(width: 10),
-              // Content column
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Name
                     Text(
                       name,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: fontSize,
+                        fontSize: fontSize * 0.95,
+                        fontWeight: FontWeight.w200,
                         fontFamily: Fonts.primaryFontFamily,
+                        color: Colors.black,
                       ),
-                      textAlign: TextAlign.right,
                     ),
-                    SizedBox(height: 4),
-                    // Stars row
+                    const SizedBox(height: 4),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
                       children: List.generate(
                         5,
-                        (index) => Icon(
-                          Icons.star,
-                          color: Color(0xff0F7757),
-                          size: smallFontSize * 1.3,
+                        (index) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                          child: SvgPicture.asset(
+                            index < rating 
+                              ? "assets/icons/star.svg" 
+                              : "assets/icons/starborder.svg",
+                            width: 16,
+                            height: 16,
+                            color: const Color(0xff0F7757),
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 6),
-                    // Comment text
+                    const SizedBox(height: 6),
                     Text(
                       comment,
                       style: TextStyle(
-                        fontSize: smallFontSize,
+                        fontWeight: FontWeight.w100,
                         fontFamily: Fonts.primaryFontFamily,
+                        fontSize: fontSize * 0.85,
+                        color: Colors.black87,
                       ),
-                      textAlign: TextAlign.right,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: 8),
-          // Time ago text - Aligned to the left
+          const Spacer(),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
               timeAgo,
               style: TextStyle(
                 color: Colors.grey[600],
-                fontSize: smallFontSize * 0.9,
-                fontFamily: Fonts.primaryFontFamily,
+                fontWeight: FontWeight.w100,
+                fontSize: smallFontSize * 0.85,
+                fontFamily: Fonts.primaryFontFamily
               ),
               textAlign: TextAlign.left,
             ),

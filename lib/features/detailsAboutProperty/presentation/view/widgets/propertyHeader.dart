@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/ratingDialog.dart';
 
@@ -80,17 +81,14 @@ class PropertyHeader extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   textDirection: TextDirection.rtl,
                   children: [
-                    Icon(
-                      Icons.star,
-                      color: Color(0xff0F7757),
-                      size: smallIconSize,
-                    ),
+                      SvgPicture.asset('assets/icons/star.svg',width:15,height:15),
+          
                     SizedBox(width: smallPadding * 0.8),
                     Text(
                       "  4",
                       style: TextStyle(
                         fontSize: regularFontSize,
-                        fontWeight: FontWeight.bold,
+                        // fontWeight: FontWeight.bold,
                         color: Colors.black87,
                         fontFamily: Fonts.primaryFontFamily,
                       ),
@@ -103,24 +101,6 @@ class PropertyHeader extends StatelessWidget {
                             fontSize: smallFontSize,
                             color: Color(0xff565656),
                             fontFamily: Fonts.primaryFontFamily,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => RatingDialog()),
-                            );
-                          },
-                          child: Text(
-                            " تقييم ",
-                            style: TextStyle(
-                              fontSize: smallFontSize,
-                              color: Color(0xff565656),
-                              decoration: TextDecoration.underline,
-                              fontFamily: Fonts.primaryFontFamily,
-                            ),
                           ),
                         ),
                         GestureDetector(
@@ -142,6 +122,25 @@ class PropertyHeader extends StatelessWidget {
                             ),
                           ),
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RatingDialog()),
+                            );
+                          },
+                          child: Text(
+                            " تقييم ",
+                            style: TextStyle(
+                              fontSize: smallFontSize,
+                              color: Color(0xff565656),
+                              decoration: TextDecoration.underline,
+                              fontFamily: Fonts.primaryFontFamily,
+                            ),
+                          ),
+                        ),
+                        
                         Text(
                           " ) ",
                           style: TextStyle(
@@ -157,17 +156,16 @@ class PropertyHeader extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            width: smallCircleSize,
-            height: smallCircleSize,
-            decoration: BoxDecoration(
-              color: Color(0xff0F7757),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.favorite,
-              color: Colors.white,
-              size: smallIconSize * 0.8,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Container(
+              width: smallCircleSize,
+              height: smallCircleSize,
+              decoration: BoxDecoration(
+                color: Color(0xff0F7757),
+                shape: BoxShape.circle,
+              ),
+              child: SvgPicture.asset('assets/icons/heart.svg',width:20,height:20)
             ),
           ),
         ],

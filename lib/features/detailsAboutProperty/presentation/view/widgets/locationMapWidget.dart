@@ -171,17 +171,19 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Divider(thickness: 0.3,),
         Padding(
           padding: EdgeInsets.all(widget.padding),
           child: Text(
-            "الموقع",
+            "تفاصيل الموقع على الخريطة",
             style: TextStyle(
+              color: Colors.black,
               fontSize: widget.fontSize,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontFamily: Fonts.primaryFontFamily,
             ),
           ),
-        ),
+        ),SizedBox(height: 10,),
         Container(
           margin: EdgeInsets.symmetric(horizontal: widget.padding),
           height: 200,
@@ -225,27 +227,27 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.all(widget.padding),
-          child: ElevatedButton(
-            onPressed: _navigateToFullScreenMap,
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 45),
-              backgroundColor: AppColors.primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: Text(
-              "عرض على الخريطة الكاملة",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: widget.smallFontSize,
-                fontFamily: Fonts.primaryFontFamily,
-              ),
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: EdgeInsets.all(widget.padding),
+        //   child: ElevatedButton(
+        //     onPressed: _navigateToFullScreenMap,
+        //     style: ElevatedButton.styleFrom(
+        //       minimumSize: const Size(double.infinity, 45),
+        //       backgroundColor: AppColors.primaryColor,
+        //       shape: RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.circular(8),
+        //       ),
+        //     ),
+        //     child: Text(
+        //       "عرض على الخريطة الكاملة",
+        //       style: TextStyle(
+        //         color: Colors.white,
+        //         fontSize: widget.smallFontSize,
+        //         fontFamily: Fonts.primaryFontFamily,
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

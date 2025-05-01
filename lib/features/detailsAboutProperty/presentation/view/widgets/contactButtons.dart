@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 
@@ -22,6 +23,7 @@ class ContactButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: 10,),
         Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(
@@ -40,8 +42,9 @@ class ContactButtons extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey.shade200,
-                    padding:
-                        EdgeInsets.symmetric(vertical: standardPadding * 0.8),
+                    padding: EdgeInsets.symmetric(
+                      vertical: standardPadding * 0.8,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -50,22 +53,20 @@ class ContactButtons extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'الايميل',
+                        'مراسلة',
                         style: TextStyle(
                           fontSize: regularFontSize,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w100,
                           fontFamily: Fonts.primaryFontFamily,
                         ),
                       ),
                       SizedBox(width: smallPadding),
-                      Icon(Icons.email_outlined,
-                          color: Colors.black54, size: iconSize),
                     ],
                   ),
                 ),
               ),
-              SizedBox(width: standardPadding * 0.5),
+              SizedBox(width: 10),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
@@ -73,8 +74,9 @@ class ContactButtons extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey.shade200,
-                    padding:
-                        EdgeInsets.symmetric(vertical: standardPadding * 0.8),
+                    padding: EdgeInsets.symmetric(
+                      vertical: standardPadding * 0.8,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -82,42 +84,44 @@ class ContactButtons extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Icon(Icons.phone, color: Colors.black, size: iconSize),
+                      SizedBox(width: smallPadding),
+
                       Text(
                         'اتصال',
                         style: TextStyle(
                           fontSize: regularFontSize,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w200,
                           fontFamily: Fonts.primaryFontFamily,
                         ),
                       ),
-                      SizedBox(width: smallPadding),
-                      Icon(Icons.phone, color: Colors.black54, size: iconSize),
                     ],
                   ),
                 ),
               ),
-              SizedBox(width: standardPadding * 0.5),
+              SizedBox(width:  10),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    launchUrl(Uri.parse("https://wa.me/123456789"));
+                    launchUrl(Uri.parse("https://wa.me/201119723643"));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightGreen.shade100,
-                    padding:
-                        EdgeInsets.symmetric(vertical: standardPadding * 0.8),
+                    padding: EdgeInsets.symmetric(
+                      vertical: standardPadding * 0.8,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: Icon(Icons.chat, color: Colors.green, size: iconSize),
+                  child: SvgPicture.asset("assets/icons/whatsapp.svg"),
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: screenHeight * 0.01),
+        SizedBox(height: 10 ),
       ],
     );
   }

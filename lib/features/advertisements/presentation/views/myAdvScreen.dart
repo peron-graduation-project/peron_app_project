@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:peron_project/core/helper/fonts.dart';
-import 'package:peron_project/features/advertisements/presentation/views/add_property_screen.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/no_published.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/property_card.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/tab_item.dart';
-// Import the AddPropertyScreen
 
 class MyAdvertisementsPage extends StatefulWidget {
   final int initialPublishedCount;
 
   const MyAdvertisementsPage({
-    Key? key,
-    this.initialPublishedCount = 0, // Default is 0, but can be overridden
-  }) : super(key: key);
+    super.key,
+    this.initialPublishedCount = 0,
+  });
 
   @override
   State<MyAdvertisementsPage> createState() => _MyAdvertisementsPageState();

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
-import 'package:peron_project/features/advertisements/presentation/widgets/custom_dropdown.dart';
-import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field.dart';
 
-import '../views/add_property_screen3.dart';
+import 'package:peron_project/features/advertisements/presentation/views/add_property_screen3.dart';
+import 'package:peron_project/features/advertisements/presentation/widgets/custom_dropdown.dart';
+
 
 class PropertyForm2 extends StatefulWidget {
   const PropertyForm2({super.key});

@@ -21,13 +21,14 @@ class PropertyFeatures extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(padding),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'ميزات الشقة',
+            'مميزات الشقة',
             style: TextStyle(
+              color: Colors.black,
               fontSize: fontSize * 1.2,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,

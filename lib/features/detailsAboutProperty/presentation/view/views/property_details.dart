@@ -45,7 +45,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     final screenSize = MediaQuery.of(context).size;
     final screenWidth = screenSize.width;
     final screenHeight = screenSize.height;
@@ -54,7 +54,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
     final iconSize = screenWidth * 0.055;
     final smallIconSize = iconSize * 0.9;
 
-    final standardPadding = screenWidth * 0.03;
+    final standardPadding = screenWidth * 0.0;
     final smallPadding = standardPadding * 0.3;
 
     final titleFontSize = screenWidth * 0.055;
@@ -96,26 +96,33 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: smallPadding),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        SizedBox(width: 10,),
                         FeatureItem(
-                          text: '150',
-                          icon: Icons.swap_horiz,
+                          text: '4',
+                          icon: Icons.chair,
                           screenWidth: screenWidth,
                         ),
-                        FeatureItem(
-                          text: '5',
-                          icon: Icons.bed,
-                          screenWidth: screenWidth,
-                        ),
+                        SizedBox(width: 12,),
                         FeatureItem(
                           text: '2',
                           icon: Icons.bathtub,
                           screenWidth: screenWidth,
                         ),
+                                                SizedBox(width: 12,),
+
                         FeatureItem(
-                          text: '4',
-                          icon: Icons.chair,
+                          text: '5',
+                          icon: Icons.bed,
+                          screenWidth: screenWidth,
+                        ),
+                        
+                                                SizedBox(width: 12,),
+
+                        FeatureItem(
+                          text: '150',
+                          icon: Icons.swap_horiz,
                           screenWidth: screenWidth,
                         ),
                       ],

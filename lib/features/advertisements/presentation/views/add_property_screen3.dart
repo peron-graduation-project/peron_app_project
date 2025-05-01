@@ -7,7 +7,7 @@ import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/property_form3.dart';
 
 class AddPropertyScreen3 extends StatelessWidget {
-  const AddPropertyScreen3({Key? key}) : super(key: key);
+  const AddPropertyScreen3({super.key});
 
   @override
   Widget build(BuildContext context) {

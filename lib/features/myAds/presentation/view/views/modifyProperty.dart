@@ -55,7 +55,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
           TextButton(
             onPressed: () {
               setState(() {
-                // إعادة تعيين الحقول
+                
                 selectedLocation = null;
                 selectedView = null;
                 selectedState = null;
@@ -63,7 +63,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                 selectedPhoneCode = '+20';
                 allowPets = false;
                 acceptAllTerms = false;
-                phoneController.clear(); // مسح قيمة الهاتف
+                phoneController.clear(); 
                 propertyTypeController.clear();
                 detailsController.clear();
                 youtubeLinkController.clear();
@@ -73,7 +73,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                 bathroomsController.clear();
                 floorController.clear();
                 kitchenController.clear();
-                addressController.clear(); // مسح جميع الحقول
+                addressController.clear(); 
               });
             },
             child: Text(

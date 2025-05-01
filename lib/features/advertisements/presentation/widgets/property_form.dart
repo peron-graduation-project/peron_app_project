@@ -3,10 +3,9 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
+import 'package:peron_project/features/advertisements/presentation/views/add_property_screen2.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_dropdown.dart';
-import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field.dart';
-
-import '../views/add_property_screen2.dart';
+import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field2.dart';
 
 class PropertyForm extends StatefulWidget {
   const PropertyForm({super.key});
@@ -22,7 +21,7 @@ class _PropertyFormState extends State<PropertyForm> {
 
   final List<String> mansouraPlaces = [
     'حي الجامعة',
-     'توريل',
+    'توريل',
     'عبدالسلام عارف',
     'قناة السويس',
     'المشاية',
@@ -44,7 +43,7 @@ class _PropertyFormState extends State<PropertyForm> {
         children: [
           buildLabel('نوع العقار', screenWidth),
           const SizedBox(height: 8),
-       //   const CustomTextField(hintText: 'اكتب نوع العقار'),
+          const CustomTextField(hintText: 'اكتب نوع العقار'),
 
           buildLabel('المكان', screenWidth),
           const SizedBox(height: 8),
@@ -61,11 +60,11 @@ class _PropertyFormState extends State<PropertyForm> {
 
           buildLabel('تفاصيل الاعلان/مميزات الاعلان', screenWidth),
           const SizedBox(height: 8),
-       //   const CustomTextField(hintText: '', maxLines: 4),
+          const CustomTextField(hintText: '', maxLines: 4),
 
           buildLabel('رابط الفيديو يوتيوب', screenWidth),
           const SizedBox(height: 8),
-         // const CustomTextField(hintText: ''),
+          const CustomTextField(hintText: ''),
 
           const SizedBox(height: 12),
           Padding(
@@ -93,7 +92,7 @@ class _PropertyFormState extends State<PropertyForm> {
           ),
 
           const SizedBox(height: 12),
-          Directionality( 
+          Directionality(
             textDirection: TextDirection.ltr,
             child: Container(
               decoration: BoxDecoration(
@@ -127,57 +126,57 @@ class _PropertyFormState extends State<PropertyForm> {
 
           const SizedBox(height: 16),
 
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    Expanded(
-      child: Text(
-        'الرقم يحتوي علي واتس اب',
-        style: TextStyle(
-          fontFamily: Fonts.primaryFontFamily,
-          fontSize: screenWidth * 0.035,
-        ),
-        textAlign: TextAlign.right,
-      ),
-    ),
-    Switch(
-      value: isWhatsapp,
-      activeColor: AppColors.primaryColor,
-      onChanged: (value) {
-        setState(() {
-          isWhatsapp = value;
-        });
-      },
-    ),
-  ],
-),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  'الرقم يحتوي علي واتس اب',
+                  style: TextStyle(
+                    fontFamily: Fonts.primaryFontFamily,
+                    fontSize: screenWidth * 0.035,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+              Switch(
+                value: isWhatsapp,
+                activeColor: AppColors.primaryColor,
+                onChanged: (value) {
+                  setState(() {
+                    isWhatsapp = value;
+                  });
+                },
+              ),
+            ],
+          ),
 
-const SizedBox(height: 4),
+          const SizedBox(height: 4),
 
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    Checkbox(
-      value: isEmailChecked,
-      activeColor: AppColors.primaryColor,
-      onChanged: (value) {
-        setState(() {
-          isEmailChecked = value!;
-        });
-      },
-    ),
-    Expanded(
-      child: Text(
-        'تواصل معي عن طريق البريد الالكتروني',
-        style: TextStyle(
-          fontFamily: Fonts.primaryFontFamily,
-          fontSize: screenWidth * 0.035,
-        ),
-        textAlign: TextAlign.right,
-      ),
-    ),
-  ],
-),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Checkbox(
+                value: isEmailChecked,
+                activeColor: AppColors.primaryColor,
+                onChanged: (value) {
+                  setState(() {
+                    isEmailChecked = value!;
+                  });
+                },
+              ),
+              Expanded(
+                child: Text(
+                  'تواصل معي عن طريق البريد الالكتروني',
+                  style: TextStyle(
+                    fontFamily: Fonts.primaryFontFamily,
+                    fontSize: screenWidth * 0.035,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            ],
+          ),
 
 
           SizedBox(height: screenHeight * 0.04),
