@@ -85,7 +85,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
               style: TextStyle(
                 color: AppColors.grey,
                 fontSize: 16,
-                fontWeight: FontWeight.bold,
+                // fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -98,23 +98,12 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Divider(thickness: 1),
+                const Divider(thickness: 1,indent: 8,endIndent: 8,),
                 _buildTextField('نوع العقار', propertyTypeController),
-                _buildDropdown(
-                  'المكان',
-                  [
-                    "حى الجامعه",
-                    "قناه السويس",
-                    "توريل",
-                    "الجلاء",
-                    "المشايه",
-                    "الترعه",
-                    "الصنيه",
-                    "الاتوبيس",
-                    "عبدالسلام عارف",
-                  ],
-                  selectedLocation,
-                  (val) => setState(() => selectedLocation = val),
+                _buildTextField(
+                    'المكان',
+
+                    addressController
                 ),
                 Text(
                   "تفاصيل الإعلان",
@@ -191,7 +180,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                 _buildTextField('السعر - جنيه', priceController, height: 36),
 
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -235,7 +224,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                     'حراسه',
                   ],
                   selectedValues,
-                  (val) => setState(() => selectedValues = val),
+                      (val) => setState(() => selectedValues = val),
                 ),
 
                 const SizedBox(height: 8),
@@ -283,13 +272,13 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
   }
 
   Widget _buildTextField(
-    String label,
-    TextEditingController controller, {
-    double height = 60,
-    int maxline = 1,
-  }) {
+      String label,
+      TextEditingController controller, {
+        double height = 60,
+        int maxline = 1,
+      }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -331,13 +320,13 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
   }
 
   Widget _buildDropdown(
-    String label,
-    List<String> items,
-    String? selectedValue,
-    void Function(String?) onChanged,
-  ) {
+      String label,
+      List<String> items,
+      String? selectedValue,
+      void Function(String?) onChanged,
+      ) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -354,36 +343,36 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
             value: selectedValue,
             onChanged: onChanged,
             items:
-                items.map((item) {
-                  final isSelected = selectedValue == item;
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          item,
-                          style: TextStyle(
-                            color:
-                                isSelected
-                                    ? AppColors.primaryColor
-                                    : Colors.black,
-                            fontWeight:
-                                isSelected
-                                    ? FontWeight.w600
-                                    : FontWeight.normal,
-                          ),
-                        ),
-                        if (isSelected)
-                          Icon(
-                            Icons.check,
-                            color: AppColors.primaryColor,
-                            size: 20,
-                          ),
-                      ],
+            items.map((item) {
+              final isSelected = selectedValue == item;
+              return DropdownMenuItem<String>(
+                value: item,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      item,
+                      style: TextStyle(
+                        color:
+                        isSelected
+                            ? AppColors.primaryColor
+                            : Colors.black,
+                        fontWeight:
+                        isSelected
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                      ),
                     ),
-                  );
-                }).toList(),
+                    if (isSelected)
+                      Icon(
+                        Icons.check,
+                        color: AppColors.primaryColor,
+                        size: 20,
+                      ),
+                  ],
+                ),
+              );
+            }).toList(),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 12,
@@ -432,13 +421,13 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
   }
 
   Widget _buildCheckboxDropdown(
-    String label,
-    List<String> items,
-    List<String> selectedValues,
-    void Function(List<String>) onChanged,
-  ) {
+      String label,
+      List<String> items,
+      List<String> selectedValues,
+      void Function(List<String>) onChanged,
+      ) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -476,65 +465,65 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
               ),
             ),
             items:
-                items.map((item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    enabled: false,
-                    child: StatefulBuilder(
-                      builder: (context, innerSetState) {
-                        final isSelected = selectedValues.contains(item);
-                        return InkWell(
-                          onTap: () {
-                            innerSetState(() {
-                              if (isSelected) {
-                                selectedValues.remove(item);
-                              } else {
-                                selectedValues.add(item);
-                              }
-                              onChanged(List.from(selectedValues));
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                item,
-                                style: TextStyle(
-                                  color:
-                                      isSelected
-                                          ? AppColors.primaryColor
-                                          : Colors.black,
-                                  fontWeight:
-                                      isSelected
-                                          ? FontWeight.w600
-                                          : FontWeight.normal,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Checkbox(
-                                value: isSelected,
-                                onChanged: (_) {
-                                  innerSetState(() {
-                                    if (isSelected) {
-                                      selectedValues.remove(item);
-                                    } else {
-                                      selectedValues.add(item);
-                                    }
-                                    onChanged(List.from(selectedValues));
-                                  });
-                                },
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                activeColor: AppColors.primaryColor,
-                              ),
-                            ],
-                          ),
-                        );
+            items.map((item) {
+              return DropdownMenuItem<String>(
+                value: item,
+                enabled: false,
+                child: StatefulBuilder(
+                  builder: (context, innerSetState) {
+                    final isSelected = selectedValues.contains(item);
+                    return InkWell(
+                      onTap: () {
+                        innerSetState(() {
+                          if (isSelected) {
+                            selectedValues.remove(item);
+                          } else {
+                            selectedValues.add(item);
+                          }
+                          onChanged(List.from(selectedValues));
+                        });
                       },
-                    ),
-                  );
-                }).toList(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            item,
+                            style: TextStyle(
+                              color:
+                              isSelected
+                                  ? AppColors.primaryColor
+                                  : Colors.black,
+                              fontWeight:
+                              isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Checkbox(
+                            value: isSelected,
+                            onChanged: (_) {
+                              innerSetState(() {
+                                if (isSelected) {
+                                  selectedValues.remove(item);
+                                } else {
+                                  selectedValues.add(item);
+                                }
+                                onChanged(List.from(selectedValues));
+                              });
+                            },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            activeColor: AppColors.primaryColor,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );
+            }).toList(),
             selectedItemBuilder: (context) {
               return items.map((item) {
                 return Text(
