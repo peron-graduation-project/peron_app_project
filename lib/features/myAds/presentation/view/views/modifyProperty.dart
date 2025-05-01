@@ -17,12 +17,14 @@ class EditPropertyScreen extends StatefulWidget {
 
 class _EditPropertyScreenState extends State<EditPropertyScreen> {
   String? selectedLocation;
+
   String? selectedView;
   String? selectedState;
   String? selectedPayment;
   String selectedPhoneCode = '+20';
   bool allowPets = false;
   bool acceptAllTerms = false;
+  List<String> selectedValues = [];
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController propertyTypeController = TextEditingController();
   final TextEditingController detailsController = TextEditingController();
@@ -34,6 +36,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
   final TextEditingController floorController = TextEditingController();
   final TextEditingController kitchenController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
+  final TextEditingController specificationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +58,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
           TextButton(
             onPressed: () {
               setState(() {
-                
+                selectedValues.clear();
                 selectedLocation = null;
                 selectedView = null;
                 selectedState = null;
@@ -63,7 +66,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                 selectedPhoneCode = '+20';
                 allowPets = false;
                 acceptAllTerms = false;
-                phoneController.clear(); 
+                phoneController.clear();
                 propertyTypeController.clear();
                 detailsController.clear();
                 youtubeLinkController.clear();
@@ -73,7 +76,8 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                 bathroomsController.clear();
                 floorController.clear();
                 kitchenController.clear();
-                addressController.clear(); 
+                addressController.clear();
+                specificationController.clear();
               });
             },
             child: Text(
@@ -177,8 +181,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                     print(phone.completeNumber);
                   },
                 ),
-              
-              
+
                 const SizedBox(height: 8),
                 _buildTextField(
                   'المساحة (بالمتر)',
@@ -186,7 +189,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                   height: 36,
                 ),
                 _buildTextField('السعر - جنيه', priceController, height: 36),
-              
+
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: Row(
@@ -220,7 +223,21 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                 _buildTextField('الغرف', roomsController, height: 36),
                 _buildTextField('الحمامات', bathroomsController, height: 36),
                 _buildTextField('عنوان العقار', addressController, height: 36),
-                
+
+                _buildCheckboxDropdown(
+                  'مواصفات أخرى',
+                  [
+                    "مصعد",
+                    'جراج',
+                    'بلكونه',
+                    'واي فاي',
+                    'تدفئه مركزيه',
+                    'حراسه',
+                  ],
+                  selectedValues,
+                  (val) => setState(() => selectedValues = val),
+                ),
+
                 const SizedBox(height: 8),
                 const Text(
                   'أضف صور العقار',
@@ -398,6 +415,143 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
             ),
             dropdownStyleData: DropdownStyleData(
               maxHeight: double.infinity,
+              width: 220,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
+              ),
+              offset: const Offset(-140, 8),
+            ),
+            menuItemStyleData: const MenuItemStyleData(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCheckboxDropdown(
+    String label,
+    List<String> items,
+    List<String> selectedValues,
+    void Function(List<String>) onChanged,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 8),
+          DropdownButtonFormField2<String>(
+            isExpanded: true,
+            value: null,
+            onChanged: (_) {},
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 8,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: Colors.grey),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+              ),
+            ),
+            hint: Text(
+              selectedValues.isEmpty ? '' : selectedValues.join(" / "),
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            items:
+                items.map((item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    enabled: false,
+                    child: StatefulBuilder(
+                      builder: (context, innerSetState) {
+                        final isSelected = selectedValues.contains(item);
+                        return InkWell(
+                          onTap: () {
+                            innerSetState(() {
+                              if (isSelected) {
+                                selectedValues.remove(item);
+                              } else {
+                                selectedValues.add(item);
+                              }
+                              onChanged(List.from(selectedValues));
+                            });
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                item,
+                                style: TextStyle(
+                                  color:
+                                      isSelected
+                                          ? AppColors.primaryColor
+                                          : Colors.black,
+                                  fontWeight:
+                                      isSelected
+                                          ? FontWeight.w600
+                                          : FontWeight.normal,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Checkbox(
+                                value: isSelected,
+                                onChanged: (_) {
+                                  innerSetState(() {
+                                    if (isSelected) {
+                                      selectedValues.remove(item);
+                                    } else {
+                                      selectedValues.add(item);
+                                    }
+                                    onChanged(List.from(selectedValues));
+                                  });
+                                },
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                activeColor: AppColors.primaryColor,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }).toList(),
+            selectedItemBuilder: (context) {
+              return items.map((item) {
+                return Text(
+                  selectedValues.join(" / "),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal,
+                  ),
+                );
+              }).toList();
+            },
+            iconStyleData: const IconStyleData(
+              icon: Icon(Icons.keyboard_arrow_down, color: Colors.black54),
+              iconSize: 24,
+            ),
+            dropdownStyleData: DropdownStyleData(
+              maxHeight: 300,
               width: 220,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
