@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
-import 'package:peron_project/features/advertisements/presentation/views/no_published_content.dart';
 import 'package:peron_project/features/authentication/presentation/manager/logout/logout_cubit.dart';
 import 'package:peron_project/features/profile/presentation/view/view/profile_screen.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
@@ -13,6 +12,7 @@ import 'package:peron_project/features/profile/presentation/view/widgets/profile
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../../core/helper/colors.dart';
+import '../../../../advertisements/presentation/views/myAdvScreen.dart';
 import '../../../../authentication/data/repos/logout/logout_repo_imp.dart';
 import '../../../../authentication/presentation/manager/logout/logout_state.dart';
 

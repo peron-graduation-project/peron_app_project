@@ -34,7 +34,7 @@ class HomeViewBodyState extends State<HomeViewBody> {
         child: MainView(),
       ),
       const FavouriteView(),
-      const ChatView(),
+      ChatView(),
       AccountScreen(key: UniqueKey()),
     ];
   }

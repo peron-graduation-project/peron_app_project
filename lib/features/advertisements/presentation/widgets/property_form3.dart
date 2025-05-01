@@ -121,7 +121,7 @@ class _PropertyForm3State extends State<PropertyForm3> {
 
           buildLabel('عنوان العقار', screenWidth),
           const SizedBox(height: 8),
-          CustomTextField(controller: addressController),
+        //  CustomTextField(controller: addressController),
 
           buildLabel('مواصفات أخرى', screenWidth),
           const SizedBox(height: 8),

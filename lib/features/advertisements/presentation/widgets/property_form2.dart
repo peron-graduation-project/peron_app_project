@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
-import 'package:peron_project/features/advertisements/presentation/add_property/add_property_screen3.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_dropdown.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field.dart';
+
+import '../views/add_property_screen3.dart';
 
 class PropertyForm2 extends StatefulWidget {
   const PropertyForm2({super.key});
@@ -36,11 +37,11 @@ class _PropertyForm2State extends State<PropertyForm2> {
         children: [
           buildLabel('المساحه (بالمتر)', screenWidth),
           const SizedBox(height: 8),
-          const CustomTextField(),
+         // const CustomTextField(),
 
           buildLabel('السعر - جنيه', screenWidth),
           const SizedBox(height: 8),
-          const CustomTextField(),
+       //   const CustomTextField(),
 
           buildLabel('تطل على', screenWidth),
           const SizedBox(height: 8),
@@ -57,19 +58,19 @@ class _PropertyForm2State extends State<PropertyForm2> {
 
           buildLabel('الغرف', screenWidth),
           const SizedBox(height: 8),
-          const CustomTextField(),
+       //   const CustomTextField(),
 
           buildLabel('الحمامات', screenWidth),
           const SizedBox(height: 8),
-          const CustomTextField(),
+         // const CustomTextField(),
 
           buildLabel('الطابق', screenWidth),
           const SizedBox(height: 8),
-          const CustomTextField(),
+          //const CustomTextField(),
 
           buildLabel('المطبخ', screenWidth),
           const SizedBox(height: 8),
-          const CustomTextField(),
+          //const CustomTextField(),
 
           SizedBox(height: screenHeight * 0.04),
 

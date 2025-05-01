@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 
 class DateSeparator extends StatelessWidget {
   final double screenWidth;
-  const DateSeparator({super.key, required this.screenWidth});
+  final String date;
+
+
+  const DateSeparator({super.key, required this.screenWidth, required this.date});
 
   @override
   Widget build(BuildContext context) {

@@ -12,7 +12,6 @@ class NotificationRepoImpl implements NotificationRepo {
   NotificationRepoImpl(this.apiService);
 
   @override
-  @override
   Future<Either<Failure, List<NotificationModel>>> getNotifications() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -25,7 +24,7 @@ class NotificationRepoImpl implements NotificationRepo {
         ));
       }
 
-      final Either<Failure, List<NotificationModel>> response = await apiService.getNotification(token: token); // توقعنا إن الـ ApiService هيرجع List<NotificationModel>
+      final Either<Failure, List<NotificationModel>> response = await apiService.getNotification(token: token);
 
       print("✅ [DEBUG] NotificationRepoImp Response: $response");
 

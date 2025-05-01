@@ -3,9 +3,10 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
-import 'package:peron_project/features/advertisements/presentation/add_property/add_property_screen2.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_dropdown.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field.dart';
+
+import '../views/add_property_screen2.dart';
 
 class PropertyForm extends StatefulWidget {
   const PropertyForm({super.key});
@@ -43,7 +44,7 @@ class _PropertyFormState extends State<PropertyForm> {
         children: [
           buildLabel('نوع العقار', screenWidth),
           const SizedBox(height: 8),
-          const CustomTextField(hintText: 'اكتب نوع العقار'),
+       //   const CustomTextField(hintText: 'اكتب نوع العقار'),
 
           buildLabel('المكان', screenWidth),
           const SizedBox(height: 8),
@@ -60,11 +61,11 @@ class _PropertyFormState extends State<PropertyForm> {
 
           buildLabel('تفاصيل الاعلان/مميزات الاعلان', screenWidth),
           const SizedBox(height: 8),
-          const CustomTextField(hintText: '', maxLines: 4),
+       //   const CustomTextField(hintText: '', maxLines: 4),
 
           buildLabel('رابط الفيديو يوتيوب', screenWidth),
           const SizedBox(height: 8),
-          const CustomTextField(hintText: ''),
+         // const CustomTextField(hintText: ''),
 
           const SizedBox(height: 12),
           Padding(

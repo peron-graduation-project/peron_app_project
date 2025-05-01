@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:peron_project/features/chats/data/models/chat_model.dart';
 import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/notification/data/notification_model.dart';
 import 'package:peron_project/features/profile/data/models/profile_model.dart';
@@ -8,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import '../../../../core/error/failure.dart';
+import '../../features/chats/data/models/message_model.dart';
 import '../../features/profile/data/models/inquiry_model.dart';
 import '../utils/property_model.dart';
 
@@ -639,6 +641,131 @@ class ApiService {
     ));
   }
 }
+  Future<Either<Failure, List<Message>>> getChatConversation({
+    required String token,
+    required String id,
+
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/Chat/conversation/$id',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("✅ [DEBUG] get Chat Conversation API Response: ${response.data}");
+
+      if (response.data is List) {
+        final List<Message> messages = (response.data as List)
+            .map((json) => Message.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return Right(messages);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم عند جلب المحادثة ",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error أثناء جلب المحادثة : $e");
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء جلب المحادثة  في ApiService: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء جلب المحادثة ",
+        errors: [e.toString()],
+      ));
+    }
+  }
+  Future<Either<Failure, List<ChatModel>>> getChats({
+    required String token,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/Chat/chats',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("✅ [DEBUG] get Chats  API Response: ${response.data}");
+
+      if (response.data is List) {
+        final List<ChatModel> chats = (response.data as List)
+            .map((json) => ChatModel.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return Right(chats);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم عند جلب المحادثات ",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error أثناء جلب المحادثات : $e");
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] خطأ غير متوقع أثناء جلب المحادثات  في ApiService: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء جلب المحادثات ",
+        errors: [e.toString()],
+      ));
+    }
+  }
+  Future<Either<Failure, Map<String, dynamic>>> sendMessage({
+    required String token,
+    required String id,
+    required String message,
+
+  }) async {
+    try {
+
+      final response = await _dio.post(
+        '/Chat/send',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+        data: {
+          "receiverId": id,
+          "message":message,
+        },
+      );
+
+
+      print("✅ [DEBUG] send Message API Response: ${response.data}");
+
+
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        return Right(response.data as Map<String, dynamic>);
+      } else {
+
+        return Left(ServiceFailure(
+          errorMessage: "فشل في إرسال الرسالة: استجابة غير متوقعة",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+
+      print("❌ [DEBUG] Dio Error (send message): $e");
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+
+      print("❗ [DEBUG] Unexpected Error in send message: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء إرسال الرسالة",
+        errors: [e.toString()],
+      ));
+    }
+  }
   Future<Either<Failure, Map<String, dynamic>>> changePassword({
     required String token,
     required String oldPassword ,
