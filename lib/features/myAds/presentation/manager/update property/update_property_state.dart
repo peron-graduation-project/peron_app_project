@@ -1,6 +1,17 @@
-part of 'update_property_cubit.dart';
+abstract class UpdatePropertyState {}
 
-@immutable
-sealed class UpdatePropertyState {}
+class UpdatePropertyStateInitial extends UpdatePropertyState {}
 
-final class UpdatePropertyInitial extends UpdatePropertyState {}
+class UpdatePropertyStateLoading extends UpdatePropertyState {}
+
+class UpdatePropertyStateSuccess extends UpdatePropertyState {
+  final String message;
+
+  UpdatePropertyStateSuccess(this.message);
+}
+
+class UpdatePropertyStateFailure extends UpdatePropertyState {
+  final String errorMessage;
+
+  UpdatePropertyStateFailure(this.errorMessage);
+}

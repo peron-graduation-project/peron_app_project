@@ -1118,5 +1118,101 @@ class ApiService {
       ));
     }
   }
+  Future<Either<Failure, String>> updateProperty({
+    required String token,
+    required Property property,
+    required int id
+  }) async {
+    try {
+      final response = await _dio.put(
+        '/Property/$id',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+        data: {
+          {
+            "title": property.title,
+            "location": property.location,
+            "price": property.price,
+            "rentType": property.rentType,
+            "bedrooms": property.bedrooms,
+            "bathrooms": property.bathrooms,
+            "hasInternet": property.hasInternet,
+            "allowsPets": property.allowsPets,
+            "area": property.area,
+            "smokingAllowed": property.smokingAllowed,
+            "floor": property.floor,
+            "isFurnished": property.isFurnished,
+            "hasBalcony": property.hasBalcony,
+            "hasSecurity": property.hasSecurity,
+            "hasElevator": property.hasElevator,
+            "minBookingDays": property.minBookingDays,
+            "availableFrom": property.availableFrom,
+            "availableTo": property.availableTo,
+            "description": property.description,
+            "latitude": property.latitude,
+            "longitude": property.longitude,
+          }
+        },
+      );
+
+      print("✅ [DEBUG] updateProperty API Response: ${response.data}");
+
+      if (response.statusCode == 200 && response.data is String) {
+        return Right(response.data);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "فشل في تعديل الشقة: استجابة غير متوقعة",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error (updateProperty): $e");
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      print("❗️ [DEBUG] Unexpected Error in updateProperty: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء إرسال تعديل بيانات الشقة",
+        errors: [e.toString()],
+      ));
+    }
+  }
+  Future<Either<Failure, Property>> getProperty({
+    required String token,
+    required int id
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/Property/$id',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("✅ [DEBUG] getProperty API Response: ${response.data}");
+
+      if (response.statusCode == 200 && response.data is String) {
+        return Right(response.data);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "فشل في جلب بيانات الشقة: استجابة غير متوقعة",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error (getProperty): $e");
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      print("❗️ [DEBUG] Unexpected Error in getProperty: $e");
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء جلب  بيانات الشقة",
+        errors: [e.toString()],
+      ));
+    }
+  }
 
   }

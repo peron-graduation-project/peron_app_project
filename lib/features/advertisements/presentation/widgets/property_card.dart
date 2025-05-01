@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/myAds/presentation/view/views/modifyProperty.dart';
 
 class PropertyCard extends StatefulWidget {
-  const PropertyCard({Key? key}) : super(key: key);
+  const PropertyCard({super.key});
 
   @override
   State<PropertyCard> createState() => _PropertyCardState();
@@ -228,28 +227,6 @@ class _PropertyCardState extends State<PropertyCard> {
       ),
     );
   }
-
-  Widget _buildDetailItem(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 16,
-          color: Colors.grey[600],
-        ),
-        const SizedBox(width: 4),
-        Text(
-          text,
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 14,
-          ),
-        ),
-        const SizedBox(width: 10),
-      ],
-    );
-  }
-
   Widget buildPropertyInfoRow(IconData icon, int value) {
     return Row(
       children: [
