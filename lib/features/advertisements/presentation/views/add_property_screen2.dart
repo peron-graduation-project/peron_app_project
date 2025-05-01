@@ -75,10 +75,6 @@ class AddPropertyScreen2 extends StatelessWidget {
                     height: screenHeight * 0.05,
                   ),
                 ),
-
-                
-
-                
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: screenWidth * 0.04,

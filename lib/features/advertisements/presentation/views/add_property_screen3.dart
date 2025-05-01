@@ -51,8 +51,6 @@ class AddPropertyScreen3 extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                
                 Padding(
                   padding: EdgeInsets.only(
                     top: screenHeight * 0.025,
@@ -63,10 +61,7 @@ class AddPropertyScreen3 extends StatelessWidget {
                     color: const Color(0xFFE1E1E1),
                   ),
                 ),
-
                 SizedBox(height: screenHeight * 0.02),
-
-                
                 Center(
                   child: SvgPicture.asset(
                     Images.addPropertyTitle3,
@@ -75,9 +70,6 @@ class AddPropertyScreen3 extends StatelessWidget {
                   ),
                 ),
 
-
-
-                
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: screenWidth * 0.04,

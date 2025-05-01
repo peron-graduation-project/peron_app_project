@@ -94,7 +94,7 @@ class _ChatBodyScreenState extends State<ChatBodyScreen> {
       final state = context.read<GetConversationCubit>().state;
       if (state is GetConversationStateSuccess) {
         final message = _controller.text;
-    final String receiverId = state.conversations.first.id.toString();
+    final String receiverId = widget.id;
 
         context.read<GetConversationCubit>().addSentMessage(
           message: message,

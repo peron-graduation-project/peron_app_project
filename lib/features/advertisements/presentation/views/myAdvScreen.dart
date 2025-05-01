@@ -43,10 +43,9 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
   void initState() {
     super.initState();
     publishedAdsCount =
-        widget.initialPublishedCount; // Initialize with the provided value
+        widget.initialPublishedCount;
   }
 
-  // Navigate to AddPropertyScreen
   void _navigateToAddPropertyScreen() {
     // Navigator.push(
     //   context,
@@ -190,7 +189,7 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
                   ? PropertyCard()
                   : NoPublishedAdsContent(
                     onAddProperty:
-                        _navigateToAddPropertyScreen, // Update to use navigation function
+                        _navigateToAddPropertyScreen,
                   ),
         );
       case 1:
