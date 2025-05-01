@@ -20,6 +20,7 @@ class ChatViewBody extends StatefulWidget {
 }
 
 class _ChatViewBodyState extends State<ChatViewBody> {
+  List<ChatModel> allChats = [];
   List<ChatModel> filteredChats = [];
   Set<int> selectedChats = {};
   bool isSelectionMode = false;
@@ -71,8 +72,10 @@ class _ChatViewBodyState extends State<ChatViewBody> {
 
         if (state is GetChatsStateSuccess) {
           chats = state.chats;
-          if (filteredChats.isEmpty || filteredChats.length != chats.length) {
+          if (allChats.isEmpty || allChats.length != chats.length) {
+            allChats = List.from(chats);
             filteredChats = List.from(chats);
+
           }
         }
 
@@ -101,9 +104,10 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                 onSelected: (value) {
                   if (value == "delete") {
                     setState(() {
-                      selectedChats.forEach((index) {
+                      final sortedIndices = selectedChats.toList()..sort((a, b) => b.compareTo(a));
+                      for (int index in sortedIndices) {
                         chats.removeAt(index);
-                      });
+                      }
                       selectedChats.clear();
                       isSelectionMode = false;
                     });

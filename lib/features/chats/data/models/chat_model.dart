@@ -25,7 +25,7 @@ class ChatModel {
       lastMessage: json['lastMessage'] ?? '',
       timestamp: json['timestamp'] ?? '',
       isRead: json['isRead'] ?? false,
-      unReadCount: json['unReadCount']??0,
+      unReadCount: json['unreadCount']??0,
     );
   }
 
@@ -37,7 +37,7 @@ class ChatModel {
       'lastMessage': lastMessage,
       'timestamp': timestamp,
       'isRead': isRead,
-      'unReadCount': unReadCount,
+      'unreadCount': unReadCount,
     };
   }
 }
