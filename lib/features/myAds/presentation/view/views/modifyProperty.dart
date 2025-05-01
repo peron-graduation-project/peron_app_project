@@ -85,7 +85,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
               style: TextStyle(
                 color: AppColors.grey,
                 fontSize: 16,
-                fontWeight: FontWeight.bold,
+                // fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -98,23 +98,12 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Divider(thickness: 1),
+                const Divider(thickness: 1,indent: 8,endIndent: 8,),
                 _buildTextField('نوع العقار', propertyTypeController),
-                _buildDropdown(
+                _buildTextField(
                   'المكان',
-                  [
-                    "حى الجامعه",
-                    "قناه السويس",
-                    "توريل",
-                    "الجلاء",
-                    "المشايه",
-                    "الترعه",
-                    "الصنيه",
-                    "الاتوبيس",
-                    "عبدالسلام عارف",
-                  ],
-                  selectedLocation,
-                  (val) => setState(() => selectedLocation = val),
+                
+                  addressController
                 ),
                 Text(
                   "تفاصيل الإعلان",
@@ -191,7 +180,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                 _buildTextField('السعر - جنيه', priceController, height: 36),
 
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -289,7 +278,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
     int maxline = 1,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -337,7 +326,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
     void Function(String?) onChanged,
   ) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -438,7 +427,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
     void Function(List<String>) onChanged,
   ) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
