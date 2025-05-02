@@ -17,12 +17,7 @@ void main() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   final providers = await getAppProviders(sharedPreferences);
 
-  runApp(
-    MultiProvider(
-      providers: providers,
-      child: const PeronApp(),
-    ),
-  );
+  runApp(MultiProvider(providers: providers, child: const PeronApp()));
 }
 
 class PeronApp extends StatelessWidget {
@@ -42,20 +37,11 @@ class PeronApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [
-            Locale('ar', 'AE'),
-          ],
-         initialRoute: PageRouteName.initialRoute,
+          supportedLocales: const [Locale('ar', 'AE')],
+          initialRoute: PageRouteName.initialRoute,
           onGenerateRoute: RoutesGenerator.onGenerateRoute,
-<<<<<<< HEAD
         );
-=======
-
-          
-       );
->>>>>>> abf607add8c7aa90ecbe5df1ab334c25963c44c7
       },
     );
   }
 }
-
