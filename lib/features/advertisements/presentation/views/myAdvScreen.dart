@@ -1,19 +1,23 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/features/advertisements/presentation/views/add_property_screen.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/no_published.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/property_card.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/tab_item.dart';
-// Import the AddPropertyScreen
+import 'package:peron_project/features/detailsAboutProperty/domain/repos/get%20property/get_property_repo_imp.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_cubit.dart';
 
 class MyAdvertisementsPage extends StatefulWidget {
   final int initialPublishedCount;
 
   const MyAdvertisementsPage({
-    Key? key,
-    this.initialPublishedCount = 0, // Default is 0, but can be overridden
-  }) : super(key: key);
+    super.key,
+    this.initialPublishedCount = 0,
+  });
 
   @override
   State<MyAdvertisementsPage> createState() => _MyAdvertisementsPageState();
@@ -45,10 +49,9 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
   void initState() {
     super.initState();
     publishedAdsCount =
-        widget.initialPublishedCount; // Initialize with the provided value
+        widget.initialPublishedCount;
   }
 
-  // Navigate to AddPropertyScreen
   void _navigateToAddPropertyScreen() {
     Navigator.push(
       context,
@@ -58,7 +61,9 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
     final isSmallScreen = screenSize.width < 360;
 
     return Scaffold(
@@ -187,13 +192,16 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
     switch (_selectedTabIndex) {
       case 0:
         return Center(
-          child:
-              publishedAdsCount > 0
-                  ? PropertyCard()
-                  : NoPublishedAdsContent(
-                    onAddProperty:
-                        _navigateToAddPropertyScreen, // Update to use navigation function
-                  ),
+            child:
+          publishedAdsCount > 0
+              ?  BlocProvider(
+            create: (context) => GetPropertyCubit(GetPropertyRepoImp(ApiService(Dio()))),
+            child: PropertyCard(),
+          )
+              : NoPublishedAdsContent(
+                onAddProperty:
+                    _navigateToAddPropertyScreen,
+              ),
         );
       case 1:
         return const SizedBox();

@@ -5,8 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
+
 import 'package:peron_project/features/advertisements/presentation/views/myAdvScreen.dart';
 import 'package:peron_project/features/authentication/presentation/manager/logout/logout_cubit.dart';
+import 'package:peron_project/features/detailsAboutProperty/domain/repos/get%20property/get_property_repo_imp.dart';
+import 'package:peron_project/features/myAds/presentation/manager/update%20property/update_property_cubit.dart';
 import 'package:peron_project/features/profile/presentation/view/view/profile_screen.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/accountOption.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/profileSection.dart';
@@ -16,6 +19,8 @@ import '../../../../../core/helper/colors.dart';
 import '../../../../authentication/data/repos/logout/logout_repo_imp.dart';
 import '../../../../authentication/presentation/manager/logout/logout_state.dart';
 
+import '../../../../detailsAboutProperty/presentation/manager/get property/get_property_cubit.dart';
+import '../../../../myAds/domain/repos/edit property/edit_property_repo_imp.dart';
 import '../../../domain/repos/get profile/get_profile_repo_imp.dart';
 import '../../../domain/repos/update profile/update_profile_repo_imp.dart';
 import '../../manager/get profile/get_profile_cubit.dart';
@@ -165,7 +170,16 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
                       );
                     },
                   ),
-                  AccountOption(
+                  MultiBlocProvider(
+  providers: [
+    BlocProvider(
+  create: (context) => GetPropertyCubit(GetPropertyRepoImp(ApiService(Dio()))),
+),
+    BlocProvider(
+      create: (context) => UpdatePropertyCubit(UpdatePropertyRepoImp(ApiService(Dio()))),
+    ),
+  ],
+  child: AccountOption(
                     icon: Icons.list_alt_rounded,
                     title: "إعلاناتي",
                     screenWidth: screenWidth,
@@ -178,6 +192,7 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
                       );
                     },
                   ),
+),
                   AccountOption(
                     icon: Icons.share,
                     title: "مشاركة التطبيق",

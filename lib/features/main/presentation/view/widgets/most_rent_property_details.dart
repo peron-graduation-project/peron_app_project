@@ -32,7 +32,10 @@ class MostRentPropertyDetails extends StatelessWidget {
           children: [
             Stack(
               children: [
-                PropertyImage(imageUrl: property.images[0], itemWidth: itemWidth),
+                PropertyImage(
+                  imageUrl: property.images.isNotEmpty ? property.images[0] : null,
+                  itemWidth: itemWidth,
+                ),
                 CustomPriceWidget(propertyPrice: property.price),
               ],
             ),

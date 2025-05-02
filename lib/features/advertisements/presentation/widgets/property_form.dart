@@ -21,7 +21,7 @@ class _PropertyFormState extends State<PropertyForm> {
 
   final List<String> mansouraPlaces = [
     'حي الجامعة',
-     'توريل',
+    'توريل',
     'عبدالسلام عارف',
     'قناة السويس',
     'المشاية',
@@ -92,7 +92,7 @@ class _PropertyFormState extends State<PropertyForm> {
           ),
 
           const SizedBox(height: 12),
-          Directionality( 
+          Directionality(
             textDirection: TextDirection.ltr,
             child: Container(
               decoration: BoxDecoration(
@@ -126,57 +126,57 @@ class _PropertyFormState extends State<PropertyForm> {
 
           const SizedBox(height: 16),
 
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    Expanded(
-      child: Text(
-        'الرقم يحتوي علي واتس اب',
-        style: TextStyle(
-          fontFamily: Fonts.primaryFontFamily,
-          fontSize: screenWidth * 0.035,
-        ),
-        textAlign: TextAlign.right,
-      ),
-    ),
-    Switch(
-      value: isWhatsapp,
-      activeColor: AppColors.primaryColor,
-      onChanged: (value) {
-        setState(() {
-          isWhatsapp = value;
-        });
-      },
-    ),
-  ],
-),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  'الرقم يحتوي علي واتس اب',
+                  style: TextStyle(
+                    fontFamily: Fonts.primaryFontFamily,
+                    fontSize: screenWidth * 0.035,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+              Switch(
+                value: isWhatsapp,
+                activeColor: AppColors.primaryColor,
+                onChanged: (value) {
+                  setState(() {
+                    isWhatsapp = value;
+                  });
+                },
+              ),
+            ],
+          ),
 
-const SizedBox(height: 4),
+          const SizedBox(height: 4),
 
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    Checkbox(
-      value: isEmailChecked,
-      activeColor: AppColors.primaryColor,
-      onChanged: (value) {
-        setState(() {
-          isEmailChecked = value!;
-        });
-      },
-    ),
-    Expanded(
-      child: Text(
-        'تواصل معي عن طريق البريد الالكتروني',
-        style: TextStyle(
-          fontFamily: Fonts.primaryFontFamily,
-          fontSize: screenWidth * 0.035,
-        ),
-        textAlign: TextAlign.right,
-      ),
-    ),
-  ],
-),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Checkbox(
+                value: isEmailChecked,
+                activeColor: AppColors.primaryColor,
+                onChanged: (value) {
+                  setState(() {
+                    isEmailChecked = value!;
+                  });
+                },
+              ),
+              Expanded(
+                child: Text(
+                  'تواصل معي عن طريق البريد الالكتروني',
+                  style: TextStyle(
+                    fontFamily: Fonts.primaryFontFamily,
+                    fontSize: screenWidth * 0.035,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            ],
+          ),
 
 
           SizedBox(height: screenHeight * 0.04),

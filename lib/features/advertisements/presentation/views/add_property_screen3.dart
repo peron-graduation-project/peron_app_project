@@ -7,7 +7,7 @@ import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/property_form3.dart';
 
 class AddPropertyScreen3 extends StatelessWidget {
-  const AddPropertyScreen3({Key? key}) : super(key: key);
+  const AddPropertyScreen3({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +51,6 @@ class AddPropertyScreen3 extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                
                 Padding(
                   padding: EdgeInsets.only(
                     top: screenHeight * 0.025,
@@ -63,10 +61,7 @@ class AddPropertyScreen3 extends StatelessWidget {
                     color: const Color(0xFFE1E1E1),
                   ),
                 ),
-
                 SizedBox(height: screenHeight * 0.02),
-
-                
                 Center(
                   child: SvgPicture.asset(
                     Images.addPropertyTitle3,
@@ -75,9 +70,6 @@ class AddPropertyScreen3 extends StatelessWidget {
                   ),
                 ),
 
-
-
-                
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: screenWidth * 0.04,
