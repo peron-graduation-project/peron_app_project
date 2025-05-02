@@ -54,10 +54,10 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
             size: 18
           ),
           onPressed: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => PropertyForm3()),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PropertyForm3()),
+            );
           },
         ),
         // بدون أي أزرار في جانب الأيسر (actions)

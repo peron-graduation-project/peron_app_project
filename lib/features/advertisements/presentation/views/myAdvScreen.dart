@@ -50,10 +50,10 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
 
   // Navigate to AddPropertyScreen
   void _navigateToAddPropertyScreen() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => AddPropertyScreen()),
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddPropertyScreen()),
+    );
   }
 
   @override

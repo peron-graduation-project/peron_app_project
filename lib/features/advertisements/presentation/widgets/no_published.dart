@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/features/advertisements/presentation/views/add_property_screen.dart';
 
 class NoPublishedAdsContent extends StatelessWidget {
   final VoidCallback onAddProperty;
 
   const NoPublishedAdsContent({Key? key, required this.onAddProperty})
-      : super(key: key);
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,31 +27,50 @@ class NoPublishedAdsContent extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
               const SizedBox(height: 25),
-               Text(
+              Text(
                 'لا يوجد إعلانات منشوره بعد',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Color.fromARGB(255, 15, 15, 15),            fontFamily: Fonts.primaryFontFamily,
-),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 15, 15, 15),
+                  fontFamily: Fonts.primaryFontFamily,
+                ),
               ),
               const SizedBox(height: 5),
-               Text(
+              Text(
                 'بعد',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.black,            fontFamily: Fonts.primaryFontFamily,
-),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontFamily: Fonts.primaryFontFamily,
+                ),
               ),
               const SizedBox(height: 10),
               Text(
                 'أضف إعلانات لتصل إلى الاف المستخدمين',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14,            fontFamily: Fonts.primaryFontFamily,
-fontWeight: FontWeight.w200, color: const Color.fromARGB(255, 154, 153, 153)),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: Fonts.primaryFontFamily,
+                  fontWeight: FontWeight.w200,
+                  color: const Color.fromARGB(255, 154, 153, 153),
+                ),
               ),
               const SizedBox(height: 30),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: onAddProperty,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddPropertyScreen(),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF0F8E65),
                     padding: const EdgeInsets.symmetric(vertical: 15),
@@ -58,10 +78,13 @@ fontWeight: FontWeight.w200, color: const Color.fromARGB(255, 154, 153, 153)),
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child:  Text(
+                  child: Text(
                     'اضف عقار',
-                    style: TextStyle(color: Colors.white, fontSize: 16,            fontFamily: Fonts.primaryFontFamily,
-),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: Fonts.primaryFontFamily,
+                    ),
                   ),
                 ),
               ),

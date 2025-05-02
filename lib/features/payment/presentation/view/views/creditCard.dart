@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/fonts.dart';
-import 'package:peron_project/features/myAds/presentation/view/widgets/successDialog.dart';
+// import 'package:peron_project/features/myAds/presentation/view/widgets/successDialog.dart';
 import 'package:peron_project/features/payment/presentation/view/widgets/creditdetails.dart';
 import 'package:peron_project/features/payment/presentation/view/widgets/customField.dart';
 import 'package:peron_project/features/payment/presentation/view/widgets/successPaymentDialog.dart';
