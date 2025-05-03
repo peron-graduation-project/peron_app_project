@@ -39,17 +39,17 @@ class MostRentPropertyDetails extends StatelessWidget {
                 CustomPriceWidget(propertyPrice: property.price),
               ],
             ),
-            SizedBox(height: paddingSize),
+            SizedBox(height: 4),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: paddingSize),
+              padding: EdgeInsets.symmetric(horizontal: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   PropertyTitle(title: 'شقة سكنية ${property.title}'),
-                  SizedBox(height: paddingSize * 0.5),
+                  SizedBox(height: 3),
                   PropertyRating(rating: property.averageRating??0.0, iconSize: iconSize),
-                  SizedBox(height: paddingSize * 0.5),
+                  SizedBox(height: 3),
                   PropertyLocation(location: property.title, iconSize: iconSize),
                   const Divider(),
                   PropertyStats(

@@ -41,9 +41,8 @@ class MostRentPropertyWidget extends StatelessWidget {
               );
             }
 
-            // إذا تم مسح البحث، أعد تحميل البيانات الأصلية
             if (searchState is GetSearchPropertiesStateEmpty) {
-              context.read<GetSearchPropertiesCubit>().clearSearch(); // تأكد من أنك أضفت clearSearch في الـCubit
+              context.read<GetSearchPropertiesCubit>().clearSearch();
             }
 
             if (selectedSort == "الأعلى سعرا") {
@@ -87,9 +86,17 @@ class MostRentPropertyWidget extends StatelessWidget {
                 builder: (context, state) {
                   if (state is GetRecommendedPropertiesStateLoading) {
                     return Center(child: CircularProgressIndicator(color: AppColors.primaryColor));
-                  } else if (state is GetRecommendedPropertiesStateSuccess) {
+                  }
+                  else if (state is GetRecommendedPropertiesStateSuccess) {
+
                     return _buildHorizontalPropertyList(context, state.properties);
-                  } else {
+                  }
+                  else if (state is GetRecommendedPropertiesStateFailure) {
+                    return Center(
+                      child: const Text('فشل في تحميل العقارات.', style: TextStyle(fontSize: 16)),
+                    );
+                  }
+                  else {
                     return const Center(child: Text('لا توجد عقارات متاحة.'));
                   }
                 },

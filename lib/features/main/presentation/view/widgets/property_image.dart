@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/helper/colors.dart';
 
 class PropertyImage extends StatelessWidget {
   final String? imageUrl;
@@ -20,6 +21,7 @@ class PropertyImage extends StatelessWidget {
           ? Image.network(
         imageUrl!,
         width: double.infinity,
+        height: itemWidth * 0.6,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
           return _placeholder();
@@ -33,6 +35,7 @@ class PropertyImage extends StatelessWidget {
             color: Colors.grey[300],
             child: Center(
               child: CircularProgressIndicator(
+                color: AppColors.primaryColor,
                 value: loadingProgress.expectedTotalBytes != null
                     ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
                     : null,
