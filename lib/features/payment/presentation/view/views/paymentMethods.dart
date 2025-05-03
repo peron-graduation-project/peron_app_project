@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/features/advertisements/data/property_model.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/property_form3.dart';
 import 'package:peron_project/features/payment/presentation/view/widgets/paymentMethodItem.dart';
 import 'continuePayment.dart';
 import 'creditcard.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
-  const PaymentMethodScreen({Key? key}) : super(key: key);
-
+  final PropertyFormData formData; 
+  const PaymentMethodScreen({
+    Key? key,
+    required this.formData,  
+  }) : super(key: key);
   @override
   State<PaymentMethodScreen> createState() => _PaymentMethodScreenState();
 }
@@ -56,7 +60,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PropertyForm3()),
+              MaterialPageRoute(builder: (context) => PropertyForm3(formData: widget.formData,)),
             );
           },
         ),

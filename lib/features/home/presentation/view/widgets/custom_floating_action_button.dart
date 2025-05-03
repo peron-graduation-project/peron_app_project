@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/features/advertisements/presentation/views/add_property_screen.dart';
 
 import '../../../../../core/helper/colors.dart';
 
@@ -17,7 +18,13 @@ class CustomFloatingActionButton extends StatelessWidget {
         backgroundColor: AppColors.primaryColor,
         shape: const CircleBorder(),
         child: Icon(Icons.add, size: buttonSize * 0.5, color: Colors.white),
-        onPressed: () {},
+        onPressed: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => const AddPropertyScreen()),
+  );
+},
+
       ),
     );
   }

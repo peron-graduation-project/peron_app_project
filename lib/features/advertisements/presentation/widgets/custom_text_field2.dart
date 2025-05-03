@@ -6,12 +6,19 @@ class CustomTextField extends StatelessWidget {
   final String? hintText;
   final int maxLines;
   final TextEditingController? controller;
+  final String? Function(String?)? validator;
+  final TextInputType? keyboardType;                 
+  final TextAlignVertical? textAlignVertical;        
 
   const CustomTextField({
     Key? key,
     this.hintText,
     this.maxLines = 1,
     this.controller,
+    this.validator,
+    this.keyboardType,                                
+    this.textAlignVertical,      
+                     
   }) : super(key: key);
 
   @override
@@ -19,47 +26,56 @@ class CustomTextField extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
+    final inputDecoration = InputDecoration(
+      hintText: hintText,
+      hintStyle: TextStyle(
+        fontFamily: Fonts.primaryFontFamily,
+        fontWeight: FontWeight.w500,
+        fontSize: screenWidth * 0.04,
+        height: 1.0,
+        color: AppColors.bodySmallColor,
+      ),
+      enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: AppColors.dividerColor, 
-          width: 1,
-        ),
+        borderSide: BorderSide(color: AppColors.dividerColor),
       ),
-      child: TextField(
-        controller: controller,
-        maxLines: maxLines,
-        textAlign: TextAlign.right,
-        textAlignVertical: maxLines == 1
-            ? TextAlignVertical.center
-            : TextAlignVertical.top,
-        style: TextStyle(
-          fontFamily: Fonts.primaryFontFamily,
-          fontSize: screenWidth * 0.04,
-          fontWeight: FontWeight.w500,
-          color: AppColors.titleSmallColor, 
-        ),
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: TextStyle(
-            fontFamily: Fonts.primaryFontFamily,
-            fontWeight: FontWeight.w500,
-            fontSize: screenWidth * 0.04,
-            height: 1.0,
-            color: AppColors.bodySmallColor,
-          ),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.03,
-            vertical: maxLines == 1
-                ? screenHeight * 0.015
-                : screenHeight * 0.02,
-          ),
-        ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: AppColors.primaryColor, width: 1.5),
       ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.red, width: 1.2),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.red, width: 1.2),
+      ),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.03,
+        vertical: maxLines == 1
+            ? screenHeight * 0.015
+            : screenHeight * 0.02,
+      ),
+    );
+
+    return TextFormField(
+      controller: controller,
+      validator: validator,
+      maxLines: maxLines,
+      keyboardType: keyboardType,                   
+      textAlign: TextAlign.right,
+      textAlignVertical: textAlignVertical ??
+          (maxLines == 1
+              ? TextAlignVertical.center
+              : TextAlignVertical.top),
+      style: TextStyle(
+        fontFamily: Fonts.primaryFontFamily,
+        fontSize: screenWidth * 0.04,
+        fontWeight: FontWeight.w500,
+        color: AppColors.titleSmallColor,
+      ),
+      decoration: inputDecoration,
     );
   }
 }
-

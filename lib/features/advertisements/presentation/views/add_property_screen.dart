@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/images.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
-import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/property_form.dart';
+import 'package:peron_project/core/helper/fonts.dart';
 
 class AddPropertyScreen extends StatelessWidget {
   const AddPropertyScreen({Key? key}) : super(key: key);
@@ -89,7 +89,7 @@ class AddPropertyScreen extends StatelessWidget {
             ),
           ),
         ),
-      ), 
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/colors.dart';
+import 'package:peron_project/features/filter/screens/filter_screen.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20Search/get_search_cubit.dart';
 
 class CustomSearchBar extends StatelessWidget {
@@ -49,6 +50,10 @@ class CustomSearchBar extends StatelessWidget {
               if (query.isNotEmpty) {
                 context.read<GetSearchPropertiesCubit>().getSearchProperties(query);
               }
+               Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => FilterScreen()),
+               );
             },
             icon: Icon(Icons.tune_outlined, color: AppColors.primaryColor, size: 25),
           ),

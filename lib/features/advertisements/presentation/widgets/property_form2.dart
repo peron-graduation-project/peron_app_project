@@ -2,112 +2,162 @@ import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
-
+import 'package:peron_project/features/advertisements/data/property_model.dart';
 import 'package:peron_project/features/advertisements/presentation/views/add_property_screen3.dart';
-import 'package:peron_project/features/advertisements/presentation/widgets/custom_dropdown.dart';
-
+import 'package:peron_project/features/advertisements/presentation/widgets/custom_multi_select_dropdown.dart';
+import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field2.dart';
 
 class PropertyForm2 extends StatefulWidget {
-  const PropertyForm2({super.key});
+  final PropertyFormData formData;
+  const PropertyForm2({Key? key, required this.formData}) : super(key: key);
 
   @override
   _PropertyForm2State createState() => _PropertyForm2State();
 }
 
 class _PropertyForm2State extends State<PropertyForm2> {
-  String? selectedView;
+  final _formKey = GlobalKey<FormState>();
 
-  final List<String> viewOptions = [
-    'شارع رئيسي',
-    'شارع فرعي',
-    'ناصيه',
-    'خلفي',
-    'اخرى'
+  final TextEditingController bedroomsController = TextEditingController();
+  final TextEditingController bathsController    = TextEditingController();
+  final TextEditingController addressController  = TextEditingController();
+
+  final List<String> featuresOptions = [
+    'مصعد',
+    'برج',
+    'بلكونه',
+    'واي فاي',
+    'تدفئه مركزيه',
+    'حراسه/امان',
   ];
+  List<String> selectedFeatures = [];
+
+  @override
+  void dispose() {
+    bedroomsController.dispose();
+    bathsController.dispose();
+    addressController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth  = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          buildLabel('المساحه (بالمتر)', screenWidth),
-          const SizedBox(height: 8),
-         // const CustomTextField(),
+      child: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildLabel('الغرف', screenWidth),
+            const SizedBox(height: 8),
+            CustomTextField(
+              controller: bedroomsController,
+              hintText: 'أدخل عدد الغرف',
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'يرجى إدخال عدد الغرف';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'يرجى إدخال رقم صحيح';
+                }
+                return null;
+              },
+            ),
 
-          buildLabel('السعر - جنيه', screenWidth),
-          const SizedBox(height: 8),
-       //   const CustomTextField(),
+            buildLabel('الحمامات', screenWidth),
+            const SizedBox(height: 8),
+            CustomTextField(
+              controller: bathsController,
+              hintText: 'أدخل عدد الحمامات',
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'يرجى إدخال عدد الحمامات';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'يرجى إدخال رقم صحيح';
+                }
+                return null;
+              },
+            ),
 
-          buildLabel('تطل على', screenWidth),
-          const SizedBox(height: 8),
-          CustomDropdown(
-            label: 'اختر',
-            value: selectedView,
-            items: viewOptions,
-            onChanged: (value) {
-              setState(() {
-                selectedView = value;
-              });
-            },
-          ),
+            buildLabel('عنوان العقار', screenWidth),
+            const SizedBox(height: 8),
+            CustomTextField(
+              controller: addressController,
+              hintText: 'أدخل العنوان الكامل',
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'يرجى إدخال العنوان';
+                }
+                return null;
+              },
+            ),
 
-          buildLabel('الغرف', screenWidth),
-          const SizedBox(height: 8),
-       //   const CustomTextField(),
+            buildLabel('مواصفات أخرى', screenWidth),
+            const SizedBox(height: 8),
+            CustomMultiSelectDropdown(
+              label: 'اختر',
+              items: featuresOptions,
+              selectedValues: selectedFeatures,
+              onChanged: (newSelected) {
+                setState(() => selectedFeatures = newSelected);
+              },
+            ),
 
-          buildLabel('الحمامات', screenWidth),
-          const SizedBox(height: 8),
-         // const CustomTextField(),
+            SizedBox(height: screenHeight * 0.04),
 
-          buildLabel('الطابق', screenWidth),
-          const SizedBox(height: 8),
-          //const CustomTextField(),
+            Row(
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    text: 'متابعة',
+                    textColor: AppColors.labelMediumColor,
+                    backgroundColor: AppColors.primaryColor,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        widget.formData
+                          ..bedrooms        = int.tryParse(bedroomsController.text) ?? 0
+                          ..bathrooms       = int.tryParse(bathsController.text) ?? 0
+                          ..location        = addressController.text
+                          ..selectedFeatures = selectedFeatures;
 
-          buildLabel('المطبخ', screenWidth),
-          const SizedBox(height: 8),
-          //const CustomTextField(),
-
-          SizedBox(height: screenHeight * 0.04),
-
-          Row(
-            children: [
-              Expanded(
-                child: CustomButton(
-                  text: 'متابعة',
-                  textColor: AppColors.labelMediumColor,
-                  backgroundColor: AppColors.primaryColor,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AddPropertyScreen3(),
-                      ),
-                    );
-                  },
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddPropertyScreen3(
+                              data: widget.formData,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: CustomButton(
-                  text: 'السابق',
-                  textColor: AppColors.primaryColor,
-                  backgroundColor: Colors.white,
-                  borderColor: AppColors.primaryColor,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                const SizedBox(width: 16),
+                Expanded(
+                  child: CustomButton(
+                    text: 'السابق',
+                    textColor: AppColors.primaryColor,
+                    backgroundColor: Colors.white,
+                    borderColor: AppColors.primaryColor,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
 
-          SizedBox(height: screenHeight * 0.04),
-        ],
+            SizedBox(height: screenHeight * 0.04),
+          ],
+        ),
       ),
     );
   }
