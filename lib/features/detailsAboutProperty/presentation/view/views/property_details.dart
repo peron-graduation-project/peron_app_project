@@ -30,13 +30,11 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
     'assets/images/appartment3.jpg',
   ];
 
-  void _goToImage(int index) {
-    if (index >= 0 && index < _imagesPaths.length) {
-      setState(() {
-        _currentImageIndex = index;
-      });
-    }
+ void goToImage(int index) {
+  if (index >= 0 && index < _imagesPaths.length) {
+    // Update currentImageIndex (e.g., via a callback or state management)
   }
+}
 
   void _toggleExtendedDetails() {
     setState(() {
@@ -77,7 +75,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                   PropertyImageSlider(
                     imagesPaths: _imagesPaths,
                     currentImageIndex: _currentImageIndex,
-                    goToImage: _goToImage,
+                    goToImage: goToImage,
                     imageHeight: imageHeight,
                     standardPadding: standardPadding,
                     screenHeight: screenHeight,

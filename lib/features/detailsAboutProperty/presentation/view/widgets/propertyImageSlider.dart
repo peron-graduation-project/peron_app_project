@@ -28,25 +28,27 @@ class PropertyImageSlider extends StatelessWidget {
     return Stack(
       children: [
         GestureDetector(
-          onHorizontalDragEnd: (details) {
-            if (details.primaryVelocity != null) {
-              if (details.primaryVelocity! > 0) {
-                goToImage(currentImageIndex - 1);
-              } else {
-                goToImage(currentImageIndex + 1);
-              }
-            }
-          },
-          child: Container(
-            height: imageHeight,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(imagesPaths[currentImageIndex]),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
+  onHorizontalDragEnd: (details) {
+    if (details.primaryVelocity != null) {
+      if (details.primaryVelocity! > 0) {
+        // Swipe right: go to next image
+        goToImage(currentImageIndex + 1);
+      } else {
+        // Swipe left: go to previous image
+        goToImage(currentImageIndex - 1);
+      }
+    }
+  },
+  child: Container(
+    height: imageHeight,
+    decoration: BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage(imagesPaths[currentImageIndex]),
+        fit: BoxFit.cover,
+      ),
+    ),
+  ),
+),
         Positioned(
           bottom: imageHeight * 0.15,
           left: 0,

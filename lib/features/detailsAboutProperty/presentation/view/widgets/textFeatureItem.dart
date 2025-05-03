@@ -29,8 +29,7 @@ class TextFeatureItem extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-              color: Colors.grey[700],
-              height: 1.5,
+color: const Color.fromARGB(255, 143, 143, 143),              height: 1.5,
               fontWeight: FontWeight.w100,
               fontSize: 17,
               fontFamily: Fonts.primaryFontFamily,

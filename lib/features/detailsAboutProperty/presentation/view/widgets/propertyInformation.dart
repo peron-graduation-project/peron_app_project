@@ -24,7 +24,7 @@ class PropertyInformation extends StatelessWidget {
           Text(
             'الحالة: ممتازة',
             style: TextStyle(
-              color: Colors.grey[700],
+              color: const Color.fromARGB(255, 143, 143, 143),
               // height: 1.5,
               fontWeight: FontWeight.normal,
               fontSize: 17,
@@ -36,8 +36,7 @@ class PropertyInformation extends StatelessWidget {
           Text(
             'الطابق: الثالث',
             style: TextStyle(
-              color: Colors.grey[700],
-              height: 1.5,
+color: const Color.fromARGB(255, 143, 143, 143),              height: 1.5,
               fontWeight: FontWeight.normal,
               fontSize: 17,
               fontFamily: Fonts.primaryFontFamily,
@@ -48,8 +47,7 @@ class PropertyInformation extends StatelessWidget {
           Text(
             'الموقع: على الطريق الدائري وبجوار المسجد الكبير',
             style: TextStyle(
-              color: Colors.grey[700],
-              height: 1.5,
+color: const Color.fromARGB(255, 143, 143, 143),              height: 1.5,
               fontWeight: FontWeight.normal,
               fontSize: 17,
               fontFamily: Fonts.primaryFontFamily,

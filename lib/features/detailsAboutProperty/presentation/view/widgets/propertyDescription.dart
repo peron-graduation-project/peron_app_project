@@ -50,7 +50,7 @@ class PropertyDescription extends StatelessWidget {
           child: Text(
             'النوع: شقة مميزة في موقع هادي وسكني راقي، تطل على شارع واسع. تتكون من 3 غرف نوم رئيسية، غرفتين حمام، مطبخ، ومغلقة كلياً في الدور الثالث في عمارة حديثة مزودة بأساسنسير. العمارة نظيفة وآمنة.\nالمساحة: مساحة واسعة تبلغ 150 م\nالتشطيب: سوبر لوكس',
             style: TextStyle(
-              color: Colors.grey[700],
+              color: const Color.fromARGB(255, 143, 143, 143),
               height: 1.5,
               fontWeight: FontWeight.normal,
               fontSize: 17,

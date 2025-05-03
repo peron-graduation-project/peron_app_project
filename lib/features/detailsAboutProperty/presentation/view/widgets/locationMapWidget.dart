@@ -45,6 +45,7 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
   LatLng? _currentLatLng;
   StreamSubscription<loc.LocationData>? _locationSubscription;
   LatLng _defaultLocation = const LatLng(30.0444, 31.2357); // Cairo
+  double _zoomLevel = 15.0;
 
   @override
   void initState() {
@@ -80,7 +81,7 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
       // Center the map on the property
       if (_controller != null) {
         _controller!.animateCamera(
-          CameraUpdate.newLatLngZoom(propertyLocation, 15),
+          CameraUpdate.newLatLngZoom(propertyLocation, _zoomLevel),
         );
       }
     }
@@ -152,7 +153,6 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
   }
 
   void _navigateToFullScreenMap() {
-    // استخدم MapScreen مباشرة بدلاً من إنشاء كلاس جديد
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -161,9 +161,28 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
               propertyLatitude: widget.propertyLatitude,
               propertyLongitude: widget.propertyLongitude,
               propertyTitle: widget.propertyTitle,
+              initialZoom: _zoomLevel,
             ),
       ),
     );
+  }
+
+  void _zoomIn() {
+    setState(() {
+      _zoomLevel = (_zoomLevel + 1).clamp(0.0, 18.0);
+      if (_controller != null) {
+        _controller!.animateCamera(CameraUpdate.zoomTo(_zoomLevel));
+      }
+    });
+  }
+
+  void _zoomOut() {
+    setState(() {
+      _zoomLevel = (_zoomLevel - 1).clamp(0.0, 18.0);
+      if (_controller != null) {
+        _controller!.animateCamera(CameraUpdate.zoomTo(_zoomLevel));
+      }
+    });
   }
 
   @override
@@ -183,7 +202,8 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
               fontFamily: Fonts.primaryFontFamily,
             ),
           ),
-        ),SizedBox(height: 10,),
+        ),
+        SizedBox(height: 10,),
         Container(
           margin: EdgeInsets.symmetric(horizontal: widget.padding),
           height: 200,
@@ -205,7 +225,7 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
                               widget.propertyLongitude!,
                             )
                             : _currentLatLng ?? _defaultLocation,
-                    zoom: 15,
+                    zoom: _zoomLevel,
                   ),
                   onMapCreated: (GoogleMapController controller) {
                     _controller = controller;
@@ -223,31 +243,26 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
                       color: AppColors.primaryColor,
                     ),
                   ),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: Column(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.add, color: AppColors.primaryColor),
+                        onPressed: _zoomIn,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.remove, color: AppColors.primaryColor),
+                        onPressed: _zoomOut,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
         ),
-        // Padding(
-        //   padding: EdgeInsets.all(widget.padding),
-        //   child: ElevatedButton(
-        //     onPressed: _navigateToFullScreenMap,
-        //     style: ElevatedButton.styleFrom(
-        //       minimumSize: const Size(double.infinity, 45),
-        //       backgroundColor: AppColors.primaryColor,
-        //       shape: RoundedRectangleBorder(
-        //         borderRadius: BorderRadius.circular(8),
-        //       ),
-        //     ),
-        //     child: Text(
-        //       "عرض على الخريطة الكاملة",
-        //       style: TextStyle(
-        //         color: Colors.white,
-        //         fontSize: widget.smallFontSize,
-        //         fontFamily: Fonts.primaryFontFamily,
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
@@ -258,12 +273,14 @@ class SimpleMapScreen extends StatefulWidget {
   final double? propertyLatitude;
   final double? propertyLongitude;
   final String? propertyTitle;
+  final double initialZoom;
 
   SimpleMapScreen({
     Key? key,
     this.propertyLatitude,
     this.propertyLongitude,
     this.propertyTitle,
+    this.initialZoom = 15.0,
   }) : super(key: key);
 
   @override
@@ -282,10 +299,12 @@ class _SimpleMapScreenState extends State<SimpleMapScreen> {
   LatLng? _currentLatLng;
   LatLng _defaultLocation = const LatLng(30.0444, 31.2357); // Cairo
   StreamSubscription<loc.LocationData>? _locationSubscription;
+  double _zoomLevel = 15.0;
 
   @override
   void initState() {
     super.initState();
+    _zoomLevel = widget.initialZoom;
     _setupMap();
     _startTrackingUserLocation();
   }
@@ -358,7 +377,7 @@ class _SimpleMapScreenState extends State<SimpleMapScreen> {
       // Center the map on the property
       if (_controller != null) {
         _controller!.animateCamera(
-          CameraUpdate.newLatLngZoom(propertyLocation, 15),
+          CameraUpdate.newLatLngZoom(propertyLocation, _zoomLevel),
         );
       }
     }
@@ -423,6 +442,24 @@ class _SimpleMapScreenState extends State<SimpleMapScreen> {
     }
   }
 
+  void _zoomIn() {
+    setState(() {
+      _zoomLevel = (_zoomLevel + 1).clamp(0.0, 18.0);
+      if (_controller != null) {
+        _controller!.animateCamera(CameraUpdate.zoomTo(_zoomLevel));
+      }
+    });
+  }
+
+  void _zoomOut() {
+    setState(() {
+      _zoomLevel = (_zoomLevel - 1).clamp(0.0, 18.0);
+      if (_controller != null) {
+        _controller!.animateCamera(CameraUpdate.zoomTo(_zoomLevel));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -448,7 +485,7 @@ class _SimpleMapScreenState extends State<SimpleMapScreen> {
                         widget.propertyLongitude!,
                       )
                       : _currentLatLng ?? _defaultLocation,
-              zoom: 15,
+              zoom: _zoomLevel,
             ),
             onMapCreated: (GoogleMapController controller) {
               _controller = controller;
@@ -458,7 +495,7 @@ class _SimpleMapScreenState extends State<SimpleMapScreen> {
             polylines: _polylines,
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
-            zoomControlsEnabled: true,
+            zoomControlsEnabled: false,
             onTap: (LatLng position) {
               // يمكن إضافة وظائف إضافية عند النقر على الخريطة
             },
@@ -467,6 +504,51 @@ class _SimpleMapScreenState extends State<SimpleMapScreen> {
             Center(
               child: CircularProgressIndicator(color: AppColors.primaryColor),
             ),
+          Positioned(
+            top: 50,
+            right: 10,
+            child: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.add, color: AppColors.primaryColor),
+                  onPressed: _zoomIn,
+                ),
+                IconButton(
+                  icon: Icon(Icons.remove, color: AppColors.primaryColor),
+                  onPressed: _zoomOut,
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (_currentLatLng != null)
+                  Text(
+                    "Latitude: ${_currentLatLng!.latitude}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                if (_currentLatLng != null)
+                  Text(
+                    "Longitude: ${_currentLatLng!.longitude}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                if (widget.propertyLatitude != null && widget.propertyLongitude != null)
+                  Text(
+                    "Property Latitude: ${widget.propertyLatitude}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                if (widget.propertyLatitude != null && widget.propertyLongitude != null)
+                  Text(
+                    "Property Longitude: ${widget.propertyLongitude}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+              ],
+            ),
+          ),
         ],
       ),
     );
