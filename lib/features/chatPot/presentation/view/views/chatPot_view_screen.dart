@@ -144,14 +144,6 @@ class ChatpotViewScreen extends StatelessWidget {
                               top: screenHeight * 0.015,
                               bottom: screenHeight * 0.015,
                             ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                Icons.attach_file,
-                                color: Colors.grey[600],
-                                size: screenWidth * 0.06,
-                              ),
-                              onPressed: () {},
-                            ),
                           ),
                         ),
                       ),

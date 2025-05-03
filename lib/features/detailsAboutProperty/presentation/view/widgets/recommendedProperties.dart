@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_launcher_icons/xml_templates.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/core/utils/property_model.dart';
+import 'package:peron_project/features/main/presentation/manager/get%20Search/get_search_cubit.dart';
+import 'package:peron_project/features/main/presentation/manager/get%20Search/get_search_state.dart';
 
 class RecommendedProperties extends StatefulWidget {
   final double screenWidth;
   final double padding;
   final double fontSize;
   final double smallFontSize;
+  final String location;
 
   const RecommendedProperties({
     Key? key,
+    required this.location,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
@@ -23,6 +28,12 @@ class RecommendedProperties extends StatefulWidget {
 class _RecommendedPropertiesState extends State<RecommendedProperties> {
   final Set<int> _favoriteIndices = {};
 
+  @override
+  void initState() {
+    super.initState();
+    context.read<GetSearchPropertiesCubit>().getSearchProperties(widget.location);
+  }
+
   void _toggleFavorite(int index) {
     setState(() {
       if (_favoriteIndices.contains(index)) {
@@ -35,85 +46,98 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Divider(thickness: 0.3),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: widget.padding),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocBuilder<GetSearchPropertiesCubit, GetSearchPropertiesState>(
+      builder: (context, state) {
+        if (state is GetSearchPropertiesStateLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (state is GetSearchPropertiesStateFailure) {
+          return Center(
+            child: Text(
+              'فشل في جلب البيانات: ${state.errorMessage}',
+              style: TextStyle(color: Colors.red),
+            ),
+          );
+        }
+
+        if (state is GetSearchPropertiesStateEmpty) {
+          return Center(
+            child: Text(
+              'لا توجد عقارات متاحة في هذا الموقع',
+              style: TextStyle(color: Colors.grey),
+            ),
+          );
+        }
+
+        if (state is GetSearchPropertiesStateSuccess) {
+          List<Property> properties = state.properties;
+          return Column(
             children: [
-              Text(
-                'مقترح به لك',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: Fonts.primaryFontFamily,
+              Divider(thickness: 0.3),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: widget.padding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'مقترح به لك',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: Fonts.primaryFontFamily,
+                      ),
+                      textAlign: TextAlign.right,
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.right,
               ),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  'عرض الكل',
-                  style: TextStyle(
-                    color: const Color(0xff0F7757),
-                    fontFamily: Fonts.primaryFontFamily,
+              SizedBox(height: 12),
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: SizedBox(
+                  height: 180,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: widget.padding),
+                    itemCount: properties.length,
+                    itemBuilder: (context, index) {
+                    Property property = properties[index];
+return Row(
+  children: [
+    _buildPropertyCard(
+      context,
+      index: index,
+      imagePath: property.images != null && property.images!.isNotEmpty
+          ? property.images![0]
+          : "",
+      propertyType: property.rentType ??
+          "غير محدد",
+      location: property.location ?? "موقع غير محدد",
+      price: property.price != null ? property.price.toString() : "سعر غير محدد",
+    ),
+    SizedBox(width: 12),
+  ],
+);
+
+                    },
                   ),
                 ),
               ),
             ],
-          ),
-        ),
-        SizedBox(height: 12),
-        Directionality(
-          textDirection: TextDirection.rtl,
-          child: SizedBox(
-            height: 180,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              // تم إزالة reverse: true لجعل التمرير من اليمين لليسار
-              padding: EdgeInsets.symmetric(horizontal: widget.padding),
-              children: [
-                _buildPropertyCard(
-                  context,
-                  index: 0,
-                  imagePath: 'assets/images/appartment.jpg',
-                  propertyType: 'شقة سكنية',
-                  location: 'توريل',
-                  price: '2200.00',
-                ),
-                SizedBox(width: 12),
-                _buildPropertyCard(
-                  context,
-                  index: 1,
-                  imagePath: 'assets/images/appartment2.jpg',
-                  propertyType: 'شقة سكنية',
-                  location: 'توريل',
-                  price: '2200.00',
-                ),
-                SizedBox(width: 12),
-                _buildPropertyCard(
-                  context,
-                  index: 2,
-                  imagePath: 'assets/images/appartment3.jpg',
-                  propertyType: 'شقة سكنية',
-                  location: 'توريل',
-                  price: '2200.00',
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+          );
+        }
+
+        return Container();
+      },
     );
   }
 
   Widget _buildPropertyCard(
     BuildContext context, {
     required int index,
-    required String imagePath,
+    String? imagePath,
     required String propertyType,
     required String location,
     required String price,
@@ -146,12 +170,27 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      imagePath,
-                      height: 90,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+                    child: imagePath != null
+                        ? Image.network(
+                            imagePath,
+                            height: 90,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                height: 90,
+                                width: double.infinity,
+                                color: Colors.grey[300],
+                                child: Icon(Icons.broken_image),
+                              );
+                            },
+                          )
+                        : Container(
+                            height: 90,
+                            width: double.infinity,
+                            color: Colors.grey[300],
+                            child: Icon(Icons.image_not_supported),
+                          ),
                   ),
                   Positioned(
                     top: 5,

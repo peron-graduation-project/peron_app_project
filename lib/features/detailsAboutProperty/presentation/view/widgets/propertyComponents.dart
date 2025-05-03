@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/utils/property_model.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/textFeatureItem.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 
@@ -7,9 +8,11 @@ class PropertyComponents extends StatelessWidget {
   final double padding;
   final double fontSize;
   final double smallFontSize;
+  final Property property;
 
   PropertyComponents({
     Key? key,
+    required this.property,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
@@ -34,11 +37,13 @@ class PropertyComponents extends StatelessWidget {
             textAlign: TextAlign.right,
           ),
           SizedBox(height: 15),
-          TextFeatureItem(text: 'غرف: 3', fontSize: smallFontSize),
-          TextFeatureItem(text: 'حمام: 2', fontSize: smallFontSize),
-          TextFeatureItem(text: 'مطبخ', fontSize: smallFontSize),
-          TextFeatureItem(text: 'ريسبشن كبير', fontSize: smallFontSize),
-          TextFeatureItem(text: 'بلكونة', fontSize: smallFontSize),
+          TextFeatureItem(text: 'غرف: ${property.bedrooms}', fontSize: smallFontSize),
+          TextFeatureItem(text: 'حمام: ${property.bathrooms}', fontSize: smallFontSize),
+          // TextFeatureItem(text: 'مطبخ', fontSize: smallFontSize),
+          // TextFeatureItem(text: 'ريسبشن كبير', fontSize: smallFontSize),
+        if (property.hasBalcony!=null)
+         TextFeatureItem(text: 'بلكونة', fontSize: smallFontSize),
+
         ],
       ),
     );

@@ -24,7 +24,7 @@ class _MostRentPropertyCardState extends State<MostRentPropertyCard> {
       onTap: () {
         Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PropertyDetailScreen()),
+              MaterialPageRoute(builder: (context) => PropertyDetailScreen(propertyId: property.propertyId,)),
             );
       },
       child: LayoutBuilder(

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/core/utils/property_model.dart';
 
 class PropertyInformation extends StatelessWidget {
   final double screenWidth;
   final double padding;
   final double fontSize;
+  final Property property;
 
   const PropertyInformation({
     Key? key,
+    required this.property,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
@@ -20,9 +23,9 @@ class PropertyInformation extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 0,),
+          SizedBox(height: 0),
           Text(
-            'الحالة: ممتازة',
+            property.description??"",
             style: TextStyle(
               color: const Color.fromARGB(255, 143, 143, 143),
               // height: 1.5,
@@ -34,9 +37,22 @@ class PropertyInformation extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Text(
-            'الطابق: الثالث',
+            property.description??"",
             style: TextStyle(
-color: const Color.fromARGB(255, 143, 143, 143),              height: 1.5,
+              color: const Color.fromARGB(255, 143, 143, 143),
+              height: 1.5,
+              fontWeight: FontWeight.normal,
+              fontSize: 17,
+              fontFamily: Fonts.primaryFontFamily,
+            ),
+            textAlign: TextAlign.right,
+          ),
+            SizedBox(height: 5),
+          Text(
+            'المساحه: ${property.area}   ',
+            style: TextStyle(
+              color: const Color.fromARGB(255, 143, 143, 143),
+              height: 1.5,
               fontWeight: FontWeight.normal,
               fontSize: 17,
               fontFamily: Fonts.primaryFontFamily,
@@ -44,16 +60,31 @@ color: const Color.fromARGB(255, 143, 143, 143),              height: 1.5,
             textAlign: TextAlign.right,
           ),
           SizedBox(height: 5),
+        
           Text(
-            'الموقع: على الطريق الدائري وبجوار المسجد الكبير',
+            'الطابق: ${property.floor}   ',
             style: TextStyle(
-color: const Color.fromARGB(255, 143, 143, 143),              height: 1.5,
+              color: const Color.fromARGB(255, 143, 143, 143),
+              height: 1.5,
               fontWeight: FontWeight.normal,
               fontSize: 17,
               fontFamily: Fonts.primaryFontFamily,
             ),
             textAlign: TextAlign.right,
           ),
+            Text(
+            'الموقع: ${property.location}   ',
+            style: TextStyle(
+              color: const Color.fromARGB(255, 143, 143, 143),
+              height: 1.5,
+              fontWeight: FontWeight.normal,
+              fontSize: 17,
+              fontFamily: Fonts.primaryFontFamily,
+            ),
+            textAlign: TextAlign.right,
+          ),
+            
+          
         ],
       ),
     );

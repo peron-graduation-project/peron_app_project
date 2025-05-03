@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:peron_project/core/utils/property_model.dart';
+import 'package:peron_project/features/chats/presentation/view/views/chat_body_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 
@@ -9,9 +11,11 @@ class ContactButtons extends StatelessWidget {
   final double smallPadding;
   final double iconSize;
   final double screenHeight;
+  final Property property;
 
   ContactButtons({
     Key? key,
+    required this.property,
     required this.standardPadding,
     required this.regularFontSize,
     required this.smallPadding,
@@ -23,7 +27,7 @@ class ContactButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 10,),
+        SizedBox(height: 10),
         Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(
@@ -38,7 +42,10 @@ class ContactButtons extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    launchUrl(Uri.parse("mailto:example@email.com"));
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (_) => ChatBodyScreen(name:property.ownerId,image: null,)),
+                    // );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey.shade200,
@@ -100,7 +107,7 @@ class ContactButtons extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width:  10),
+              SizedBox(width: 10),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
@@ -121,7 +128,7 @@ class ContactButtons extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 10 ),
+        SizedBox(height: 10),
       ],
     );
   }

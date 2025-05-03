@@ -1,20 +1,28 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peron_project/core/network/api_service.dart';
+import 'package:peron_project/features/detailsAboutProperty/domain/repos/get%20property/get_property_repo_imp.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_cubit.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_state.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/additionalFeatures.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/contactButtons.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/featureItem.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/locationMapWidget.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/propertyComponents.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/propertyDescription.dart';
-import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/propertyFeature.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/propertyHeader.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/propertyImageSlider.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/propertyInformation.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../widgets/recommendedProperties.dart';
-import '../widgets/reviewsSection.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/recommendedProperties.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/reviewsSection.dart';
+
+import '../../../../../core/helper/colors.dart';
 
 class PropertyDetailScreen extends StatefulWidget {
-  const PropertyDetailScreen({Key? key}) : super(key: key);
+  final int propertyId;
+
+  const PropertyDetailScreen({super.key, required this.propertyId});
 
   @override
   State<PropertyDetailScreen> createState() => _PropertyDetailScreenState();
@@ -30,11 +38,11 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
     'assets/images/appartment3.jpg',
   ];
 
- void goToImage(int index) {
-  if (index >= 0 && index < _imagesPaths.length) {
-    // Update currentImageIndex (e.g., via a callback or state management)
+  void goToImage(int index) {
+    if (index >= 0 && index < _imagesPaths.length) {
+      // Update currentImageIndex (e.g., via a callback or state management)
+    }
   }
-}
 
   void _toggleExtendedDetails() {
     setState(() {
@@ -43,162 +51,203 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
   }
 
   @override
-  Widget build(BuildContext context) { 
-    final screenSize = MediaQuery.of(context).size;
-    final screenWidth = screenSize.width;
-    final screenHeight = screenSize.height;
-
-    final imageHeight = screenHeight * 0.5;
-    final iconSize = screenWidth * 0.055;
-    final smallIconSize = iconSize * 0.9;
-
-    final standardPadding = screenWidth * 0.0;
-    final smallPadding = standardPadding * 0.3;
-
-    final titleFontSize = screenWidth * 0.055;
-    final priceFontSize = screenWidth * 0.06;
-    final regularFontSize = screenWidth * 0.045;
-    final smallFontSize = screenWidth * 0.04;
-
-    final circleSize = screenWidth * 0.1;
-    final smallCircleSize = screenWidth * 0.08;
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  PropertyImageSlider(
-                    imagesPaths: _imagesPaths,
-                    currentImageIndex: _currentImageIndex,
-                    goToImage: goToImage,
-                    imageHeight: imageHeight,
-                    standardPadding: standardPadding,
-                    screenHeight: screenHeight,
-                    smallCircleSize: smallCircleSize,
-                  ),
-                  PropertyHeader(
-                    standardPadding: standardPadding,
-                    titleFontSize: titleFontSize,
-                    priceFontSize: priceFontSize,
-                    smallPadding: smallPadding,
-                    regularFontSize: regularFontSize,
-                    smallFontSize: smallFontSize,
-                    smallIconSize: smallIconSize,
-                    smallCircleSize: smallCircleSize,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: smallPadding),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(width: 10,),
-                        FeatureItem(
-                          text: '4',
-                          icon: Icons.chair,
-                          screenWidth: screenWidth,
-                        ),
-                        SizedBox(width: 12,),
-                        FeatureItem(
-                          text: '2',
-                          icon: Icons.bathtub,
-                          screenWidth: screenWidth,
-                        ),
-                                                SizedBox(width: 12,),
-
-                        FeatureItem(
-                          text: '5',
-                          icon: Icons.bed,
-                          screenWidth: screenWidth,
-                        ),
-                        
-                                                SizedBox(width: 12,),
-
-                        FeatureItem(
-                          text: '150',
-                          icon: Icons.swap_horiz,
-                          screenWidth: screenWidth,
-                        ),
-                      ],
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create:
+          (_) =>
+              GetPropertyCubit(GetPropertyRepoImp(ApiService(Dio())))
+                ..getProperty(id: widget.propertyId),
+      child: BlocBuilder<GetPropertyCubit, GetPropertyState>(
+        builder: (context, state) {
+          if (state is GetPropertyStateLoading) {
+            return  Scaffold(
+              body: Center(child: CircularProgressIndicator(
+                color: AppColors.primaryColor,
+              )),
+            );
+          } else if (state is GetPropertyStateFailure) {
+            return Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      state.errorMessage,
+                      style: const TextStyle(color: Colors.red),
                     ),
-                  ),
-                  PropertyDescription(
-                    standardPadding: standardPadding,
-                    smallPadding: smallPadding,
-                    regularFontSize: regularFontSize,
-                    toggleExtendedDetails: _toggleExtendedDetails,
-                    showExtendedDetails: _showExtendedDetails,
-                    smallFontSize: smallFontSize,
-                  ),
-                  if (_showExtendedDetails) ...[
-                    PropertyInformation(
-                      screenWidth: screenWidth,
-                      padding: standardPadding,
-                      fontSize: regularFontSize,
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<GetPropertyCubit>().getProperty(
+                          id: widget.propertyId,
+                        );
+                      },
+                      child: const Text('إعادة المحاولة'),
                     ),
-
-                    PropertyFeatures(
-                      screenWidth: screenWidth,
-                      padding: standardPadding,
-                      fontSize: regularFontSize,
-                      smallFontSize: smallFontSize,
-                    ),
-
-                    PropertyComponents(
-                      screenWidth: screenWidth,
-                      padding: standardPadding,
-                      fontSize: regularFontSize,
-                      smallFontSize: smallFontSize,
-                    ),
-
-                    AdditionalFeatures(
-                      screenWidth: screenWidth,
-                      padding: standardPadding,
-                      fontSize: regularFontSize,
-                    ),
-
-                    LocationMapWidget(
-                      screenWidth: screenWidth,
-                      padding: standardPadding,
-                      fontSize: regularFontSize,
-                      smallFontSize: smallFontSize,
-                      propertyLatitude: 30.0444,
-                      propertyLongitude: 31.2357,
-                      propertyTitle: "شقة سكنية بحى الجامعه",
-                    ),
-
-                    ReviewsSection(
-                      screenWidth: screenWidth,
-                      padding: standardPadding,
-                      fontSize: regularFontSize,
-                      smallFontSize: smallFontSize,
-                    ),
-
-                    RecommendedProperties(
-                      screenWidth: screenWidth,
-                      padding: standardPadding,
-                      fontSize: regularFontSize,
-                      smallFontSize: smallFontSize,
-                    ),
-
-                   
                   ],
+                ),
+              ),
+            );
+          } else if (state is GetPropertyStateSuccess) {
+            final property = state.property;
+            final screenSize = MediaQuery.of(context).size;
+            final screenWidth = screenSize.width;
+            final screenHeight = screenSize.height;
+
+            final imageHeight = screenHeight * 0.5;
+            final iconSize = screenWidth * 0.055;
+            final smallIconSize = iconSize * 0.9;
+
+            final standardPadding = screenWidth * 0.0;
+            final smallPadding = standardPadding * 0.3;
+
+            final titleFontSize = screenWidth * 0.055;
+            final priceFontSize = screenWidth * 0.06;
+            final regularFontSize = screenWidth * 0.045;
+            final smallFontSize = screenWidth * 0.04;
+
+            final circleSize = screenWidth * 0.1;
+            final smallCircleSize = screenWidth * 0.08;
+
+            return Scaffold(
+              backgroundColor: Colors.white,
+              body: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          PropertyImageSlider(
+                            imagesPaths: property.images ?? [],
+                            currentImageIndex: _currentImageIndex,
+                            goToImage: goToImage,
+                            imageHeight: imageHeight,
+                            standardPadding: standardPadding,
+                            screenHeight: screenHeight,
+                            smallCircleSize: smallCircleSize,
+                          ),
+                          PropertyHeader(
+                            property: state.property,
+                            standardPadding: standardPadding,
+                            titleFontSize: titleFontSize,
+                            priceFontSize: priceFontSize,
+                            smallPadding: smallPadding,
+                            regularFontSize: regularFontSize,
+                            smallFontSize: smallFontSize,
+                            smallIconSize: smallIconSize,
+                            smallCircleSize: smallCircleSize,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: smallPadding,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(width: 10),
+                                FeatureItem(
+                                  text: property.bedrooms.toString(),
+                                  icon: Icons.chair,
+                                  screenWidth: screenWidth,
+                                ),
+                                const SizedBox(width: 12),
+                                FeatureItem(
+                                  text: property.bathrooms.toString(),
+                                  icon: Icons.bathtub,
+                                  screenWidth: screenWidth,
+                                ),
+                                const SizedBox(width: 12),
+                                FeatureItem(
+                                  text: property.bedrooms.toString(),
+                                  icon: Icons.bed,
+                                  screenWidth: screenWidth,
+                                ),
+                                const SizedBox(width: 12),
+                                FeatureItem(
+                                  text: property.area.toString(),
+                                  icon: Icons.swap_horiz,
+                                  screenWidth: screenWidth,
+                                ),
+                              ],
+                            ),
+                          ),
+                          PropertyDescription(
+                            description: property.description ?? "",
+                            standardPadding: standardPadding,
+                            smallPadding: smallPadding,
+                            regularFontSize: regularFontSize,
+                            toggleExtendedDetails: _toggleExtendedDetails,
+                            showExtendedDetails: _showExtendedDetails,
+                            smallFontSize: smallFontSize,
+                          ),
+                          if (_showExtendedDetails) ...[
+                            PropertyInformation(
+                              property: property,
+                              screenWidth: screenWidth,
+                              padding: standardPadding,
+                              fontSize: regularFontSize,
+                            ),
+                            // PropertyFeatures(
+                            //   screenWidth: screenWidth,
+                            //   padding: standardPadding,
+                            //   fontSize: regularFontSize,
+                            //   smallFontSize: smallFontSize,
+                            // ),
+                            PropertyComponents(
+                              property: property,
+                              screenWidth: screenWidth,
+                              padding: standardPadding,
+                              fontSize: regularFontSize,
+                              smallFontSize: smallFontSize,
+                            ),
+                            AdditionalFeatures(
+                              property: property,
+                              screenWidth: screenWidth,
+                              padding: standardPadding,
+                              fontSize: regularFontSize,
+                            ),
+                            LocationMapWidget(
+                              screenWidth: screenWidth,
+                              padding: standardPadding,
+                              fontSize: regularFontSize,
+                              smallFontSize: smallFontSize,
+                              property: property,
+                            ),
+
+                            ReviewsSection(
+                              screenWidth: screenWidth,
+                              padding: standardPadding,
+                              fontSize: regularFontSize,
+                              smallFontSize: smallFontSize,
+                            ),
+                            RecommendedProperties(
+                              location: property.location??"",
+                              screenWidth: screenWidth,
+                              padding: standardPadding,
+                              fontSize: regularFontSize,
+                              smallFontSize: smallFontSize,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  ContactButtons(
+                    property: property,
+                    standardPadding: standardPadding,
+                    regularFontSize: regularFontSize,
+                    smallPadding: smallPadding,
+                    iconSize: iconSize,
+                    screenHeight: screenHeight,
+                  ),
                 ],
               ),
-            ),
-          ),
-          ContactButtons(
-            standardPadding: standardPadding,
-            regularFontSize: regularFontSize,
-            smallPadding: smallPadding,
-            iconSize: iconSize,
-            screenHeight: screenHeight,
-          ),
-        ],
+            );
+          } else {
+            return const Scaffold(); // للحالة initial
+          }
+        },
       ),
     );
   }

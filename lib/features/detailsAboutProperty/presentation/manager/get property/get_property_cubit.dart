@@ -5,29 +5,35 @@ import 'package:peron_project/features/detailsAboutProperty/domain/repos/get%20p
 import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_state.dart';
 import '../../../../../core/error/failure.dart';
 
-
 class GetPropertyCubit extends Cubit<GetPropertyState> {
   final GetPropertyRepo getPropertyRepo;
 
-  GetPropertyCubit(this.getPropertyRepo) : super(GetPropertyStateInitial());
+  Property? _cachedProperty;
 
-  Future<void> getProperty({required int id}) async {
-    emit(GetPropertyStateLoading());
+  GetPropertyCubit(this.getPropertyRepo) : super( GetPropertyStateInitial());
 
-    try {
-      final Either<Failure, Property> result = await getPropertyRepo.getProperty(id: id);
+  Future<void> getProperty({required int id, bool forceRefresh = false}) async {
+    emit( GetPropertyStateLoading());
 
-      result.fold(
-            (failure) {
-          emit(GetPropertyStateFailure(errorMessage: failure.errorMessage));
-        },
-            (property) {
-
-            emit(GetPropertyStateSuccess(property: property));
-        },
-      );
-    } catch (e) {
-      emit(GetPropertyStateFailure(errorMessage: 'حدث خطأ غير متوقع: $e'));
+    if (_cachedProperty != null && !forceRefresh) {
+      emit(GetPropertyStateSuccess(property: _cachedProperty!));
+      return;
     }
+
+    final Either<Failure, Property> result = await getPropertyRepo.getProperty(id: id);
+
+    result.fold(
+      (failure) {
+        emit(GetPropertyStateFailure(errorMessage: failure.errorMessage));
+      },
+      (property) {
+        _cachedProperty = property;
+        emit(GetPropertyStateSuccess(property: property));
+      },
+    );
+  }
+
+  Future<void> refreshProperty(int id) async {
+    await getProperty(id: id, forceRefresh: true);
   }
 }

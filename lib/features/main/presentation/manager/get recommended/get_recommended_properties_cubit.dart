@@ -9,9 +9,16 @@ import 'get_recommended_properties_state.dart';
 class GetRecommendedPropertiesCubit extends Cubit<GetRecommendedPropertiesState> {
   final GetRecommendedRepo getRecommendedRepo;
 
-   GetRecommendedPropertiesCubit(this.getRecommendedRepo) : super(GetRecommendedPropertiesStateInitial());
+  List<RecommendedProperty>? _cachedProperties;
 
-  Future<void> getRecommendedProperties() async {
+  GetRecommendedPropertiesCubit(this.getRecommendedRepo) : super(GetRecommendedPropertiesStateInitial());
+
+  Future<void> getRecommendedProperties({bool forceRefresh = false}) async {
+    if (_cachedProperties != null && !forceRefresh) {
+      emit(GetRecommendedPropertiesStateSuccess(properties: _cachedProperties!));
+      return;
+    }
+
     emit(GetRecommendedPropertiesStateLoading());
 
     final Either<Failure, List<RecommendedProperty>> result = await getRecommendedRepo.getRecommendedProperties();
@@ -21,13 +28,13 @@ class GetRecommendedPropertiesCubit extends Cubit<GetRecommendedPropertiesState>
         emit(GetRecommendedPropertiesStateFailure(errorMessage: failure.errorMessage));
       },
           (properties) {
-        print("✅✅✅ [DEBUG] properties (in Cubit, before emit): $properties");
-        if (properties.isNotEmpty) {
-          print("✅✅✅ [DEBUG] First properties Type: ${properties.first.runtimeType}");
-          print("✅✅✅ [DEBUG] First properties: ${properties.first.toJson()}");
-        }
+        _cachedProperties = properties;
         emit(GetRecommendedPropertiesStateSuccess(properties: properties));
       },
     );
+  }
+
+  Future<void> refreshRecommendedProperties() async {
+    await getRecommendedProperties(forceRefresh: true);
   }
 }

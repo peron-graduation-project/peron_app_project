@@ -7,26 +7,29 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/core/utils/property_model.dart';
 
 // كلاس الخريطة المصغر للاستخدام في صفحة تفاصيل العقار
 class LocationMapWidget extends StatefulWidget {
+  final Property property;
   final double screenWidth;
   final double padding;
   final double fontSize;
   final double smallFontSize;
-  final double? propertyLatitude;
-  final double? propertyLongitude;
-  final String? propertyTitle;
+  // final double? propertyLatitude;
+  // final double? propertyLongitude;
+  // final String? propertyTitle;
 
   LocationMapWidget({
     Key? key,
+    required this.property,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
     required this.smallFontSize,
-    this.propertyLatitude,
-    this.propertyLongitude,
-    this.propertyTitle,
+    // this.propertyLatitude,
+    // this.propertyLongitude,
+    // this.propertyTitle,
   }) : super(key: key);
 
   @override
@@ -63,16 +66,16 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
   }
 
   void _addPropertyMarker() {
-    if (widget.propertyLatitude != null && widget.propertyLongitude != null) {
+    if (widget.property.latitude != null && widget.property.longitude != null) {
       final propertyLocation = LatLng(
-        widget.propertyLatitude!,
-        widget.propertyLongitude!,
+        widget.property.latitude!,
+        widget.property.longitude!,
       );
 
       _propertyMarker = Marker(
         markerId: const MarkerId("property_location"),
         position: propertyLocation,
-        infoWindow: InfoWindow(title: widget.propertyTitle ?? "موقع العقار"),
+        infoWindow: InfoWindow(title: widget.property.title ?? "موقع العقار"),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
       );
 
@@ -158,9 +161,9 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
       MaterialPageRoute(
         builder:
             (context) => SimpleMapScreen(
-              propertyLatitude: widget.propertyLatitude,
-              propertyLongitude: widget.propertyLongitude,
-              propertyTitle: widget.propertyTitle,
+              propertyLatitude: widget.property.latitude,
+              propertyLongitude: widget.property.longitude,
+              propertyTitle: widget.property.title,
               initialZoom: _zoomLevel,
             ),
       ),
@@ -190,7 +193,7 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Divider(thickness: 0.3,),
+        Divider(thickness: 0.3),
         Padding(
           padding: EdgeInsets.all(widget.padding),
           child: Text(
@@ -203,7 +206,7 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
             ),
           ),
         ),
-        SizedBox(height: 10,),
+        SizedBox(height: 10),
         Container(
           margin: EdgeInsets.symmetric(horizontal: widget.padding),
           height: 200,
@@ -218,11 +221,11 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
                 GoogleMap(
                   initialCameraPosition: CameraPosition(
                     target:
-                        widget.propertyLatitude != null &&
-                                widget.propertyLongitude != null
+                        widget.property.latitude != null &&
+                                widget.property.longitude != null
                             ? LatLng(
-                              widget.propertyLatitude!,
-                              widget.propertyLongitude!,
+                              widget.property.latitude!,
+                              widget.property.longitude!,
                             )
                             : _currentLatLng ?? _defaultLocation,
                     zoom: _zoomLevel,
@@ -466,10 +469,7 @@ class _SimpleMapScreenState extends State<SimpleMapScreen> {
       appBar: AppBar(
         title: Text(
           widget.propertyTitle ?? "موقع العقار",
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: Fonts.primaryFontFamily,
-          ),
+          style: TextStyle(fontSize: 16, fontFamily: Fonts.primaryFontFamily),
         ),
         backgroundColor: AppColors.primaryColor,
       ),
@@ -536,12 +536,14 @@ class _SimpleMapScreenState extends State<SimpleMapScreen> {
                     "Longitude: ${_currentLatLng!.longitude}",
                     style: TextStyle(color: Colors.black),
                   ),
-                if (widget.propertyLatitude != null && widget.propertyLongitude != null)
+                if (widget.propertyLatitude != null &&
+                    widget.propertyLongitude != null)
                   Text(
                     "Property Latitude: ${widget.propertyLatitude}",
                     style: TextStyle(color: Colors.black),
                   ),
-                if (widget.propertyLatitude != null && widget.propertyLongitude != null)
+                if (widget.propertyLatitude != null &&
+                    widget.propertyLongitude != null)
                   Text(
                     "Property Longitude: ${widget.propertyLongitude}",
                     style: TextStyle(color: Colors.black),

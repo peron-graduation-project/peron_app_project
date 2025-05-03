@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:peron_project/features/home/presentation/view/views/home_view_body.dart';
-
 import 'curvedtopclipper.dart';
 
 class PropertyImageSlider extends StatelessWidget {
-  final List<String> imagesPaths;
+  final List<String> imagesPaths; // URLs of images
   final int currentImageIndex;
   final Function(int) goToImage;
   final double imageHeight;
@@ -28,27 +26,25 @@ class PropertyImageSlider extends StatelessWidget {
     return Stack(
       children: [
         GestureDetector(
-  onHorizontalDragEnd: (details) {
-    if (details.primaryVelocity != null) {
-      if (details.primaryVelocity! > 0) {
-        // Swipe right: go to next image
-        goToImage(currentImageIndex + 1);
-      } else {
-        // Swipe left: go to previous image
-        goToImage(currentImageIndex - 1);
-      }
-    }
-  },
-  child: Container(
-    height: imageHeight,
-    decoration: BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage(imagesPaths[currentImageIndex]),
-        fit: BoxFit.cover,
-      ),
-    ),
-  ),
-),
+          onHorizontalDragEnd: (details) {
+            if (details.primaryVelocity != null) {
+              if (details.primaryVelocity! > 0) {
+                goToImage(currentImageIndex + 1);
+              } else {
+                goToImage(currentImageIndex - 1);
+              }
+            }
+          },
+          child: Container(
+            height: imageHeight,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(imagesPaths[currentImageIndex]),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
         Positioned(
           bottom: imageHeight * 0.15,
           left: 0,
@@ -80,7 +76,7 @@ class PropertyImageSlider extends StatelessWidget {
           ),
         ),
         Positioned(
-          top:  30,
+          top: 30,
           right: 20,
           child: Container(
             width: smallCircleSize,
@@ -97,10 +93,7 @@ class PropertyImageSlider extends StatelessWidget {
                 size: 25,
               ),
               onPressed: () {
-                Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomeViewBody()),
-            );
+                Navigator.pop(context); // رجوع للخلف بدلاً من الذهاب لصفحة ثابتة
               },
             ),
           ),

@@ -59,6 +59,7 @@ class Property {
     this.longitude,
   });
 
+  // Factory method to create a Property object from JSON data
   factory Property.fromJson(Map<String, dynamic> json) {
     return Property(
       propertyId: json['propertyId'],
@@ -67,7 +68,7 @@ class Property {
       title: json['title'],
       area: json['area'],
       location: json['location'],
-      price: (json['price'] != null) ? (json['price'] as num).toDouble() : null,
+      price: json['price'] != null ? (json['price'] as num).toDouble() : null,
       createdAt: json['createdAt'] != null ? DateTime.tryParse(json['createdAt']) : null,
       rentType: json['rentType'],
       bedrooms: json['bedrooms'],
@@ -84,14 +85,15 @@ class Property {
       availableTo: json['availableTo'] != null ? DateTime.tryParse(json['availableTo']) : null,
       minBookingDays: json['minBookingDays'],
       description: json['description'],
-      images: (json['images'] as List?)?.map((e) => e.toString()).toList(),
+      images: json['images'] != null ? List<String>.from(json['images']) : null,
       bookings: json['bookings'],
       ratings: json['ratings'],
-      latitude: (json['latitude'] != null) ? (json['latitude'] as num).toDouble() : null,
-      longitude: (json['longitude'] != null) ? (json['longitude'] as num).toDouble() : null,
+      latitude: json['latitude'] != null ? (json['latitude'] as num).toDouble() : null,
+      longitude: json['longitude'] != null ? (json['longitude'] as num).toDouble() : null,
     );
   }
 
+  // Convert the Property object to JSON
   Map<String, dynamic> toJson() {
     return {
       'propertyId': propertyId,

@@ -8,9 +8,11 @@ class PropertyDescription extends StatelessWidget {
   final double smallFontSize;
   final Function toggleExtendedDetails;
   final bool showExtendedDetails;
+  final String description;
 
   const PropertyDescription({
     Key? key,
+    required this.description,
     required this.standardPadding,
     required this.smallPadding,
     required this.regularFontSize,
@@ -48,7 +50,7 @@ class PropertyDescription extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: standardPadding),
           child: Text(
-            'النوع: شقة مميزة في موقع هادي وسكني راقي، تطل على شارع واسع. تتكون من 3 غرف نوم رئيسية، غرفتين حمام، مطبخ، ومغلقة كلياً في الدور الثالث في عمارة حديثة مزودة بأساسنسير. العمارة نظيفة وآمنة.\nالمساحة: مساحة واسعة تبلغ 150 م\nالتشطيب: سوبر لوكس',
+          description,
             style: TextStyle(
               color: const Color.fromARGB(255, 143, 143, 143),
               height: 1.5,

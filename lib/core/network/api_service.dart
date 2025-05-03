@@ -1179,7 +1179,7 @@ class ApiService {
       ));
     }
   }
-  Future<Either<Failure, Property>> getProperty({
+Future<Either<Failure, Property>> getProperty({
     required String token,
     required int id
   }) async {
@@ -1195,8 +1195,9 @@ class ApiService {
 
       print("✅ [DEBUG] getProperty API Response: ${response.data}");
 
-      if (response.statusCode == 200 && response.data is String) {
-        return Right(response.data);
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        final property = Property.fromJson(response.data);
+        return Right(property);
       } else {
         return Left(ServiceFailure(
           errorMessage: "فشل في جلب بيانات الشقة: استجابة غير متوقعة",
