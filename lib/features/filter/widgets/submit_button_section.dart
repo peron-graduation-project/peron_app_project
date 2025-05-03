@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
 
-
 class SubmitButtonSection extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
+  final Widget? child;
 
-  const SubmitButtonSection({super.key, required this.onPressed});
+  const SubmitButtonSection({
+    super.key,
+    required this.onPressed,
+    this.child,
+  });
 
   @override
   Widget build(BuildContext context) {

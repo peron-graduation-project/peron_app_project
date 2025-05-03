@@ -11,6 +11,7 @@ import '../widgets/additional_services_section.dart';
 import '../widgets/allow_pets_section.dart';
 import '../widgets/booking_date_section.dart';
 import '../widgets/submit_button_section.dart';
+import 'available_apartments_screen.dart';
 
 class FilterScreen extends StatefulWidget {
   const FilterScreen({super.key});
@@ -37,9 +38,8 @@ class _FilterScreenState extends State<FilterScreen> {
   TextEditingController maxController = TextEditingController();
 
   void updateRangeSlider() {
-    double? min = double.tryParse(minController.text);
-    double? max = double.tryParse(maxController.text);
-
+    final min = double.tryParse(minController.text);
+    final max = double.tryParse(maxController.text);
     if (min != null && max != null && min >= 500 && max <= 20000 && min <= max) {
       setState(() {
         minPrice = min;
@@ -68,56 +68,70 @@ class _FilterScreenState extends State<FilterScreen> {
   }
 
   void applyFilters() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+
+    if (token.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('خطأ فى  بتسجيل الدخول ')),
+      );
+      return;
+    }
+
+    if (selectedLocation == null &&
+        isMonthly == null &&
+        minPrice == null &&
+        maxPrice == null &&
+        rooms == null &&
+        bathrooms == null &&
+        floors == null &&
+        rating == null &&
+        furnitureStatus == null &&
+        selectedDate == null &&
+        selectedServices.isEmpty &&
+        !allowPets) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('يرجى تحديد بعض الفلاتر أولاً')),
+      );
+      return;
+    }
+
+    final params = <String, dynamic>{};
+    if (selectedLocation != null) params['Location'] = selectedLocation;
+    if (minPrice != null) params['MinPrice'] = minPrice;
+    if (maxPrice != null) params['MaxPrice'] = maxPrice;
+    if (isMonthly != null) params['RentType'] = isMonthly! ? 'Monthly' : 'Daily';
+    if (rooms != null) params['Bedrooms'] = rooms;
+    if (bathrooms != null) params['Bathrooms'] = bathrooms;
+    if (floors != null) params['Floor'] = floors;
+    if (rating != null) params['MinRating'] = rating!.toDouble();
+    if (furnitureStatus != null) params['IsFurnished'] = (furnitureStatus == 'مجهزة');
+    if (selectedServices.contains('شرفة')) params['HasBalcony'] = true;
+    if (selectedServices.contains('انترنت')) params['HasInternet'] = true;
+    if (selectedServices.contains('أمن')) params['HasSecurity'] = true;
+    if (selectedServices.contains('مصعد')) params['HasElevator'] = true;
+    if (allowPets) params['AllowsPets'] = true;
+    if (selectedServices.contains('تدخين')) params['SmokingAllowed'] = true;
+    if (selectedDate != null) {
+      params['AvailableFrom'] = selectedDate!.toIso8601String().split('T').first;
+    }
+
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token') ?? '';
-
-      if (token.isEmpty) {
-        print('التوكن غير موجود، تأكد من تسجيل الدخول');
-        return;
-      }
-
-      if (selectedLocation == null &&
-          isMonthly == null &&
-          minPrice == null &&
-          maxPrice == null &&
-          rooms == null &&
-          bathrooms == null &&
-          floors == null &&
-          rating == null &&
-          furnitureStatus == null &&
-          selectedDate == null &&
-          selectedServices.isEmpty &&
-          !allowPets) {
-        print('يرجى تحديد بعض الفلاتر أولاً');
-        return;
-      }
-
       final filteredProperties = await FilterApi.getFilteredProperties(
-        location: selectedLocation,
-        minPrice: minPrice ?? 0,
-        maxPrice: maxPrice ?? 999999,
-        rentType: isMonthly == null ? null : (isMonthly! ? 'شهري' : 'يومي'),
-        area: 100,
-        bedrooms: rooms,
-        bathrooms: bathrooms,
-        floor: floors,
-        minRating: rating?.toDouble(),
-        isFurnished: furnitureStatus == null ? null : (furnitureStatus == "مجهزة"),
-        hasBalcony: selectedServices.contains('شرفة'),
-        hasInternet: selectedServices.contains('انترنت'),
-        hasSecurity: selectedServices.contains('أمن'),
-        hasElevator: selectedServices.contains('مصعد'),
-        allowsPets: allowPets,
-        smokingAllowed: selectedServices.contains('تدخين'),
-        minBookingDays: 1,
-        availableFrom: selectedDate?.toIso8601String(),
+        queryParams: params,
         token: token,
       );
-
-      print(filteredProperties);
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PropertiesScreen(filteredProperties: filteredProperties),
+        ),
+      );
     } catch (e) {
-      print('خطأ أثناء الفلترة: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('خطأ أثناء الفلترة: \$e')),
+      );
     }
   }
 
@@ -135,11 +149,11 @@ class _FilterScreenState extends State<FilterScreen> {
                 HeaderSection(resetFilters: resetFilters),
                 LocationSection(
                   selectedLocation: selectedLocation,
-                  onChanged: (value) => setState(() => selectedLocation = value),
+                  onChanged: (v) => setState(() => selectedLocation = v),
                 ),
                 RentalDurationSection(
                   isMonthly: isMonthly,
-                  onChanged: (value) => setState(() => isMonthly = value),
+                  onChanged: (v) => setState(() => isMonthly = v),
                 ),
                 PriceRangeSection(
                   minPrice: minPrice ?? 500,
@@ -153,14 +167,14 @@ class _FilterScreenState extends State<FilterScreen> {
                   bathrooms: bathrooms ?? 1,
                   floors: floors ?? 1,
                   rating: rating ?? 1,
-                  onRoomsChanged: (value) => setState(() => rooms = value),
-                  onBathroomsChanged: (value) => setState(() => bathrooms = value),
-                  onFloorsChanged: (value) => setState(() => floors = value),
-                  onRatingChanged: (value) => setState(() => rating = value),
+                  onRoomsChanged: (v) => setState(() => rooms = v),
+                  onBathroomsChanged: (v) => setState(() => bathrooms = v),
+                  onFloorsChanged: (v) => setState(() => floors = v),
+                  onRatingChanged: (v) => setState(() => rating = v),
                 ),
                 FurnitureStatusSection(
                   furnitureStatus: furnitureStatus,
-                  onChanged: (value) => setState(() => furnitureStatus = value),
+                  onChanged: (v) => setState(() => furnitureStatus = v),
                 ),
                 AdditionalServicesSection(
                   selectedServices: selectedServices,
@@ -176,15 +190,13 @@ class _FilterScreenState extends State<FilterScreen> {
                 ),
                 AllowPetsSection(
                   allowPets: allowPets,
-                  onChanged: (value) => setState(() => allowPets = value),
+                  onChanged: (v) => setState(() => allowPets = v),
                 ),
                 BookingDateSection(
                   selectedDate: selectedDate,
-                  onDateSelected: (date) => setState(() => selectedDate = date),
+                  onDateSelected: (d) => setState(() => selectedDate = d),
                 ),
-                SubmitButtonSection(
-                  onPressed: applyFilters,
-                ),
+                SubmitButtonSection(onPressed: applyFilters),
               ],
             ),
           ),
