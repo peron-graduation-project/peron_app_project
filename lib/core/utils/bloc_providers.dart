@@ -66,7 +66,7 @@ final apiService=ApiService(Dio());
     BlocProvider(create: (_) => GetNotificationCubit(NotificationRepoImpl(apiService))..getNotifications()),
     BlocProvider(create: (_) => GetInquiryCubit(GetInquiryRepoImp(apiService))..getInquires()),
 
-    BlocProvider(create: (_) => GetChatsCubit(GetChatsRepoImp(apiService))),
+    BlocProvider(create: (_) => GetChatsCubit(GetChatsRepoImp(apiService))..getChats()),
 
     BlocProvider(create: (_) => SendAppRatingCubit(AppRatingRepoImp(apiService))),
     BlocProvider(create: (_) => DeleteAccountCubit(DeleteAccountRepoImp(apiService))),

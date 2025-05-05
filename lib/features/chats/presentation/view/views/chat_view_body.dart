@@ -11,6 +11,7 @@ import '../../manager/get chats/get_chats_cubit.dart';
 import '../../manager/get chats/get_chats_state.dart';
 import '../../manager/get conversation/get_conversation_cubit.dart';
 import 'chat_body_screen.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ChatViewBody extends StatefulWidget {
   const ChatViewBody({super.key});
@@ -25,11 +26,6 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   Set<int> selectedChats = {};
   bool isSelectionMode = false;
 
-  @override
-  void initState() {
-    super.initState();
-    context.read<GetChatsCubit>().getChats();
-  }
 
   void _filterChats(String query, List<ChatModel> chats) {
     setState(() {
@@ -40,8 +36,8 @@ class _ChatViewBodyState extends State<ChatViewBody> {
             chats
                 .where(
                   (chat) =>
-                      chat.name.toLowerCase().contains(query.toLowerCase()),
-                )
+                  chat.name.toLowerCase().contains(query.toLowerCase()),
+            )
                 .toList();
       }
     });
@@ -75,7 +71,6 @@ class _ChatViewBodyState extends State<ChatViewBody> {
           if (allChats.isEmpty || allChats.length != chats.length) {
             allChats = List.from(chats);
             filteredChats = List.from(chats);
-
           }
         }
 
@@ -87,17 +82,17 @@ class _ChatViewBodyState extends State<ChatViewBody> {
             ),
             centerTitle: true,
             leading:
-                isSelectionMode
-                    ? IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        setState(() {
-                          isSelectionMode = false;
-                          selectedChats.clear();
-                        });
-                      },
-                    )
-                    : null,
+            isSelectionMode
+                ? IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                setState(() {
+                  isSelectionMode = false;
+                  selectedChats.clear();
+                });
+              },
+            )
+                : null,
             actions: [
               PopupMenuButton<String>(
                 color: AppColors.scaffoldBackgroundColor,
@@ -117,262 +112,291 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                 },
                 itemBuilder:
                     (context) => [
-                      PopupMenuItem(
-                        value: "delete",
-                        child: Row(
-                          children: [
-                            Text(
-                              "حذف",
-                              style: theme.labelLarge!.copyWith(
-                                color: Color(0xff282929),
-                              ),
-                            ),
-                            Spacer(),
-                            Icon(Icons.delete, color: Colors.grey),
-                          ],
+                  PopupMenuItem(
+                    value: "delete",
+                    child: Row(
+                      children: [
+                        Text(
+                          "حذف",
+                          style: theme.labelLarge!.copyWith(
+                            color: Color(0xff282929),
+                          ),
                         ),
-                      ),
-                      PopupMenuItem(
-                        value: "archive",
-                        child: Row(
-                          children: [
-                            Text(
-                              "أرشيف",
-                              style: theme.labelLarge!.copyWith(
-                                color: Color(0xff282929),
-                              ),
-                            ),
-                            Spacer(),
-                            Icon(Icons.archive, color: Colors.grey),
-                          ],
+                        Spacer(),
+                        Icon(Icons.delete, color: Colors.grey),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: "archive",
+                    child: Row(
+                      children: [
+                        Text(
+                          "أرشيف",
+                          style: theme.labelLarge!.copyWith(
+                            color: Color(0xff282929),
+                          ),
                         ),
-                      ),
-                      PopupMenuItem(
-                        value: "pin",
-                        child: Row(
-                          children: [
-                            Text(
-                              "تثبيت",
-                              style: theme.labelLarge!.copyWith(
-                                color: Color(0xff282929),
-                              ),
-                            ),
-                            Spacer(),
-                            Icon(Icons.push_pin, color: Colors.grey),
-                          ],
+                        Spacer(),
+                        Icon(Icons.archive, color: Colors.grey),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: "pin",
+                    child: Row(
+                      children: [
+                        Text(
+                          "تثبيت",
+                          style: theme.labelLarge!.copyWith(
+                            color: Color(0xff282929),
+                          ),
                         ),
-                      ),
-                    ],
+                        Spacer(),
+                        Icon(Icons.push_pin, color: Colors.grey),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
           body:
-              state is GetChatsStateLoading
-                  ? Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: AppColors.primaryColor,
+          state is GetChatsStateLoading
+              ? ListView.builder(
+            itemCount: 10,
+            itemBuilder: (context, index) {
+              return Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: screenHeight * 0.005,
+                    horizontal: screenWidth * 0,
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.04,
                     ),
-                  )
-                  : Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(screenWidth * 0.03),
-                        child: TextField(
-                          onChanged: (query) => _filterChats(query, chats),
-                          decoration: InputDecoration(
-                            hintText: "ابحث عن الاسم...",
-                            hintStyle: theme.displayMedium!.copyWith(
-                              color: Color(0xff818181),
-                            ),
-                            prefixIcon: const Icon(Icons.search),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                screenWidth * 0.03,
-                              ),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                screenWidth * 0.03,
-                              ),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 123, 122, 122),
-                                width: 2,
-                              ),
-                            ),
-                          ),
-                        ),
+                    leading: CircleAvatar(
+                      radius: screenWidth * 0.10,
+                      backgroundColor: Colors.grey[300],
+                    ),
+                    title: Container(
+                      width: screenWidth * 0.5,
+                      height: 15,
+                      color: Colors.white,
+                    ),
+                    subtitle: Container(
+                      width: screenWidth * 0.6,
+                      height: 10,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              );
+            },
+          )
+              : Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(screenWidth * 0.03),
+                child: TextField(
+                  onChanged: (query) => _filterChats(query, chats),
+                  decoration: InputDecoration(
+                    hintText: "ابحث عن الاسم...",
+                    hintStyle: theme.displayMedium!.copyWith(
+                      color: Color(0xff818181),
+                    ),
+                    prefixIcon: const Icon(Icons.search),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        screenWidth * 0.03,
                       ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: filteredChats.length,
-                          itemBuilder: (context, index) {
-                            final chat = filteredChats[index];
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: screenHeight * 0.005,
-                                horizontal: screenWidth * 0,
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        screenWidth * 0.03,
+                      ),
+                      borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 123, 122, 122),
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredChats.length,
+                  itemBuilder: (context, index) {
+                    final chat = filteredChats[index];
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: screenHeight * 0.005,
+                        horizontal: screenWidth * 0,
+                      ),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.04,
+                        ),
+                        tileColor:
+                        selectedChats.contains(index)
+                            ? Colors.grey.shade300
+                            : Colors.transparent,
+                        leading: Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: screenWidth * 0.10,
+                              backgroundColor: Colors.grey[300],
+                              backgroundImage:
+                              chat.photo.isNotEmpty
+                                  ? NetworkImage(chat.photo)
+                                  : AssetImage(
+                                "assets/images/no pic.jpg",
+                              )
+                              as ImageProvider,
+                            ),
+                            if (selectedChats.contains(index))
+                              Positioned(
+                                right: 0,
+                                bottom: 0,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color.fromARGB(
+                                      255,
+                                      76,
+                                      141,
+                                      95,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                ),
                               ),
-                              child: ListTile(
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: screenWidth * 0.04,
+                          ],
+                        ),
+                        title: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              chat.name,
+                              style: theme.labelLarge!.copyWith(
+                                color: Color(0xff231F20),
+                              ),
+                            ),
+                            Text(
+                              chat.timestamp,
+                              style: theme.displayMedium!.copyWith(
+                                color: Color(0xff000000),
+                              ),
+                            ),
+                          ],
+                        ),
+                        subtitle: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                chat.lastMessage,
+                                style: theme.bodySmall!.copyWith(
+                                  color: Color(0xff818181),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                tileColor:
-                                    selectedChats.contains(index)
-                                        ? Colors.grey.shade300
-                                        : Colors.transparent,
-                                leading: Stack(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: screenWidth * 0.10,
-                                      backgroundColor: Colors.grey[300],
-                                      backgroundImage:
-                                          chat.photo.isNotEmpty
-                                              ? NetworkImage(chat.photo)
-                                              : AssetImage(
-                                                    "assets/images/no pic.jpg",
-                                                  )
-                                                  as ImageProvider,
-                                    ),
-                                    if (selectedChats.contains(index))
-                                      Positioned(
-                                        right: 0,
-                                        bottom: 0,
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color.fromARGB(
-                                              255,
-                                              76,
-                                              141,
-                                              95,
-                                            ),
-                                          ),
-                                          child: const Icon(
-                                            Icons.check,
-                                            color: Colors.white,
-                                            size: 18,
-                                          ),
+                              ),
+                            ),
+                            if (chat.unReadCount > 0)
+                              Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: const BoxDecoration(
+                                  color: Color.fromARGB(
+                                    255,
+                                    76,
+                                    141,
+                                    95,
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Text(
+                                  "${chat.unReadCount}",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        onTap: () {
+                          if (isSelectionMode) {
+                            _toggleSelection(index);
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider<
+                                        GetConversationCubit
+                                    >(
+                                      create:
+                                          (
+                                          _,
+                                          ) => GetConversationCubit(
+                                        GetConversationRepoImp(
+                                          ApiService(Dio()),
+                                        )..getconversation(
+                                          id: chat.chatWithId,
                                         ),
                                       ),
+                                    ),
+                                    BlocProvider<SendMessageCubit>(
+                                      create:
+                                          (
+                                          context,
+                                          ) => SendMessageCubit(
+                                        sendMessageRepo:
+                                        SendMessageRepoImp(
+                                          ApiService(Dio()),
+                                        ),
+                                        currentUserId:
+                                        chat.chatWithId,
+                                      ),
+                                    ),
                                   ],
+                                  child: ChatBodyScreen(
+                                    date: chat.timestamp,
+                                    name: chat.name,
+                                    image: chat.photo,
+                                    id: chat.chatWithId,
+                                  ),
                                 ),
-                                title: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      chat.name,
-                                      style: theme.labelLarge!.copyWith(
-                                        color: Color(0xff231F20),
-                                      ),
-                                    ),
-                                    Text(
-                                      chat.timestamp,
-                                      style: theme.displayMedium!.copyWith(
-                                        color: Color(0xff000000),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                subtitle: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        chat.lastMessage,
-                                        style: theme.bodySmall!.copyWith(
-                                          color: Color(0xff818181),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                    if (chat.unReadCount > 0)
-                                      Container(
-                                        padding: const EdgeInsets.all(6),
-                                        decoration: const BoxDecoration(
-                                          color: Color.fromARGB(
-                                            255,
-                                            76,
-                                            141,
-                                            95,
-                                          ),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Text(
-                                          "${chat.unReadCount}",
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  if (isSelectionMode) {
-                                    _toggleSelection(index);
-                                  } else {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) => MultiBlocProvider(
-                                              providers: [
-                                                BlocProvider<
-                                                  GetConversationCubit
-                                                >(
-                                                  create:
-                                                      (
-                                                        _,
-                                                      ) => GetConversationCubit(
-                                                        GetConversationRepoImp(
-                                                          ApiService(Dio()),
-                                                        )..getconversation(
-                                                          id: chat.chatWithId,
-                                                        ),
-                                                      ),
-                                                ),
-                                                BlocProvider<SendMessageCubit>(
-                                                  create:
-                                                      (
-                                                        context,
-                                                      ) => SendMessageCubit(
-                                                        sendMessageRepo:
-                                                            SendMessageRepoImp(
-                                                              ApiService(Dio()),
-                                                            ),
-                                                        currentUserId:
-                                                            chat.chatWithId,
-                                                      ),
-                                                ),
-                                              ],
-                                              child: ChatBodyScreen(
-                                                date: chat.timestamp,
-                                                name: chat.name,
-                                                image: chat.photo,
-                                                id: chat.chatWithId,
-                                              ),
-                                            ),
-                                      ),
-                                    );
-                                  }
-                                },
-                                onLongPress: () {
-                                  setState(() {
-                                    isSelectionMode = true;
-                                    _toggleSelection(index);
-                                  });
-                                },
                               ),
                             );
-                          },
-                        ),
+                          }
+                        },
+                        onLongPress: () {
+                          setState(() {
+                            isSelectionMode = true;
+                            _toggleSelection(index);
+                          });
+                        },
                       ),
-                    ],
-                  ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
