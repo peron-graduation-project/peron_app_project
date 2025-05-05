@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:peron_project/core/helper/app_snack_bar.dart';
 import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/features/authentication/data/repos/resend%20otp/resend_otp_repo_imp.dart';
 import 'package:peron_project/features/authentication/presentation/manager/resend%20otp/resend_otp_state.dart';
@@ -133,7 +135,13 @@ class _VerificationScreenBodyState extends State<_VerificationScreenBody> {
         final successState = state as VerifyOtpSuccess;
         verifiedOtp = successState.otp;
         print("تم التحقق من OTP: $verifiedOtp");
-          Navigator.pushNamedAndRemoveUntil(
+        AppSnackBar.showFromTop(
+          context: context,
+          title: 'Success',
+          message:successState.message,
+          contentType: ContentType.success,
+        );
+        Navigator.pushNamedAndRemoveUntil(
             context, PageRouteName.login, (route) => false,);
       },
       ),
@@ -143,8 +151,11 @@ class _VerificationScreenBodyState extends State<_VerificationScreenBody> {
             listener: (context, state) {
               if (state is VerifyOtpFailure) {
                 debugPrint("❌ خطأ عند التحقق من OTP: ${state.errorMessage}");
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.errorMessage)),
+                AppSnackBar.showFromTop(
+                  context: context,
+                  title: 'Error',
+                  message:state.errorMessage,
+                  contentType: ContentType.failure,
                 );
               }
             },
@@ -153,8 +164,12 @@ class _VerificationScreenBodyState extends State<_VerificationScreenBody> {
             listenWhen: (previous, current) => current is OtpResentSuccess,
             listener: (context, state) {
               if (state is OtpResentSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("تم إرسال رمز جديد")));
+                AppSnackBar.showFromTop(
+                  context: context,
+                  title: 'Success',
+                  message:'تم إرسال رمز جديد',
+                  contentType: ContentType.success,
+                );
                 startTimer();
               }
             },
@@ -246,8 +261,11 @@ class _VerificationScreenBodyState extends State<_VerificationScreenBody> {
                     if (otpCode.length == 4 && otpCode.runes.every((r) => r >= 48 && r <= 57)) {
                       context.read<VerifyOtpCubit>().verifyOtp(otpCode: otpCode,);
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("يرجى إدخال الرمز بالكامل والتأكد أنه أرقام فقط")),
+                      AppSnackBar.showFromTop(
+                        context: context,
+                        title: 'Error',
+                        message:'رجى إدخال الرمز بالكامل والتأكد أنه أرقام فقط',
+                        contentType: ContentType.failure,
                       );
                     }
                   },

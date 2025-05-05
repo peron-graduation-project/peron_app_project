@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:peron_project/core/widgets/custom_arrow_back.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
 import 'package:peron_project/features/authentication/data/repos/forget%20password/forget_password_imp.dart';
 import 'package:peron_project/features/authentication/data/repos/send%20otp/send_repo_imp.dart';
+import '../../../../../core/helper/app_snack_bar.dart';
 import '../../../../../core/navigator/page_routes_name.dart';
 import '../../manager/forgot password/forgot_password_cubit.dart';
 import '../../manager/forgot password/forgot_password_state.dart';
@@ -54,12 +56,24 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: BlocListener<ForgetPasswordCubit, ForgetPasswordState>(
               listener: (context, state) {
                 if (state is ForgetPasswordSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.message)),
+                  AppSnackBar.showFromTop(
+                    context: context,
+                    title: 'Success',
+                    message: state.message,
+                    contentType: ContentType.success,
+                  );
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    PageRouteName.checkOtp,
+                        (context) => false,
+                    arguments: _emailController.text,
                   );
                 } else if (state is ForgetPasswordFailure) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.errorMessage)),
+                  AppSnackBar.showFromTop(
+                    context: context,
+                    title: 'Error',
+                    message: state.errorMessage,
+                    contentType: ContentType.failure,
                   );
                 }
               },
@@ -88,8 +102,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               : () {
                             if (_formKey.currentState!.validate()) {
                               context.read<ForgetPasswordCubit>().forgetPassword(_emailController.text.trim());
-                              Navigator.pushNamedAndRemoveUntil(context, PageRouteName.checkOtp, (context)=>false,
-                                  arguments: _emailController.text);
                             }
                           },
                         ),

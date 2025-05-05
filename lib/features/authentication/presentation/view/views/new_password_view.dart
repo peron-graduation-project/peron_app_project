@@ -1,7 +1,9 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:peron_project/core/helper/app_snack_bar.dart';
 
 import '../../../../../core/helper/colors.dart';
 import '../../../../../core/helper/images.dart';
@@ -75,8 +77,12 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                   if (state is ResetPasswordSuccess) {
                     _showSuccessDialog(context);
                   } else if (state is ResetPasswordFailure) {
-                    _showSnackBar(context, state.errorMessage);
-                  }
+                    AppSnackBar.showFromTop(
+                      context: context,
+                      title: 'Error',
+                      message:state.errorMessage,
+                      contentType: ContentType.failure,
+                    );                  }
                 },
                 builder: (context, state) {
                   return SizedBox(
@@ -103,17 +109,34 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     final confirmPassword = confirmPasswordController.text.trim();
 
     if (password.isEmpty || confirmPassword.isEmpty) {
-      _showSnackBar(context, "من فضلك تأكد من ملء جميع الحقول");
+      AppSnackBar.showFromTop(
+        context: context,
+        title: 'Error',
+        message: 'من فضلك تأكد من ملء جميع الحقول',
+        contentType: ContentType.failure,
+      );
+
       return;
     }
 
     if (password.length < 8 || confirmPassword.length < 8) {
-      _showSnackBar(context, "كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل");
+      AppSnackBar.showFromTop(
+        context: context,
+        title: 'Error',
+        message: 'كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل',
+        contentType: ContentType.failure,
+      );
+
       return;
     }
 
     if (password != confirmPassword) {
-      _showSnackBar(context, 'كلمتا السر غير متطابقتين!');
+      AppSnackBar.showFromTop(
+        context: context,
+        title: 'Error',
+        message: 'كلمتا السر غير متطابقتين!',
+        contentType: ContentType.failure,
+      );
       return;
     }
 
@@ -125,14 +148,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     );
   }
 
-  void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
+
 
   void _showSuccessDialog(BuildContext context) {
     showDialog(

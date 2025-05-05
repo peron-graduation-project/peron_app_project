@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +8,7 @@ import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
 
+import '../../../../../core/helper/app_snack_bar.dart';
 import '../../../../../core/widgets/build_text_form_field.dart';
 import '../../manager/login/login_cubit.dart';
 import '../../manager/login/login_state.dart';
@@ -43,6 +45,12 @@ class _LoginBodyViewState extends State<LoginBodyView> {
               print(_formSignInKey.currentState!.validate());
               if (state is LoginSuccess) {
                 if (state.userModel.token.isNotEmpty) {
+                  AppSnackBar.showFromTop(
+                    context: context,
+                    title: 'Success',
+                    message:'تم تسجيل الدخول بنجاح' ,
+                    contentType: ContentType.success,
+                  );
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     PageRouteName.home,
@@ -51,11 +59,11 @@ class _LoginBodyViewState extends State<LoginBodyView> {
                 }
               }
               else if (state is LoginFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.error),
-                    backgroundColor: Colors.red,
-                  ),
+                AppSnackBar.showFromTop(
+                  context: context,
+                  title: 'Error',
+                  message: state.error.isNotEmpty ? state.error : 'حدث خطأ أثناء محاولة تسجيل الدخول، يرجى المحاولة مرة أخرى.',
+                  contentType: ContentType.failure,
                 );
               }
             },

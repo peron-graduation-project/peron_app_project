@@ -1,7 +1,9 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:peron_project/core/helper/app_snack_bar.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/network/api_service.dart';
@@ -26,33 +28,45 @@ class _SignupViewState extends State<SignupView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool acceptAllTerms = false;
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
     return BlocProvider(
-      create: (context) => SignupCubit(
-          SignupRepoImp(apiService: ApiService(Dio())),
-        SendOtpRepoImp(apiService: ApiService(Dio())),
-      ),
+      create:
+          (context) => SignupCubit(
+            SignupRepoImp(apiService: ApiService(Dio())),
+            SendOtpRepoImp(apiService: ApiService(Dio())),
+          ),
       child: BlocConsumer<SignupCubit, SignupState>(
         listener: (context, state) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
 
           if (state is SignupSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message),),
+            AppSnackBar.showFromTop(
+              context: context,
+              title: 'Success',
+              message: state.message,
+              contentType: ContentType.success,
             );
-            Navigator.pushNamed(context, PageRouteName.verificationOtp,arguments: _emailController.text,);
+            Navigator.pushNamed(
+              context,
+              PageRouteName.verificationOtp,
+              arguments: _emailController.text,
+            );
           } else if (state is SignupFailure) {
-            String errorMessage = (state.errors != null && state.errors!.isNotEmpty)
-                ? state.errors!.map((e) => e.toString()).join('\n')
-                : state.errorMessage ?? 'حدث خطأ غير متوقع';
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(errorMessage), ),
+            String errorMessage =
+                (state.errors != null && state.errors!.isNotEmpty)
+                    ? state.errors!.map((e) => e.toString()).join('\n')
+                    : state.errorMessage ?? 'حدث خطأ غير متوقع';
+            AppSnackBar.showFromTop(
+              context: context,
+              title: 'Error',
+              message: errorMessage,
+              contentType: ContentType.failure,
             );
           }
         },
@@ -69,15 +83,34 @@ class _SignupViewState extends State<SignupView> {
                 key: _formSignInKey,
                 child: ListView(
                   children: [
-                    buildTextField("الإسم", TextInputType.name, controller: _fullNameController),
+                    buildTextField(
+                      "الإسم",
+                      TextInputType.name,
+                      controller: _fullNameController,
+                    ),
                     const SizedBox(height: 15.0),
-                    buildTextField("البريد الإلكتروني", TextInputType.emailAddress, controller: _emailController),
+                    buildTextField(
+                      "البريد الإلكتروني",
+                      TextInputType.emailAddress,
+                      controller: _emailController,
+                    ),
                     const SizedBox(height: 15.0),
                     PhoneFieldInput(controller: _phoneController),
                     const SizedBox(height: 15.0),
-                    buildTextField("كلمة السر",hintText: 'Ex:Aa@12345', TextInputType.visiblePassword, obscureText: true, controller: _passwordController,),
+                    buildTextField(
+                      "كلمة السر",
+                      hintText: 'Ex:Aa@12345',
+                      TextInputType.visiblePassword,
+                      obscureText: true,
+                      controller: _passwordController,
+                    ),
                     const SizedBox(height: 15.0),
-                    buildTextField("تأكيد كلمة السر", TextInputType.visiblePassword, obscureText: true, controller: _confirmPasswordController),
+                    buildTextField(
+                      "تأكيد كلمة السر",
+                      TextInputType.visiblePassword,
+                      obscureText: true,
+                      controller: _confirmPasswordController,
+                    ),
                     const SizedBox(height: 10.0),
                     Row(
                       children: [
@@ -105,29 +138,43 @@ class _SignupViewState extends State<SignupView> {
                       child: CustomButton(
                         textColor: Colors.white,
                         backgroundColor: AppColors.primaryColor,
-                        onPressed: state is SignupLoading
-                            ? null
-                            : () {
-                          if (_passwordController.text.trim() != _confirmPasswordController.text.trim()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('كلمتا السر غير متطابقتين!'),),
-                            );
-                            return;
-                          }
-                          if (_formSignInKey.currentState!.validate() && acceptAllTerms) {
-                            BlocProvider.of<SignupCubit>(context).signUp(
-                              username: _fullNameController.text.trim(),
-                              email: _emailController.text.trim(),
-                              phoneNumber: _phoneController.text.trim(),
-                              password: _passwordController.text.trim(),
-                              confirmPassword: _confirmPasswordController.text.trim(),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('يرجى إدخال البيانات والموافقة على الشروط والأحكام')),
-                            );
-                          }
-                        },
+                        onPressed:
+                            state is SignupLoading
+                                ? null
+                                : () {
+                                  if (_passwordController.text.trim() !=
+                                      _confirmPasswordController.text.trim()) {
+                                    AppSnackBar.showFromTop(
+                                      context: context,
+                                      title: 'Error',
+                                      message: 'كلمتا السر غير متطابقتين!',
+                                      contentType: ContentType.failure,
+                                    );
+                                    return;
+                                  }
+                                  if (_formSignInKey.currentState!.validate() &&
+                                      acceptAllTerms) {
+                                    BlocProvider.of<SignupCubit>(
+                                      context,
+                                    ).signUp(
+                                      username: _fullNameController.text.trim(),
+                                      email: _emailController.text.trim(),
+                                      phoneNumber: _phoneController.text.trim(),
+                                      password: _passwordController.text.trim(),
+                                      confirmPassword:
+                                          _confirmPasswordController.text
+                                              .trim(),
+                                    );
+                                  } else {
+                                    AppSnackBar.showFromTop(
+                                      context: context,
+                                      title: 'Error',
+                                      message:
+                                          'يرجى إدخال البيانات والموافقة على الشروط والأحكام',
+                                      contentType: ContentType.failure,
+                                    );
+                                  }
+                                },
                         text: "إنشاء حساب",
                         isLoading: state is SignupLoading,
                       ),
@@ -151,17 +198,30 @@ class _SignupViewState extends State<SignupView> {
                         const SizedBox(width: 20),
                         Icon(Icons.apple, size: 44, color: Colors.black),
                         const SizedBox(width: 20),
-                        SvgPicture.asset("assets/icons/icons8-google.svg", height: 34, width: 34),
+                        SvgPicture.asset(
+                          "assets/icons/icons8-google.svg",
+                          height: 34,
+                          width: 34,
+                        ),
                       ],
                     ),
                     const SizedBox(height: 30.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("هل لديك حساب؟", style: theme.displaySmall?.copyWith(color: Colors.black)),
+                        Text(
+                          "هل لديك حساب؟",
+                          style: theme.displaySmall?.copyWith(
+                            color: Colors.black,
+                          ),
+                        ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, PageRouteName.login, arguments: true);
+                            Navigator.pushNamed(
+                              context,
+                              PageRouteName.login,
+                              arguments: true,
+                            );
                           },
                           child: Text(" تسجيل دخول", style: theme.displaySmall),
                         ),
