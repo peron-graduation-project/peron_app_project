@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:peron_project/features/chats/data/models/chat_model.dart';
 import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/notification/data/notification_model.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import '../../../../core/error/failure.dart';
+import '../../features/advertisements/data/property_model.dart';
 import '../../features/chats/data/models/message_model.dart';
 import '../../features/profile/data/models/inquiry_model.dart';
 import '../utils/property_model.dart';
@@ -1216,4 +1218,119 @@ Future<Either<Failure, Property>> getProperty({
     }
   }
 
+
+  Future<Either<Failure, Map<String, dynamic>>> postPropertyPending({
+    required String token,
+    required PropertyFormData property,
+  }) async {
+    try {
+      final dateFormat = DateFormat('yyyy-MM-dd');
+
+      final availableFromStr = dateFormat.format(property.availableFrom);
+      final availableToStr = dateFormat.format(property.availableTo);
+
+      List<MultipartFile> images = [];
+      if (property.images != null && property.images.isNotEmpty) {
+        for (var image in property.images) {
+          images.add(await MultipartFile.fromFile(image.path));
+        }
+      }
+
+      final response = await _dio.post(
+        '/Property/pending',
+        data: FormData.fromMap({
+          'Title': property.title??"",
+          'Location': property.location??"",
+          'AvailableFrom': availableFromStr??"",
+          'AvailableTo': availableToStr??"",
+          'RentType': property.rentType??"",
+          'Bedrooms': property.bedrooms??"",
+          'Bathrooms': property.bathrooms??"",
+          'HasInternet': property.hasInternet??false,
+          'AllowsPets': property.allowsPets??false,
+          'Area': property.area??0,
+          'SmokingAllowed': property.smokingAllowed??false,
+          'Floor': property.floor??0,
+          'IsFurnished': property.isFurnished??false,
+          'HasBalcony': property.hasBalcony??false,
+          'HasSecurity': property.hasSecurity??false,
+          'HasElevator': property.hasElevator??false,
+          'MinBookingDays': property.minBookingDays??1,
+          'Description': property.description??'',
+          'Latitude': property.latitude??0,
+          'Longitude': property.longitude??0,
+          'Images': images??[],
+        }),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return Right(response.data as Map<String, dynamic>);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير صحيحة من الخادم",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء رفع الشقة",
+        errors: [e.toString()],
+      ));
+    }
   }
+
+
+  Future<Either<Failure, Map<String, dynamic>>> getStripeCheckoutSession({
+    required String token,
+    required String sessionId,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/Property/confirm',
+        queryParameters: {
+          'session_id': sessionId,
+        },
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("✅ [DEBUG] Stripe Checkout API Response: ${response.data}");
+
+      if (response.data is Map<String, dynamic>) {
+        return Right(response.data as Map<String, dynamic>);
+      } else {
+        return Left(ServiceFailure(
+          errorMessage: "استجابة غير متوقعة من الخادم",
+          errors: [response.data.toString()],
+        ));
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error: $e");
+
+      final failure = ServiceFailure.fromDioError(e);
+      return Left(failure);
+    } catch (e) {
+      print("❗ [DEBUG] Unexpected Error in getStripeCheckoutSession: $e");
+
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء تأكيد الدفع",
+        errors: [e.toString()],
+      ));
+    }
+  }
+
+
+
+
+
+}

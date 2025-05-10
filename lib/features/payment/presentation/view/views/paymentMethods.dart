@@ -53,7 +53,8 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back_ios, // استخدم سهم يتجه لليمين للرجوع في واجهة RTL
+            Icons.arrow_back_ios,
+              // استخدم سهم يتجه لليمين للرجوع في واجهة RTL
             color: Colors.black, 
             size: 18
           ),

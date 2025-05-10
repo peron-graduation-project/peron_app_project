@@ -9,7 +9,7 @@ import 'package:peron_project/features/advertisements/presentation/widgets/prope
 
 class AddPropertyScreen2 extends StatelessWidget {
   final PropertyFormData data;
-  const AddPropertyScreen2({required this.data, Key? key}) : super(key: key);
+  const AddPropertyScreen2({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {

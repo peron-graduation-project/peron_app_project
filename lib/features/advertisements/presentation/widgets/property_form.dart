@@ -207,7 +207,7 @@ class _PropertyFormState extends State<PropertyForm> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-                    final data = PropertyFormData()
+                    final data = PropertyFormData()..rentType= titleController.text
                       ..title       = titleController.text
                       ..description = detailsController.text
                       ..location    = selectedPlace ?? ''

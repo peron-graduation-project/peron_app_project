@@ -1,26 +1,98 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/helper/images.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
-import 'package:peron_project/features/advertisements/data/api_service.dart' ;
 import 'package:peron_project/features/advertisements/data/property_model.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_alert_dialog.dart';
-import 'package:peron_project/features/payment/presentation/view/views/paymentMethods.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../core/helper/app_snack_bar.dart';
+import '../manager/propert_confirm/property_confirm_cubit.dart';
+import '../manager/propert_confirm/property_confirm_state.dart';
+import '../manager/property_pending/property_pending_cubit.dart';
+import '../views/myAdvScreen.dart';
 
 class PropertyForm3 extends StatefulWidget {
   final PropertyFormData formData;
-  const PropertyForm3({Key? key, required this.formData}) : super(key: key);
+  const PropertyForm3({super.key, required this.formData});
 
   @override
   State<PropertyForm3> createState() => _PropertyForm3State();
 }
 
-class _PropertyForm3State extends State<PropertyForm3> {
+class _PropertyForm3State extends State<PropertyForm3> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed && _pendingSessionId != null && _paymentLaunched) {
+      final sessionId = _pendingSessionId!;
+
+      setState(() {
+        _pendingSessionId = null;
+        _paymentLaunched = false;
+      });
+
+      await context.read<PropertyConfirmCubit>().propertyConfirm(sessionId: sessionId);
+      final state = context.read<PropertyConfirmCubit>().state;
+
+      if (state is PropertyConfirmStateSuccess) {
+        AppSnackBar.showFromTop(
+          context: context,
+          title: 'Success',
+          message: 'تم الدفع بنجاح، سيتم نشر الإعلان.',
+          contentType: ContentType.success,
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyAdvertisementsPage(initialPublishedCount: 0),
+          ),
+        );
+      } else if (state is PropertyConfirmStateFailure) {
+        AppSnackBar.showFromTop(
+          context: context,
+          title: 'Error',
+          message: 'فشلت عملية الدفع، سيتم تعليق الإعلان.',
+          contentType: ContentType.failure,
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyAdvertisementsPage(initialPublishedCount: 1),
+          ),
+        );
+      } else {
+        AppSnackBar.showFromTop(
+          context: context,
+          title: 'Error',
+          message: 'حدث خطأ غير متوقع.',
+          contentType: ContentType.failure,
+        );
+      }
+    }
+  }
+
+
+  String? _pendingSessionId;
+  bool _paymentLaunched = false;
+
   List<File> images = [];
 
   Future<void> _pickImage() async {
@@ -31,6 +103,7 @@ class _PropertyForm3State extends State<PropertyForm3> {
     }
   }
 
+
   void _showPaymentAlert(BuildContext context) {
     if (images.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -38,50 +111,39 @@ class _PropertyForm3State extends State<PropertyForm3> {
       );
       return;
     }
-
     showDialog(
       context: context,
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.4),
-      builder: (context) => CustomAlertDialog(
-        iconPath: 'assets/images/alert.svg',
-        title: 'لنشر الإعلان يجب الدفع',
-        description: 'قم بالدفع لنشر اعلانك',
-        confirmText: 'دفع',
-        cancelText: 'إلغاء',
-       onConfirm: () {
-  Navigator.pop(context);
-  widget.formData.images = images;
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => PaymentMethodScreen(
-        formData: widget.formData,
-      ),
-    ),
-  );
-},
-
-        onCancel: () => Navigator.pop(context),
-      ),
+      builder:
+          (context) => CustomAlertDialog(
+            iconPath: 'assets/images/alert.svg',
+            title: 'لنشر الإعلان يجب الدفع',
+            description: 'قم بالدفع لنشر اعلانك',
+            confirmText: 'دفع',
+            cancelText: 'إلغاء',
+            onConfirm: () {
+              Navigator.pop(context);
+              widget.formData.images = images;
+            },
+            onCancel: () async {
+              Navigator.pop(context);
+              widget.formData.images = images;
+            },
+          ),
     );
   }
-
-  Future<void> _submitProperty() async {
-    widget.formData.images = images;
-    try {
-      final api = await ApiService.create();
-      await api.createProperty(widget.formData);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('✅ تم نشر العقار بنجاح')),
-      );
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('❌ فشل في النشر: $e')),
-      );
+  Future<void> openStripeLink(String rawUrl) async {
+    final url = Uri.parse(Uri.encodeFull(rawUrl));
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint("❌ Could not launch $url");
     }
   }
+
+
+
 
   Widget buildLabel(String text, double screenWidth) {
     return Padding(
@@ -126,9 +188,10 @@ class _PropertyForm3State extends State<PropertyForm3> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: images.isEmpty
-                    ? _buildEmptyUploadBox(screenWidth, screenHeight)
-                    : _buildImageGrid(screenWidth),
+                child:
+                    images.isEmpty
+                        ? _buildEmptyUploadBox(screenWidth, screenHeight)
+                        : _buildImageGrid(screenWidth),
               ),
             ),
           ),
@@ -142,7 +205,80 @@ class _PropertyForm3State extends State<PropertyForm3> {
                   text: 'نشر',
                   backgroundColor: AppColors.primaryColor,
                   textColor: Colors.white,
-                  onPressed: () => _showPaymentAlert(context),
+                  onPressed: () async {
+                    if (images.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('❌ يرجى إضافة صورة واحدة على الأقل'),
+                        ),
+                      );
+                      return;
+                    }
+                    final paymentUrl = await context
+                        .read<PropertyPendingCubit>()
+                        .postPropertyPending(property: widget.formData);
+                    print('paymentUrl:$paymentUrl');
+                    if (paymentUrl != null && paymentUrl.isNotEmpty) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        barrierColor: Colors.black.withOpacity(0.4),
+                        builder:
+                            (context) => CustomAlertDialog(
+                              iconPath: 'assets/images/alert.svg',
+                              title: 'لنشر الإعلان يجب الدفع',
+                              description: 'قم بالدفع لنشر اعلانك',
+                              confirmText: 'دفع',
+                              cancelText: 'إلغاء',
+                              onConfirm: () async {
+                                final regex = RegExp(r'cs_test_[a-zA-Z0-9]+');
+                                final match = regex.firstMatch(paymentUrl);
+                                final sessionId = match?.group(0);
+
+                                if (sessionId != null) {
+                                  setState(() {
+                                    _pendingSessionId = sessionId;
+                                    _paymentLaunched = true;
+                                  });
+                                  await openStripeLink(paymentUrl);
+
+                                } else {
+                                  AppSnackBar.showFromTop(
+                                    context: context,
+                                    title: 'Error',
+                                    message: 'لم يتم العثور على session ID في الرابط.',
+                                    contentType: ContentType.failure,
+                                  );
+                                }
+                              },
+                              onCancel: () async {
+                                Navigator.pop(context);
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => MyAdvertisementsPage(
+                                    initialPublishedCount: 1,
+                                  )),
+                                      (route) => false,
+                                );
+                              },
+                            ),
+                      );
+                      AppSnackBar.showFromTop(
+                        context: context,
+                        title: 'Warning',
+                        message: 'تم تعليق الإعلان لحين إتمام عملية الدفع',
+                        contentType: ContentType.warning,
+                      );
+                    } else {
+                      AppSnackBar.showFromTop(
+                        context: context,
+                        title: 'Error',
+                        message:
+                            ' فشل في إرسال البيانات أو لم يتم الحصول على رابط الدفع',
+                        contentType: ContentType.failure,
+                      );
+                    }
+                  },
                 ),
               ),
               SizedBox(width: screenWidth * 0.04),
@@ -190,14 +326,19 @@ class _PropertyForm3State extends State<PropertyForm3> {
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.all(screenWidth * 0.025),
                   side: BorderSide(color: AppColors.primaryColor),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 onPressed: _pickImage,
-                child: Text('تصفح', style: TextStyle(
-                  fontFamily: Fonts.primaryFontFamily,
-                  fontSize: screenWidth * 0.037,
-                  color: AppColors.primaryColor,
-                )),
+                child: Text(
+                  'تصفح',
+                  style: TextStyle(
+                    fontFamily: Fonts.primaryFontFamily,
+                    fontSize: screenWidth * 0.037,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
               ),
             ),
           ],
@@ -227,7 +368,11 @@ class _PropertyForm3State extends State<PropertyForm3> {
                 border: Border.all(color: AppColors.primaryColor),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(Icons.add, size: iconSize, color: AppColors.primaryColor),
+              child: Icon(
+                Icons.add,
+                size: iconSize,
+                color: AppColors.primaryColor,
+              ),
             ),
           );
         }

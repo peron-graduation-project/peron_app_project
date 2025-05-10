@@ -35,6 +35,8 @@ import '../../../features/profile/presentation/manager/delete%20account/delete_a
 import '../../../features/profile/presentation/manager/get%20inquiry/get_inquiry_cubit.dart';
 import '../../../features/profile/presentation/manager/get%20profile/get_profile_cubit.dart';
 import '../../../features/profile/presentation/manager/update%20profile/update_profile_cubit.dart';
+import '../../features/advertisements/data/repo/property_confirm/property_confirm_repo_imp.dart';
+import '../../features/advertisements/presentation/manager/propert_confirm/property_confirm_cubit.dart';
 import '../../features/chats/domain/repos/get chats/get_chats_repo_imp.dart';
 import '../../features/chats/presentation/manager/get chats/get_chats_cubit.dart';
 import '../../features/profile/presentation/manager/app rating/send app rating/send_app_rating_cubit.dart';
@@ -70,7 +72,9 @@ final apiService=ApiService(Dio());
 
     BlocProvider(create: (_) => SendAppRatingCubit(AppRatingRepoImp(apiService))),
     BlocProvider(create: (_) => DeleteAccountCubit(DeleteAccountRepoImp(apiService))),
-
+    BlocProvider(
+      create: (context) => PropertyConfirmCubit(PropertyConfirmRepoImp(apiService),
+  )),
     BlocProvider(
       create: (context) => UpdateProfileCubit(
         UpdateProfileRepoImp(apiService, profileRepo),
