@@ -11,6 +11,7 @@ import 'package:peron_project/core/widgets/custom_button.dart';
 import 'package:peron_project/features/advertisements/data/property_model.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_alert_dialog.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/helper/app_snack_bar.dart';
@@ -41,53 +42,47 @@ class _PropertyForm3State extends State<PropertyForm3> with WidgetsBindingObserv
   }
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed && _pendingSessionId != null && _paymentLaunched) {
-      final sessionId = _pendingSessionId!;
+    if (state == AppLifecycleState.resumed) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final sessionId = prefs.getString('pending_session_id');
 
-      setState(() {
-        _pendingSessionId = null;
-        _paymentLaunched = false;
-      });
+      if (sessionId != null) {
+        await prefs.remove('pending_session_id');
+        await context.read<PropertyConfirmCubit>().propertyConfirm(sessionId: sessionId);
 
-      await context.read<PropertyConfirmCubit>().propertyConfirm(sessionId: sessionId);
-      final state = context.read<PropertyConfirmCubit>().state;
+        final state = context.read<PropertyConfirmCubit>().state;
 
-      if (state is PropertyConfirmStateSuccess) {
-        AppSnackBar.showFromTop(
-          context: context,
-          title: 'Success',
-          message: 'تم الدفع بنجاح، سيتم نشر الإعلان.',
-          contentType: ContentType.success,
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MyAdvertisementsPage(initialPublishedCount: 0),
-          ),
-        );
-      } else if (state is PropertyConfirmStateFailure) {
-        AppSnackBar.showFromTop(
-          context: context,
-          title: 'Error',
-          message: 'فشلت عملية الدفع، سيتم تعليق الإعلان.',
-          contentType: ContentType.failure,
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MyAdvertisementsPage(initialPublishedCount: 1),
-          ),
-        );
-      } else {
-        AppSnackBar.showFromTop(
-          context: context,
-          title: 'Error',
-          message: 'حدث خطأ غير متوقع.',
-          contentType: ContentType.failure,
-        );
+        if (state is PropertyConfirmStateSuccess) {
+          AppSnackBar.showFromTop(
+            context: context,
+            title: 'Success',
+            message: 'تم الدفع بنجاح، سيتم نشر الإعلان.',
+            contentType: ContentType.success,
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MyAdvertisementsPage(initialPublishedCount: 0),
+            ),
+          );
+        } else {
+          AppSnackBar.showFromTop(
+            context: context,
+            title: 'Error',
+            message:"فشلت عملية الدفع. سيتم تعليق حجز الشقة مؤقتًا لحين إتمام الدفع.",
+            contentType: ContentType.failure,
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MyAdvertisementsPage(initialPublishedCount: 1),
+            ),
+          );
+        }
       }
     }
   }
+
 
 
   String? _pendingSessionId;
@@ -133,14 +128,30 @@ class _PropertyForm3State extends State<PropertyForm3> with WidgetsBindingObserv
           ),
     );
   }
-  Future<void> openStripeLink(String rawUrl) async {
-    final url = Uri.parse(Uri.encodeFull(rawUrl));
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
-      debugPrint("❌ Could not launch $url");
+  Future<void> openStripeCheckout(String rawUrl) async {
+    try {
+      final Uri url = Uri.parse(rawUrl);
+
+      bool launched = await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+
+      if (!launched) {
+        launched = await launchUrl(
+          url,
+          mode: LaunchMode.inAppBrowserView,
+        );
+      }
+
+      if (!launched) {
+        debugPrint("❌ Still couldn't launch: $url");
+      }
+    } catch (e) {
+      debugPrint('🚫 Error launching Stripe URL: $e');
     }
   }
+
 
 
 
@@ -236,11 +247,15 @@ class _PropertyForm3State extends State<PropertyForm3> with WidgetsBindingObserv
                                 final sessionId = match?.group(0);
 
                                 if (sessionId != null) {
+                                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                                  await prefs.setString('pending_session_id', sessionId);
+
                                   setState(() {
                                     _pendingSessionId = sessionId;
                                     _paymentLaunched = true;
                                   });
-                                  await openStripeLink(paymentUrl);
+
+                                  await openStripeCheckout(paymentUrl);
 
                                 } else {
                                   AppSnackBar.showFromTop(
