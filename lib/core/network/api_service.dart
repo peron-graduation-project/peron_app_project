@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:peron_project/features/chatPot/data/chat_pot_model.dart';
 import 'package:peron_project/features/chats/data/models/chat_model.dart';
 import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/notification/data/notification_model.dart';
@@ -1331,6 +1332,71 @@ Future<Either<Failure, Property>> getProperty({
 
 
 
+Future<Either<Failure, List<ChatBotMessage>>> getChatPotMessages({
+    required String token,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/chatBot/history',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.data is List) {
+        final List<ChatBotMessage> messages = (response.data as List)
+            .map((json) => ChatBotMessage.fromJson(json as Map<String, dynamic>))
+            .toList();
 
+        return Right(messages);
+      } else {
+        return Left(
+          ServiceFailure(
+            errorMessage: "استجابة غير متوقعة من الخادم عند جلب الرسائل",
+            errors: [response.data.toString()],
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      return Left(
+        ServiceFailure(
+          errorMessage: "حدث خطأ غير متوقع أثناء جلب الرسائل",
+          errors: [e.toString()],
+        ),
+      );
+    }
+  }
+
+
+  Future<Either<Failure, Map<String, dynamic>>> chatBotSendMessage({
+    required String token,
+    required String message,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/chatBot/ask',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },),  data: {
+          'message': message,},  );
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        return Right(response.data as Map<String, dynamic>);
+      } else {
+        return Left(
+          ServiceFailure(
+            errorMessage: "فشل في إرسال الرسالة: استجابة غير متوقعة من الخادم",
+            errors: [response.data.toString()],
+          ),);  }
+    } on DioException catch (e) {
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      return Left(
+        ServiceFailure(
+          errorMessage: "حدث خطأ غير متوقع أثناء إرسال الرسالة إلى الشات بوت",
+          errors: [e.toString()],
+        ),
+      );
+    }
+  }
 
 }
