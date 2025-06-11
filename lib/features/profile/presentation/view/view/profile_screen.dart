@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:peron_project/features/profile/presentation/view/widgets/account
 import 'package:peron_project/features/profile/presentation/view/widgets/change_password_dialog.dart';
 import 'package:peron_project/features/profile/presentation/view/widgets/profileSection.dart';
 
+import '../../../../../core/helper/app_snack_bar.dart';
 import '../../manager/change password/change_password_cubit.dart';
 import '../../manager/update profile/update_profile_cubit.dart';
 import '../widgets/change_phone_number_dialog.dart';
@@ -116,9 +118,13 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
                               phoneNumber: ''
                             ).then((_) {
                               context.read<GetProfileCubit>().getProfile();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('تم تحديث البروفايل بنجاح')),
+                              AppSnackBar.showFromTop(
+                                context: context,
+                                title: 'Success',
+                                message: 'تم تحديث البروفايل بنجاح',
+                                contentType: ContentType.success,
                               );
+
                             });
                           }
                         },
@@ -150,8 +156,11 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
                               phoneNumber: newPhone
                             ).then((_) {
                               context.read<GetProfileCubit>().getProfile();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('تم تحديث رقم الهاتف بنجاح')),
+                              AppSnackBar.showFromTop(
+                                context: context,
+                                title: 'Success',
+                                message: 'تم تحديث رقم الهاتف بنجاح',
+                                contentType: ContentType.success,
                               );
                             });
                           }

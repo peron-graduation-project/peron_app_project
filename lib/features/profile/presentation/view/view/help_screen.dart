@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/widgets/build_text_form_field.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
 
+import '../../../../../core/helper/app_snack_bar.dart';
 import '../../../../../core/widgets/custom_arrow_back.dart';
 import '../../../../authentication/presentation/view/widgets/phone_field.dart';
 import '../../../domain/repos/submit inquiry/submit_inquiry_repo_imp.dart';
@@ -38,22 +40,22 @@ class _HelpScreenState extends State<HelpScreen> {
       child: BlocConsumer<SubmitInquiryCubit, SubmitInquiryState>(
         listener: (context, state) {
           if (state is SubmitInquiryStateSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.green,
-                content: Text(state.message),
-              ),
+            AppSnackBar.showFromTop(
+              context: context,
+              title: 'Success',
+              message: state.message,
+              contentType: ContentType.success,
             );
             _fullNameController.clear();
             _emailController.clear();
             _phoneController.clear();
             _descriptionController.clear();
           } else if (state is SubmitInquiryStateFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.red,
-                content: Text(state.errorMessage),
-              ),
+            AppSnackBar.showFromTop(
+              context: context,
+              title: 'Error',
+              message:state.errorMessage,
+              contentType: ContentType.failure,
             );
           }
         },

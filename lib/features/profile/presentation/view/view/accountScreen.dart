@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peron_project/core/helper/app_snack_bar.dart';
 import 'package:peron_project/core/navigator/page_routes_name.dart';
 import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 import 'package:peron_project/features/advertisements/presentation/views/myAdvScreen.dart';
 import 'package:peron_project/features/authentication/presentation/manager/logout/logout_cubit.dart';
@@ -228,9 +230,13 @@ class _AccountScreenState extends State<AccountScreen> with RouteAware {
                             (route) => false,
                           );
                         } else if (state is LogoutFailure) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.errorMessage)),
+                          AppSnackBar.showFromTop(
+                            context: context,
+                            title: 'Error',
+                            message:state.errorMessage,
+                            contentType: ContentType.failure,
                           );
+
                         }
                       },
                       builder: (context, state) {

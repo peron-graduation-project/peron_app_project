@@ -32,17 +32,14 @@ class _CreditCardPaymentScreenState extends State<CreditCardPaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // استخدام MediaQuery للحصول على أبعاد الشاشة
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
     final double screenHeight = screenSize.height;
 
-    // تحديد حجم الهوامش بناءً على حجم الشاشة
-    final double horizontalPadding = screenWidth * 0.05; // 5% من عرض الشاشة
-    final double verticalSpacing = screenHeight * 0.02; // 2% من ارتفاع الشاشة
+    final double horizontalPadding = screenWidth * 0.05;
+    final double verticalSpacing = screenHeight * 0.02;
 
-    // تعديل حجم الخط بناءً على حجم الشاشة
-    final double titleFontSize = screenWidth * 0.045; // يتكيف مع عرض الشاشة
+    final double titleFontSize = screenWidth * 0.045;
     final double labelFontSize = screenWidth * 0.04;
     final double buttonFontSize = screenWidth * 0.04;
 

@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +7,7 @@ import 'package:peron_project/core/helper/images.dart';
 import 'package:peron_project/features/profile/presentation/manager/app%20rating/send%20app%20rating/send_app_rating_cubit.dart';
 import 'package:peron_project/features/profile/presentation/manager/app%20rating/send%20app%20rating/send_app_rating_state.dart';
 
+import '../../../../../core/helper/app_snack_bar.dart';
 import '../../../../../core/widgets/custom_button.dart';
 
 void showRatingDialog(BuildContext context) {
@@ -22,12 +24,18 @@ void showRatingDialog(BuildContext context) {
         listener: (context, state) {
           if (state is SendAppRatingStateSuccess) {
             Navigator.pop(dialogContext);
-            ScaffoldMessenger.of(dialogContext).showSnackBar(
-              SnackBar(content: Text('تم إرسال التقييم بنجاح')),
+            AppSnackBar.showFromTop(
+              context: context,
+              title: 'Success',
+              message: 'تم إرسال التقييم بنجاح',
+              contentType: ContentType.success,
             );
           } else if (state is SendAppRatingStateFailure) {
-            ScaffoldMessenger.of(dialogContext).showSnackBar(
-              SnackBar(content: Text(state.errorMessage)),
+            AppSnackBar.showFromTop(
+              context: context,
+              title: 'Error',
+              message:state.errorMessage,
+              contentType: ContentType.failure,
             );
           }
         },
