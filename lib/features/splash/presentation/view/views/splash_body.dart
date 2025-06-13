@@ -27,6 +27,7 @@ class _SplashBodyState extends State<SplashBody>
   @override
   void initState() {
     super.initState();
+    _viewModel = OnboardingViewModel(OnboardingLocalDataSource());
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 6),
@@ -69,12 +70,8 @@ class _SplashBodyState extends State<SplashBody>
 
     _controller.forward();
     _controller.addStatusListener((status) {
-      _viewModel = OnboardingViewModel(OnboardingLocalDataSource());
-
       if (status == AnimationStatus.completed) {
         _checkOnboarding();
-
-
       }
     });
   }
