@@ -69,27 +69,20 @@ class UpdateProfileRepoImp implements UpdateProfileRepo {
           return Left(failure);
         },
             (data) async { // Handle successful response
-          if (data is Map<String, dynamic>) {
-            if (data.containsKey("message")) {
-              await _saveProfileData(fullName: fullName, profilePicture: profilePicture,phoneNumber:phoneNumber);
+          if (data.containsKey("message")) {
+            await _saveProfileData(fullName: fullName, profilePicture: profilePicture,phoneNumber:phoneNumber);
 
-              await profileRepoImp.clearCachedProfile();
-              print("🗑️ [DEBUG] Profile cache cleared after update");
+            await profileRepoImp.clearCachedProfile();
+            print("🗑️ [DEBUG] Profile cache cleared after update");
 
-              return Right(data["message"].toString());
-            } else {
-              return Left(ServiceFailure(
-                errorMessage: "الاستجابة لا تحتوي على المفتاح 'message'",
-                errors: ["لم يتم العثور على المفتاح 'message' في الاستجابة"],
-              ));
-            }
+            return Right(data["message"].toString());
           } else {
             return Left(ServiceFailure(
-              errorMessage: "الاستجابة غير صحيحة",
-              errors: ["البيانات المستلمة ليست من النوع المناسب"],
+              errorMessage: "الاستجابة لا تحتوي على المفتاح 'message'",
+              errors: ["لم يتم العثور على المفتاح 'message' في الاستجابة"],
             ));
           }
-        },
+                },
       );
     } catch (e) {
       print("❗ [DEBUG] Unexpected Error in update profileRepoImp: $e");

@@ -1,6 +1,4 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
@@ -8,7 +6,6 @@ import 'package:location/location.dart';
 import 'package:peron_project/core/helper/images.dart';
 
 import '../../../../../core/helper/colors.dart';
-import '../../../../../core/network/api_service.dart';
 import '../../../../../core/widgets/custom_button.dart';
 import 'map_screen.dart';
 

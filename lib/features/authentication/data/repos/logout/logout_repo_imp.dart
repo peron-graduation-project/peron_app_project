@@ -32,22 +32,15 @@ class LogoutRepoImp implements LogoutRepo {
           return Left(failure);
         },
             (data) {
-          if (data is Map<String, dynamic>) {
-            if (data.containsKey("message")) {
-              return Right(data["message"].toString());
-            } else {
-              return Left(ServiceFailure(
-                errorMessage: "الاستجابة لا تحتوي على المفتاح 'message'",
-                errors: ["لم يتم العثور على المفتاح 'message' في الاستجابة"],
-              ));
-            }
+          if (data.containsKey("message")) {
+            return Right(data["message"].toString());
           } else {
             return Left(ServiceFailure(
-              errorMessage: "الاستجابة غير صحيحة",
-              errors: ["البيانات المستلمة ليست من النوع المناسب"],
+              errorMessage: "الاستجابة لا تحتوي على المفتاح 'message'",
+              errors: ["لم يتم العثور على المفتاح 'message' في الاستجابة"],
             ));
           }
-        },
+                },
       );
     } catch (e) {
       print("❗ [DEBUG] Unexpected Error in LogoutRepoImp: $e");

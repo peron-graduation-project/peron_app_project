@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:peron_project/core/network/api_service.dart';
-import 'package:peron_project/features/chatPot/domain/domain/repos/get%20chatPot/get_chatpot_repo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../../core/error/failure.dart';
-import '../../../../data/chat_pot_model.dart';
+import '../../../data/chat_pot_model.dart';
+import 'get_chatpot_repo.dart';
 
 class GetChatBotRepoImpl implements GetChatBotRepo {
   final ApiService apiService;
@@ -118,6 +118,7 @@ class GetChatBotRepoImpl implements GetChatBotRepo {
           errors: ["التوكين غير موجود"],
         ));
       }
+      print('🔐 Token to send: $token');
 
       final response = await apiService.chatBotSendMessage(
         token: token,

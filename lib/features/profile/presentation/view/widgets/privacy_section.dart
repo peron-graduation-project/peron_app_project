@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/colors.dart';
-import 'package:peron_project/core/helper/fonts.dart'; 
 
 Widget buildSection({required String title, required String content}) {
   return Padding(

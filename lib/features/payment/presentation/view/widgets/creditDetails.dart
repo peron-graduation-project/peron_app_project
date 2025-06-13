@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 
 class CreditDetails extends StatelessWidget {
-  const CreditDetails({Key? key}) : super(key: key);
+  const CreditDetails({super.key});
 
   @override
   Widget build(BuildContext context) {

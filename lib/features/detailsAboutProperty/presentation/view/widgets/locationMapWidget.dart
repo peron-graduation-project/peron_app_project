@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart' as geo;
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/utils/property_model.dart';
@@ -20,8 +18,8 @@ class LocationMapWidget extends StatefulWidget {
   // final double? propertyLongitude;
   // final String? propertyTitle;
 
-  LocationMapWidget({
-    Key? key,
+  const LocationMapWidget({
+    super.key,
     required this.property,
     required this.screenWidth,
     required this.padding,
@@ -30,7 +28,7 @@ class LocationMapWidget extends StatefulWidget {
     // this.propertyLatitude,
     // this.propertyLongitude,
     // this.propertyTitle,
-  }) : super(key: key);
+  });
 
   @override
   State<LocationMapWidget> createState() => _LocationMapWidgetState();
@@ -47,7 +45,7 @@ class _LocationMapWidgetState extends State<LocationMapWidget> {
   Marker? _propertyMarker;
   LatLng? _currentLatLng;
   StreamSubscription<loc.LocationData>? _locationSubscription;
-  LatLng _defaultLocation = const LatLng(30.0444, 31.2357); // Cairo
+  final LatLng _defaultLocation = const LatLng(30.0444, 31.2357); // Cairo
   double _zoomLevel = 15.0;
 
   @override
@@ -278,13 +276,13 @@ class SimpleMapScreen extends StatefulWidget {
   final String? propertyTitle;
   final double initialZoom;
 
-  SimpleMapScreen({
-    Key? key,
+  const SimpleMapScreen({
+    super.key,
     this.propertyLatitude,
     this.propertyLongitude,
     this.propertyTitle,
     this.initialZoom = 15.0,
-  }) : super(key: key);
+  });
 
   @override
   State<SimpleMapScreen> createState() => _SimpleMapScreenState();
@@ -300,7 +298,7 @@ class _SimpleMapScreenState extends State<SimpleMapScreen> {
   Marker? _currentLocationMarker;
   Marker? _propertyMarker;
   LatLng? _currentLatLng;
-  LatLng _defaultLocation = const LatLng(30.0444, 31.2357); // Cairo
+  final LatLng _defaultLocation = const LatLng(30.0444, 31.2357); // Cairo
   StreamSubscription<loc.LocationData>? _locationSubscription;
   double _zoomLevel = 15.0;
 

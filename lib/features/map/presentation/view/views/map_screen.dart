@@ -82,7 +82,7 @@ class _MapScreenState extends State<MapScreen> {
           infoWindow: const InfoWindow(title: "موقعك الحالي"),
         );
         _markers.add(_currentLocationMarker!);
-        context.read<GetNearestCubit>().getNearest(lat: _currentLatLng!.latitude!, lon: _currentLatLng!.longitude!);
+        context.read<GetNearestCubit>().getNearest(lat: _currentLatLng!.latitude, lon: _currentLatLng!.longitude);
       }
     } catch (e) {
       print('Error getting current location: $e');

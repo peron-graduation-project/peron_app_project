@@ -20,15 +20,9 @@ class GetProfileCubit extends Cubit<GetProfileState> {
         _log('State emitted: GetProfileError - ${failure.errorMessage}');
       },
           (profile) {
-        if (profile != null) {
-          emit(GetProfileLoaded(profile: profile));
-          _log('State emitted: GetProfileLoaded - Name: ${profile.fullName}, Image: ${profile.profilePictureUrl}');
-        } else {
-          final errorMsg = 'بيانات البروفايل غير متوفرة';
-          emit(GetProfileError(message: errorMsg));
-          _log('State emitted: GetProfileError - $errorMsg');
-        }
-      },
+        emit(GetProfileLoaded(profile: profile));
+        _log('State emitted: GetProfileLoaded - Name: ${profile.fullName}, Image: ${profile.profilePictureUrl}');
+            },
     );
   }
 

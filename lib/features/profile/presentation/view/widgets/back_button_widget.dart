@@ -5,7 +5,7 @@ import 'package:peron_project/core/helper/images.dart';
 class BackButtonWidget extends StatelessWidget {
   final double screenWidth;
 
-  const BackButtonWidget({required this.screenWidth});
+  const BackButtonWidget({super.key, required this.screenWidth});
 
   @override
   Widget build(BuildContext context) {

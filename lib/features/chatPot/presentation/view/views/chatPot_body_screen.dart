@@ -5,6 +5,8 @@ import 'package:peron_project/core/widgets/custom_arrow_back.dart';
 import 'package:peron_project/features/chatPot/presentation/view/views/chatPot_view_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;

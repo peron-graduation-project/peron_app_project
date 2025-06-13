@@ -7,7 +7,7 @@ class SettingsItem extends StatelessWidget {
   final Color? iconColor;
   final Color? titleColor;
 
-  const SettingsItem({
+  const SettingsItem({super.key, 
     required this.icon,
     required this.title,
     required this.onTap,

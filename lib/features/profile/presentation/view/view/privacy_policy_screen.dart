@@ -167,7 +167,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               children: [
                 Icon(Icons.phone,color: AppColors.primaryColor,size: 20,),
                 SizedBox(width: 10,),
-                Text('رقم الهاتف:0a61119723643',style: theme.labelLarge?.copyWith(color: AppColors.primaryColor),)
+                Text('رقم الهاتف:061119723643',style: theme.labelLarge?.copyWith(color: AppColors.primaryColor),)
               ],
             )
           ],

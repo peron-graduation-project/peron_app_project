@@ -13,7 +13,7 @@ void showChangePasswordDialog(BuildContext parentContext) {
   bool obscureText1 = true;
   bool obscureText2 = true;
   bool obscureText3 = true;
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   showDialog(
     context: parentContext,
     barrierDismissible: false,
@@ -39,7 +39,7 @@ void showChangePasswordDialog(BuildContext parentContext) {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -154,7 +154,7 @@ void showChangePasswordDialog(BuildContext parentContext) {
                                   state is ChangePasswordStateLoading
                                       ? null
                                       : () {
-                                        if (_formKey.currentState!.validate()) {
+                                        if (formKey.currentState!.validate()) {
                                           BlocProvider.of<ChangePasswordCubit>(
                                             context,
                                             listen: false,

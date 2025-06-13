@@ -29,7 +29,7 @@ class PropertyDetailScreen extends StatefulWidget {
 }
 
 class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
-  int _currentImageIndex = 0;
+  final int _currentImageIndex = 0;
   bool _showExtendedDetails = false;
 
   final List<String> _imagesPaths = [

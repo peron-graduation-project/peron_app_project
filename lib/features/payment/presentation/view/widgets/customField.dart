@@ -11,14 +11,14 @@ class CustomField extends StatelessWidget {
   final String? Function(String?)? validator;
 
   const CustomField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.labelText,
     this.isNumeric = false,
     this.maxLength,
     this.onChanged,
     this.validator,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

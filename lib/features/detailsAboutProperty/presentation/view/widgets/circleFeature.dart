@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:peron_project/core/helper/fonts.dart';
 
 class CircleFeature extends StatelessWidget {
   final IconData icon;
   final double screenWidth;
 
-  CircleFeature({
-    Key? key,
+  const CircleFeature({
+    super.key,
     required this.icon,
     required this.screenWidth,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

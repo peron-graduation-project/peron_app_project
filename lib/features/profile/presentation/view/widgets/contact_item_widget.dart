@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 class HeaderWidget extends StatelessWidget {
   final double screenWidth;
 
-  const HeaderWidget({Key? key, required this.screenWidth}) : super(key: key);
+  const HeaderWidget({super.key, required this.screenWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -82,11 +82,11 @@ class ContactItemWidget extends StatelessWidget {
   final double screenWidth;
 
   const ContactItemWidget({
-    Key? key,
+    super.key,
     required this.text,
     required this.iconPath,
     required this.screenWidth,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -8,13 +8,13 @@ class SettingsItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const SettingsItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.icon, 
     required this.showArrow,
     required this.onTap,
     this.isDeleteAccount,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

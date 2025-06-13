@@ -6,10 +6,10 @@ class TextFeatureItem extends StatelessWidget {
   final double fontSize;
 
   const TextFeatureItem({
-    Key? key,
+    super.key,
     required this.text,
     required this.fontSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

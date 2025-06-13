@@ -1231,7 +1231,7 @@ Future<Either<Failure, Property>> getProperty({
       final availableToStr = dateFormat.format(property.availableTo);
 
       List<MultipartFile> images = [];
-      if (property.images != null && property.images.isNotEmpty) {
+      if (property.images.isNotEmpty) {
         for (var image in property.images) {
           images.add(await MultipartFile.fromFile(image.path));
         }
@@ -1372,12 +1372,13 @@ Future<Either<Failure, List<ChatBotMessage>>> getChatPotMessages({
     required String message,
   }) async {
     try {
+
       final response = await _dio.post(
-        '/chatBot/ask',
+        '/ChatBot/ask',
         options: Options(
           headers: {
-            'Authorization': 'Bearer $token',
-          },),  data: {
+            'Authorization': 'Bearer $token',},),
+        data: {
           'message': message,},  );
       if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
         return Right(response.data as Map<String, dynamic>);

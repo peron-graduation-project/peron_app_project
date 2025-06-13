@@ -12,7 +12,7 @@ class PropertyBorder extends StatelessWidget {
     decoration: BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(12),
-    border: Border.all(color: const Color(0xff7F7F7F66))),
+    border: Border.all(color: const Color(0xff7f7f7f66))),
       child: child,
 
     );

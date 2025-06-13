@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:peron_project/core/utils/property_model.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/views/property_details.dart';
 import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/main/presentation/view/widgets/custom_favourite_icon.dart';

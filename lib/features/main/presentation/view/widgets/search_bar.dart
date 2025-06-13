@@ -29,13 +29,17 @@ class CustomSearchBar extends StatelessWidget {
               controller: searchController,
               cursorColor: AppColors.primaryColor,
               onSubmitted: (value) {
-                
                 if (value.trim().isNotEmpty) {
                   context.read<GetSearchPropertiesCubit>().getSearchProperties(value.trim());
                 }
+
               },
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search, color: Colors.grey),
+                prefixIcon: IconButton(onPressed: (){
+                  if (searchController.text.trim().isNotEmpty) {
+                    context.read<GetSearchPropertiesCubit>().getSearchProperties(searchController.text.trim());
+                  }
+                }, icon: Icon(Icons.search, color: Colors.grey)),
                 hintText: "ابحث عن اسم المنطقة او المكان",
                 hintStyle: theme.displayMedium!.copyWith(color: Color(0xff818181)),
                 border: InputBorder.none,

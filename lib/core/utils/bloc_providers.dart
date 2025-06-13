@@ -35,14 +35,13 @@ import '../../../features/profile/presentation/manager/delete%20account/delete_a
 import '../../../features/profile/presentation/manager/get%20inquiry/get_inquiry_cubit.dart';
 import '../../../features/profile/presentation/manager/get%20profile/get_profile_cubit.dart';
 import '../../../features/profile/presentation/manager/update%20profile/update_profile_cubit.dart';
+import '../../features/chatPot/domain/repos/get chatPot/get_chatpot_repo_imp.dart';
 import '../../features/chats/domain/repos/get chats/get_chats_repo_imp.dart';
 import '../../features/chats/presentation/manager/get chats/get_chats_cubit.dart';
 import '../../features/profile/presentation/manager/app rating/send app rating/send_app_rating_cubit.dart';
 import '../network/api_service.dart';
 
 import 'package:peron_project/features/chatPot/presentation/manager/chatPot_cubit.dart';
-import 'package:peron_project/features/chatPot/domain/domain/repos/get%20chatPot/get_chatpot_repo_imp.dart';
-import 'package:peron_project/features/chatPot/domain/domain/repos/get%20chatPot/get_chatpot_repo.dart';
 
 Future<List<SingleChildWidget>> getAppProviders(SharedPreferences sharedPreferences) async {
   final apiService = ApiService(Dio());

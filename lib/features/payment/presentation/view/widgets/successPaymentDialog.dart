@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/features/advertisements/presentation/views/myAdvScreen.dart';
-import 'package:peron_project/features/home/presentation/view/views/home_view_body.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 
 class SuccessPaymentDialog extends StatelessWidget {
@@ -9,11 +8,11 @@ class SuccessPaymentDialog extends StatelessWidget {
   final VoidCallback? onButtonPressed;
 
   const SuccessPaymentDialog({
-    Key? key,
+    super.key,
     required this.message,
     this.buttonText = 'عودة',
     this.onButtonPressed,
-  }) : super(key: key);
+  });
 
   static Future<void> show({
     required BuildContext context,
@@ -65,7 +64,7 @@ class SuccessPaymentDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
-            Container(
+            SizedBox(
               width: 200,
               height: 40,
               child: ElevatedButton(

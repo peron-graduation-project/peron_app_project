@@ -12,7 +12,7 @@ class PaymentMethodItem extends StatelessWidget {
   final Color activeColor;
 
   const PaymentMethodItem({
-    Key? key,
+    super.key,
     required this.index,
     required this.selectedIndex,
     this.title, 
@@ -21,7 +21,7 @@ class PaymentMethodItem extends StatelessWidget {
     this.isCustomIcon = false,
     required this.onTap,
     this.activeColor = const Color(0xff0F7757),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

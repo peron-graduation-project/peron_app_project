@@ -4,7 +4,7 @@ class UserInfoTile extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  const UserInfoTile({required this.icon, required this.text});
+  const UserInfoTile({super.key, required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {

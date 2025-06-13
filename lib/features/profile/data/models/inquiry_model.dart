@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class InquiryModel {
   final int id;

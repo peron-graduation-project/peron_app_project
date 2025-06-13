@@ -39,7 +39,7 @@ class PropertyPendingRepoImp implements PropertyPendingRepo {
           return Left(failure);
         },
             (data) {
-          if (data is Map<String, dynamic> && data.containsKey("paypalurl")) {
+          if (data.containsKey("paypalurl")) {
             final url = data["paypalurl"];
             if (url is String) {
               return Right(url);

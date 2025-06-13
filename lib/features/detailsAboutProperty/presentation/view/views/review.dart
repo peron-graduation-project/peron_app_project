@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/fonts.dart';
-import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/reviewsSection.dart';
 
 class ReviewsScreen extends StatefulWidget {
-  const ReviewsScreen({Key? key}) : super(key: key);
+  const ReviewsScreen({super.key});
 
   @override
   State<ReviewsScreen> createState() => _ReviewsScreenState();

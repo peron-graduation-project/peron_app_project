@@ -13,13 +13,13 @@ class RecommendedProperties extends StatefulWidget {
   final String location;
 
   const RecommendedProperties({
-    Key? key,
+    super.key,
     required this.location,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
     required this.smallFontSize,
-  }) : super(key: key);
+  });
 
   @override
   State<RecommendedProperties> createState() => _RecommendedPropertiesState();

@@ -5,8 +5,7 @@ import 'package:peron_project/features/advertisements/presentation/views/add_pro
 class NoPublishedAdsContent extends StatelessWidget {
   final VoidCallback onAddProperty;
 
-  const NoPublishedAdsContent({Key? key, required this.onAddProperty})
-    : super(key: key);
+  const NoPublishedAdsContent({super.key, required this.onAddProperty});
 
   @override
   Widget build(BuildContext context) {

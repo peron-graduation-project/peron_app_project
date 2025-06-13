@@ -9,7 +9,7 @@ import 'package:peron_project/features/advertisements/presentation/widgets/custo
 
 class PropertyForm2 extends StatefulWidget {
   final PropertyFormData formData;
-  const PropertyForm2({Key? key, required this.formData}) : super(key: key);
+  const PropertyForm2({super.key, required this.formData});
 
   @override
   _PropertyForm2State createState() => _PropertyForm2State();

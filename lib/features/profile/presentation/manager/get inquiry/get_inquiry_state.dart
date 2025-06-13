@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:peron_project/core/utils/property_model.dart';
 import 'package:peron_project/features/profile/data/models/inquiry_model.dart';
 
 abstract class GetInquiryState extends Equatable {

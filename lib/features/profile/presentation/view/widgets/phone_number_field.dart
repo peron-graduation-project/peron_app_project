@@ -4,6 +4,8 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:peron_project/core/helper/colors.dart'; 
 
 class CustomPhoneField extends StatelessWidget {
+  const CustomPhoneField({super.key});
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

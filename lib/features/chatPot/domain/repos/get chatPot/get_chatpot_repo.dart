@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../../../core/error/failure.dart';
-import '../../../../data/chat_pot_model.dart';
+import '../../../data/chat_pot_model.dart';
 
 abstract class GetChatBotRepo {
   Future<Either<Failure, List<ChatBotMessage>>>getMessages();

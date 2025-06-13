@@ -7,13 +7,10 @@ import 'package:peron_project/core/helper/images.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/advertisements/data/property_model.dart';
-import 'package:peron_project/features/advertisements/data/repo/property_confirm/property_confirm_repo_imp.dart';
 import 'package:peron_project/features/advertisements/data/repo/property_pending/property_pending_repo_imp.dart';
-import 'package:peron_project/features/advertisements/presentation/manager/propert_confirm/property_confirm_cubit.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/property_form3.dart';
 
 import '../../../../core/network/api_service.dart';
-import '../../data/repo/property_confirm/property_confirm_repo.dart';
 import '../manager/property_pending/property_pending_cubit.dart';
 
 class AddPropertyScreen3 extends StatelessWidget {

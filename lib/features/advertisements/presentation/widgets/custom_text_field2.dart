@@ -11,7 +11,7 @@ class CustomTextField extends StatelessWidget {
   final TextAlignVertical? textAlignVertical;        
 
   const CustomTextField({
-    Key? key,
+    super.key,
     this.hintText,
     this.maxLines = 1,
     this.controller,
@@ -19,7 +19,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,                                
     this.textAlignVertical,      
                      
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

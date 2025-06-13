@@ -4,7 +4,7 @@ import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/payment/presentation/view/views/verification.dart';
 
 class PhoneVerificationScreen extends StatefulWidget {
-  const PhoneVerificationScreen({Key? key}) : super(key: key);
+  const PhoneVerificationScreen({super.key});
 
   @override
   State<PhoneVerificationScreen> createState() =>

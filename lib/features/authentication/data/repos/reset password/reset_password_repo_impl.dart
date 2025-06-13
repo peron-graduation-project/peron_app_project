@@ -25,7 +25,7 @@ class ResetPasswordRepoImpl implements ResetPasswordRepo {
             (data) {
           print("✅ [DEBUG] API Response: $data");
 
-          if (data is Map<String, dynamic> && data.containsKey("message")) {
+          if (data.containsKey("message")) {
             return Right(data["message"].toString());
           }
           else {

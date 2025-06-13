@@ -2,11 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:peron_project/core/helper/fonts.dart';
-import 'package:peron_project/features/myAds/presentation/view/widgets/successDialog.dart';
 import 'package:peron_project/features/payment/presentation/view/widgets/successPaymentDialog.dart';
 
 class VerificationCodeScreen extends StatefulWidget {
-  const VerificationCodeScreen({Key? key}) : super(key: key);
+  const VerificationCodeScreen({super.key});
 
   @override
   State<VerificationCodeScreen> createState() => _VerificationCodeScreenState();

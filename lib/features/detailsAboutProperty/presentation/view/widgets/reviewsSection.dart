@@ -11,7 +11,7 @@ class ReviewsSection extends StatelessWidget {
   final List<Map<String, dynamic>> reviews;
 
   const ReviewsSection({
-    Key? key,
+    super.key,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
@@ -46,7 +46,7 @@ class ReviewsSection extends StatelessWidget {
         'avatarUrl': 'assets/images/profile_pic.jpg',
       },
     ],
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

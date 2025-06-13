@@ -10,14 +10,14 @@ class PropertyComponents extends StatelessWidget {
   final double smallFontSize;
   final Property property;
 
-  PropertyComponents({
-    Key? key,
+  const PropertyComponents({
+    super.key,
     required this.property,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
     required this.smallFontSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

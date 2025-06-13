@@ -9,9 +9,9 @@ import 'creditcard.dart';
 class PaymentMethodScreen extends StatefulWidget {
   final PropertyFormData formData; 
   const PaymentMethodScreen({
-    Key? key,
+    super.key,
     required this.formData,  
-  }) : super(key: key);
+  });
   @override
   State<PaymentMethodScreen> createState() => _PaymentMethodScreenState();
 }

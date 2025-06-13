@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:peron_project/core/utils/property_model.dart';
-import 'package:peron_project/features/chats/data/models/chat_model.dart';
 
 abstract class GetPropertyState extends Equatable {
   const GetPropertyState();

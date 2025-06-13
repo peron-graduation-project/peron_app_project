@@ -7,7 +7,7 @@ import 'package:peron_project/features/payment/presentation/view/widgets/success
 
 
 class CreditCardPaymentScreen extends StatefulWidget {
-  const CreditCardPaymentScreen({Key? key}) : super(key: key);
+  const CreditCardPaymentScreen({super.key});
 
   @override
   State<CreditCardPaymentScreen> createState() =>

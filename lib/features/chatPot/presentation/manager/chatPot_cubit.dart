@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/error/failure.dart';
-import 'package:peron_project/features/chatPot/domain/domain/repos/get%20chatPot/get_chatpot_repo.dart';
 import 'package:peron_project/features/chatPot/presentation/manager/chatPot_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/chat_pot_model.dart';
+import '../../domain/repos/get chatPot/get_chatpot_repo.dart';
 
 class ChatBotCubit extends Cubit<ChatBotState> {
   final GetChatBotRepo chatBotRepo;

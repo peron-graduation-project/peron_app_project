@@ -11,7 +11,7 @@ class PropertyDescription extends StatelessWidget {
   final String description;
 
   const PropertyDescription({
-    Key? key,
+    super.key,
     required this.description,
     required this.standardPadding,
     required this.smallPadding,
@@ -19,7 +19,7 @@ class PropertyDescription extends StatelessWidget {
     required this.smallFontSize,
     required this.toggleExtendedDetails,
     required this.showExtendedDetails,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

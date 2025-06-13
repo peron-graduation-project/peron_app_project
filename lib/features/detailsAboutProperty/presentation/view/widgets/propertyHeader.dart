@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/utils/property_model.dart';
-import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/ratingDialog.dart';
 
-import '../views/review.dart';
 
 class PropertyHeader extends StatelessWidget {
   final double standardPadding;

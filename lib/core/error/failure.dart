@@ -69,7 +69,7 @@ class ServiceFailure extends Failure {
     }
 
     if (message == "حدث خطأ أثناء الاتصال بالخادم" && errorsList.isNotEmpty) {
-      message = "• " + errorsList.join("\n• ");
+      message = "• ${errorsList.join("\n• ")}";
     }
 
     print("📦 [DEBUG] Extracted Message: $message");

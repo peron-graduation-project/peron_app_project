@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 
 class RatingDialog extends StatefulWidget {
-  const RatingDialog({Key? key}) : super(key: key);
+  const RatingDialog({super.key});
 
   @override
   State<RatingDialog> createState() => _RatingDialogState();

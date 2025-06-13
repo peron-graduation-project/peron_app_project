@@ -55,6 +55,9 @@ dependencies:
   jwt_decode:
   awesome_snackbar_content: ^0.1.5
   webview_flutter:
+  easy_localization:
+  very_good_analysis: ^5.0.0
+
 
 flutter_icons:
   android: true

@@ -11,7 +11,7 @@ class PropertyImageSlider extends StatelessWidget {
   final double smallCircleSize;
 
   const PropertyImageSlider({
-    Key? key,
+    super.key,
     required this.imagesPaths,
     required this.currentImageIndex,
     required this.goToImage,
@@ -19,7 +19,7 @@ class PropertyImageSlider extends StatelessWidget {
     required this.standardPadding,
     required this.screenHeight,
     required this.smallCircleSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/main/domain/repo/get%20highest%20price/get_highest_price_repo.dart';
-import 'package:peron_project/features/main/domain/repo/get%20most%20area/get_most_area_repo.dart';
-import 'package:peron_project/features/main/domain/repo/get%20recommended/get_recommended_repo.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../../../../../core/network/api_service.dart';
 

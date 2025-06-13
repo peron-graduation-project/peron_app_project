@@ -9,12 +9,12 @@ class PropertyInformation extends StatelessWidget {
   final Property property;
 
   const PropertyInformation({
-    Key? key,
+    super.key,
     required this.property,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

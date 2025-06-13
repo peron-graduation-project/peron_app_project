@@ -8,11 +8,11 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     this.hintText,
     this.maxLines = 1,
     this.controller, required String labelText, required bool isNumeric, required int maxLength,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ import 'package:peron_project/features/chatPot/presentation/manager/chatPot_cubi
 import 'package:peron_project/features/chatPot/presentation/manager/chatPot_state.dart';
 
 class ChatpotViewScreen extends StatefulWidget {
-  ChatpotViewScreen({super.key});
+  const ChatpotViewScreen({super.key});
 
   @override
   State<ChatpotViewScreen> createState() => _ChatpotViewScreenState();
@@ -61,7 +61,9 @@ class _ChatpotViewScreenState extends State<ChatpotViewScreen> {
                   child: BlocBuilder<ChatBotCubit, ChatBotState>(
                     builder: (context, state) {
                       if (state is ChatLoading) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(child: CircularProgressIndicator(
+                          color: AppColors.primaryColor,
+                        ));
                       } else if (state is ChatLoaded) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           scrollToBottom();

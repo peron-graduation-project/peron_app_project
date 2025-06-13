@@ -6,10 +6,10 @@ class PropertyCard extends StatefulWidget {
   final VoidCallback onTap;          
 
   const PropertyCard({
-    Key? key,
+    super.key,
     required this.property,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   State<PropertyCard> createState() => _PropertyCardState();

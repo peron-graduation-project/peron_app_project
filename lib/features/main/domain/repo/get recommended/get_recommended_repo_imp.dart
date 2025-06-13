@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:peron_project/core/utils/property_model.dart';
 import 'package:peron_project/features/main/data/models/recommended_property.dart';
 import 'package:peron_project/features/main/domain/repo/get%20recommended/get_recommended_repo.dart';
 import '../../../../../../core/error/failure.dart';
