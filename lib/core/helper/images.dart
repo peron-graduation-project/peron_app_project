@@ -18,9 +18,10 @@ static String emailIcon = 'assets/images/mage_email.svg';
 static String language = 'assets/images/language.svg';
 static String rating = 'assets/images/rating.svg';
 static String uploadIcon = 'assets/images/mynaui_upload.svg';
-static String addPropertyTitle = 'assets/images/Group 19785.svg';
-static String addPropertyTitle2 = 'assets/images/Group 19786.svg';
-static String addPropertyTitle3 = 'assets/images/Group 1984077851.svg';
+static String addPropertyTitle = 'assets/images/Group 1984077855.svg';
+static String addPropertyTitle2 = 'assets/images/Group 1984077856.svg';
+static String addPropertyTitle4 = 'assets/images/Group 1984077858.svg';
+static String addPropertyTitle3 = 'assets/images/Group 1984077857.svg';
 
 
 

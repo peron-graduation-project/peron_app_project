@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/advertisements/data/property_model.dart';
-import 'package:peron_project/features/advertisements/presentation/widgets/property_form3.dart';
+import 'package:peron_project/features/advertisements/presentation/widgets/property_form4.dart';
 import 'package:peron_project/features/payment/presentation/view/widgets/paymentMethodItem.dart';
 import 'continuePayment.dart';
 import 'creditcard.dart';
@@ -60,7 +60,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PropertyForm3(formData: widget.formData,)),
+              MaterialPageRoute(builder: (context) => PropertyForm4(formData: widget.formData,)),
             );
           },
         ),
