@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
+
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/utils/property_model.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
 import 'package:peron_project/features/myAds/presentation/view/widgets/dottedBorderBox.dart';
 import 'package:peron_project/features/myAds/presentation/view/widgets/successDialog.dart';
 
+import '../../../../../core/widgets/custom_button.dart';
+import '../../../../authentication/presentation/view/widgets/phone_field.dart';
 import '../../manager/update property/update_property_cubit.dart';
 import '../../manager/update property/update_property_state.dart';
 
@@ -57,7 +58,8 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
     roomsController.text = widget.property.bedrooms.toString() ?? '';
     bathroomsController.text = widget.property.bathrooms.toString() ?? '';
     floorController.text = widget.property.floor.toString() ?? '';
-    allowPets = widget.property.allowsPets;
+    allowPets = widget.property.allowsPets ?? false;
+
   }
 
   @override
@@ -142,7 +144,25 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
           key: _formKey,
           child: ListView(
             children: [
+              SizedBox(height: 10,),
+              Text(
+                "نوع العقار",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
               _buildTextField('نوع العقار', propertyTypeController),
+              SizedBox(height: 10,),
+              Text(
+                "المكان",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
               _buildTextField('المكان', locationController),
               const SizedBox(height: 8),
               Text(
@@ -187,45 +207,27 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              IntlPhoneField(
-                controller: phoneController,
-                decoration: InputDecoration(
-                  labelText: 'الهاتف',
-                  labelStyle: GoogleFonts.tajawal(
-                    fontSize: screenWidth * 0.04,
-                    color: AppColors.black,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(
-                      color: AppColors.primaryColor,
-                      width: 2,
-                    ),
-                  ),
+              PhoneFieldInput(controller: phoneController),
+              const SizedBox(height: 8),
+              Text(
+                "المساحة (بالمتر)",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
                 ),
-                initialCountryCode: 'EG',
-                dropdownIcon: Icon(
-                  Icons.keyboard_arrow_down,
-                  color: Colors.black54,
-                  size: 24,
-                ),
-                onChanged: (phone) {
-                  print(phone.completeNumber);
-                },
-                validator: (value) {
-                  if (value == null || value.completeNumber.isEmpty) {
-                    return 'يرجى إدخال رقم الهاتف';
-                  }
-                  return null;
-                },
               ),
               const SizedBox(height: 8),
-              _buildTextField('المساحة (بالمتر)', spaceController, height: 36),
-              _buildTextField('السعر - جنيه', priceController, height: 36),
+              _buildTextField('المساحة (بالمتر)', spaceController, ),
+              SizedBox(height: 10,),
+              Text(
+                "السعر - جنيه",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              _buildTextField('السعر - جنيه', priceController,),
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
@@ -239,12 +241,12 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                       ),
                     ),
                     Transform.scale(
-                      scale: 0.9,
+                      scale: 0.8,
                       child: Switch(
-                        value: widget.property.allowsPets ?? false,
+                        value: allowPets??false,
                         activeColor: Colors.white,
                         activeTrackColor: AppColors.primaryColor,
-                        inactiveThumbColor: Colors.white,
+                        inactiveThumbColor:AppColors.primaryColor,
                         inactiveTrackColor: Colors.grey.shade400,
                         onChanged: (val) {
                           setState(() {
@@ -256,9 +258,37 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                   ],
                 ),
               ),
-              _buildTextField('الغرف', roomsController, height: 36),
-              _buildTextField('الحمامات', bathroomsController, height: 36),
-              _buildTextField('عنوان العقار', addressController, height: 36),
+              Text(
+                "الغرف",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              _buildTextField('الغرف', roomsController, ),
+              SizedBox(height: 10,),
+              Text(
+                "الحمامات",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              _buildTextField('الحمامات', bathroomsController, ),
+              SizedBox(height: 10,),
+              Text(
+                "عنوان العقار",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              _buildTextField('عنوان العقار', addressController, ),
+              
               _buildCheckboxDropdown(
                 'مواصفات أخرى',
                 [
@@ -287,8 +317,9 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                 child: SizedBox(
                   width: screenWidth * 0.6,
                   height: 48,
-                  child: ElevatedButton(
-                    onPressed: () {
+                  child: CustomButton(
+                    backgroundColor: AppColors.primaryColor,
+                    onPressed:state is UpdatePropertyStateLoading?null:(){
                       if (_formKey.currentState!.validate()) {
                         Property newProperty=Property(
                           images: [],
@@ -308,22 +339,7 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                           id: propertyId,
                         );
                       }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      backgroundColor: AppColors.primaryColor,
-                    ),
-                    child: state is UpdatePropertyStateLoading
-                        ? CircularProgressIndicator(
-                      color: AppColors.primaryColor,
-                    )
-                        : const Text(
-                      'نشر',
-                      style: TextStyle(fontSize: 16),
-                    ),
-
+                    }, textColor: Colors.white, text: 'نشر',
                   ),
                 ),
               ),
@@ -347,8 +363,6 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
         child: TextFormField(
           controller: controller,
           decoration: InputDecoration(
-            labelText: label,
-            labelStyle: GoogleFonts.tajawal(fontSize: 16),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: Colors.grey),
