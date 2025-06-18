@@ -7,7 +7,7 @@ import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/property_item.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get property/get_property_cubit.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get property/get_property_state.dart';
-
+import '../../../detailsAboutProperty/presentation/view/views/property_details.dart';
 import '../manager/propert_create/property_create_cubit.dart';
 
 class DeletedPropertyCard extends StatefulWidget {
@@ -65,11 +65,24 @@ class _DeletedPropertyCardState extends State<DeletedPropertyCard> {
               itemBuilder: (context, index) {
                 final property = properties[index];
                 final isBlurred = !restoredIndexes.contains(index);
+
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: Stack(
                     children: [
-                      PropertyItem(property: property),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PropertyDetailScreen(
+                                propertyId: property.propertyId ?? 24,
+                              ),
+                            ),
+                          );
+                        },
+                        child: PropertyItem(property: property),
+                      ),
                       if (isBlurred)
                         Positioned.fill(
                           child: ClipRRect(

@@ -29,7 +29,7 @@ class Property {
   final double? longitude;
 
   Property({
-    this.propertyId,
+     this.propertyId,
     this.ownerId,
     this.owner,
     this.title,
@@ -62,7 +62,7 @@ class Property {
   // Factory method to create a Property object from JSON data
   factory Property.fromJson(Map<String, dynamic> json) {
     return Property(
-      propertyId: json['propertyId'],
+      propertyId: json['propertyId']??24,
       ownerId: json['ownerId'],
       owner: json['owner'],
       title: json['title'],

@@ -290,7 +290,8 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        Property newProperty=Property(images: [],
+                        Property newProperty=Property(
+                          images: [],
                             description:specificationController.text,
                             price: double.parse(priceController.text),
                             area:  int.parse(spaceController.text),
