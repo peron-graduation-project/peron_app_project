@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_cubit.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_state.dart';
 
 class TabItem extends StatelessWidget {
   final String title;
   final int index;
   final int selectedIndex;
+  final int? length;
   final Function(int) onTap;
 
   const TabItem({
@@ -13,6 +17,7 @@ class TabItem extends StatelessWidget {
     required this.index,
     required this.selectedIndex,
     required this.onTap,
+    this.length,
   });
 
   @override
@@ -23,15 +28,39 @@ class TabItem extends StatelessWidget {
       onTap: () => onTap(index),
       child: Column(
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: isSelected ? const Color(0xFF0F8E65) : Colors.black,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              fontFamily: Fonts.primaryFontFamily,
+          Row(
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  color: isSelected ? const Color(0xFF0F8E65) : Colors.black,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontFamily: Fonts.primaryFontFamily,
 
-              fontSize: 14,
-            ),
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(),
+              // BlocBuilder(
+              //   builder: (context, state) {
+              //     if (state is! GetPropertyStateSuccess) {
+              //       return SizedBox();
+              //     }
+              //     return ;
+              //   },
+              // ),
+              Text(
+                "${length ?? 0}",
+                // "${index == 0 ? context.read<GetPropertyCubit>().getPropertiesLength ?? 0 : 0}",
+                style: TextStyle(
+                  color: isSelected ? const Color(0xFF0F8E65) : Colors.black,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontFamily: Fonts.primaryFontFamily,
+
+                  fontSize: 14,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 5),
           if (isSelected)

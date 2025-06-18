@@ -1,22 +1,27 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:peron_project/core/helper/fonts.dart';
-import 'package:peron_project/core/network/api_service.dart';
+import 'package:peron_project/features/advertisements/presentation/manager/propert_create/property_create_cubit.dart';
 import 'package:peron_project/features/advertisements/presentation/views/add_property_screen.dart';
-import 'package:peron_project/features/advertisements/presentation/widgets/no_published.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/property_card.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/tab_item.dart';
-import 'package:peron_project/features/detailsAboutProperty/domain/repos/get%20property/get_property_repo_imp.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_cubit.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_state.dart';
+
+import '../../../../core/helper/colors.dart';
+import '../../../../core/widgets/custom_arrow_back.dart';
+import '../widgets/deleted_property_card.dart';
+import '../widgets/no_published.dart';
 
 class MyAdvertisementsPage extends StatefulWidget {
-  final int initialPublishedCount;
+  final int? initialPublishedCount;
+  final int? currentSelectedIndex;
 
   const MyAdvertisementsPage({
     super.key,
-    this.initialPublishedCount = 0,
+    this.initialPublishedCount,
+    this.currentSelectedIndex,
   });
 
   @override
@@ -24,9 +29,9 @@ class MyAdvertisementsPage extends StatefulWidget {
 }
 
 class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
-  int _selectedTabIndex = 0;
+  late int _selectedTabIndex;
 
-  late int publishedAdsCount;
+  // late int publishedAdsCount;
   int pendingAdsCount = 0;
   int deletedAdsCount = 0;
 
@@ -48,8 +53,35 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
   @override
   void initState() {
     super.initState();
-    publishedAdsCount =
-        widget.initialPublishedCount;
+
+    _selectedTabIndex = widget.currentSelectedIndex ?? 0;
+    pendingAdsCount = _selectedTabIndex == 0 ? 0 : 1;
+    context.read<GetPropertyCubit>().getProperties(
+      index: _selectedTabIndex,
+      id: context
+          .read<PropertyCreateCubit>()
+          .getId,
+    );
+    context.read<GetPropertyCubit>().getProperties(
+      index: 0,
+      id: context
+          .read<PropertyCreateCubit>()
+          .getId,
+    );
+    context.read<GetPropertyCubit>().getProperties(
+      index: 1,
+      id: context
+          .read<PropertyCreateCubit>()
+          .getId,
+    );
+    context.read<GetPropertyCubit>().getProperties(
+      index: 2,
+      id: context
+          .read<PropertyCreateCubit>()
+          .getId,
+    );
+    // publishedAdsCount = widget.initialPublishedCount;
+    print("hna publishedAdsCount ${widget.initialPublishedCount}");
   }
 
   void _navigateToAddPropertyScreen() {
@@ -65,25 +97,27 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
         .of(context)
         .size;
     final isSmallScreen = screenSize.width < 360;
+    var theme = Theme
+        .of(context)
+        .textTheme;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
         title: Text(
-          'اعلاناتي',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-            fontFamily: Fonts.primaryFontFamily,
-          ),
+          "إعلاناتى",
+          style: theme.headlineMedium!.copyWith(fontSize: 20),
+        ),
+        centerTitle: true,
+        leading: CustomArrowBack(
         ),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1.0),
-          child: Container(height: 0.5, color: Colors.grey),
+          preferredSize: const Size.fromHeight(1),
+          child: Divider(
+            thickness: 1,
+            height: 1,
+            color: AppColors.dividerColor,
+          ),
         ),
         actions: [
           Padding(
@@ -132,83 +166,119 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
             ),
           ),
         ],
-
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: Column(
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TabItem(
-                  title: '($publishedAdsCount)منشور',
-                  index: 0,
-                  selectedIndex: _selectedTabIndex,
-                  onTap: (index) {
-                    setState(() {
-                      _selectedTabIndex = index;
-                    });
-                  },
-                ),
-                TabItem(
-                  title: '($pendingAdsCount)معلق',
-                  index: 1,
-                  selectedIndex: _selectedTabIndex,
-                  onTap: (index) {
-                    setState(() {
-                      _selectedTabIndex = index;
-                    });
-                  },
-                ),
-                TabItem(
-                  title: '($deletedAdsCount)محذوف',
-                  index: 2,
-                  selectedIndex: _selectedTabIndex,
-                  onTap: (index) {
-                    setState(() {
-                      _selectedTabIndex = index;
-                    });
-                  },
-                ),
-              ],
+            child: BlocBuilder<GetPropertyCubit, GetPropertyState>(
+              builder:
+                  (context, state) =>
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TabItem(
+                        title: "منشور",
+                        length: context.read<GetPropertyCubit>()
+                            .getPropertiesLengthByIndex(0),
+                        index: 0,
+                        selectedIndex: _selectedTabIndex,
+                        onTap: (index) {
+                          setState(() {
+                            _selectedTabIndex = index;
+
+                            if (context
+                                .read<GetPropertyCubit>()
+                                .publishedProperties
+                                .isEmpty) {
+                              context.read<GetPropertyCubit>().getProperties(
+                                index: index,
+                                id: context
+                                    .read<PropertyCreateCubit>()
+                                    .getId,
+                              );
+                            } else {
+                              context.read<GetPropertyCubit>().emit(
+                                GetPropertyStateSuccess(
+                                  properties: context
+                                      .read<GetPropertyCubit>()
+                                      .publishedProperties,
+                                ),
+                              );
+                            }
+                          });
+                        },
+                      ),
+                      TabItem(
+                        title: 'معلق ',
+                        length: context
+                            .read<GetPropertyCubit>()
+                            .getPropertiesLengthByIndex(1)
+                        ,
+                        index: 1,
+                        selectedIndex: _selectedTabIndex,
+                        onTap: (index) {
+                          setState(() {
+                            _selectedTabIndex = index;
+                            print(
+                              "hna tapitemid ${context
+                                  .read<PropertyCreateCubit>()
+                                  .getId}",
+                            );
+                            context.read<GetPropertyCubit>().getProperties(
+                              index: index,
+                            );
+                          });
+                        },
+                      ),
+                      TabItem(
+                        title: 'محذوف ',
+                        length:
+                        context
+                            .read<GetPropertyCubit>()
+                            .getPropertiesLengthByIndex(2)
+                        ,
+                        index: 2,
+                        selectedIndex: _selectedTabIndex,
+                        onTap: (index) {
+                          setState(() {
+                            _selectedTabIndex = index;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
             ),
           ),
-          Expanded(
-            child: SingleChildScrollView(child: _getContentByTabIndex()),
-          ),
+          Expanded(child: _getContentByTabIndex()),
+          // Expanded(
+          //   child: SingleChildScrollView(child: _getContentByTabIndex()),
+          // ),
         ],
       ),
     );
   }
 
   Widget _getContentByTabIndex() {
+    print("hna _getContentByTabIndex ${widget.initialPublishedCount}");
     switch (_selectedTabIndex) {
       case 0:
-        return Center(
-            child:
-          publishedAdsCount > 0
-              ?  BlocProvider(
-            create: (context) => GetPropertyCubit(GetPropertyRepoImp(ApiService(Dio()))),
-            child: PropertyCard(),
-          )
-              : NoPublishedAdsContent(
-                onAddProperty:
-                    _navigateToAddPropertyScreen,
-              ),
-        );
+        final propertyCount = context.read<GetPropertyCubit>()
+            .getPropertiesLengthByIndex(0);
+
+        if (propertyCount == null || propertyCount == 0) {
+          return const NoPublishedAdsContent();
+        } else {
+          return PropertyCard();
+        }
       case 1:
-        return const SizedBox();
+        return PropertyCard();
       case 2:
-        return const SizedBox();
+        return DeletedPropertyCard();
+
       default:
         return const SizedBox();
     }
   }
-}
+
+  }

@@ -7,29 +7,31 @@ import '../../../data/repo/property_pending/property_pending_repo.dart';
 class PropertyPendingCubit extends Cubit<PropertyPendingState> {
   final PropertyPendingRepo propertyPendingRepo;
 
-  PropertyPendingCubit(this.propertyPendingRepo) : super(PropertyPendingStateInitial());
+  PropertyPendingCubit(this.propertyPendingRepo)
+    : super(PropertyPendingStateInitial());
 
-  Future<String?> postPropertyPending({required PropertyFormData property}) async {
+  Future<String?> postPropertyPending({
+    required PropertyFormData property,
+  }) async {
     emit(PropertyPendingStateLoading());
 
-    final result = await propertyPendingRepo.postPropertyPending( property: property);
+    final result = await propertyPendingRepo.postPropertyPending(
+      property: property,
+    );
     String? paymentUrl;
 
     result.fold(
-          (failure) {
+      (failure) {
         print("❌ Failure State: ${failure.errorMessage}");
         emit(PropertyPendingStateFailure(failure.errorMessage));
         paymentUrl = null;
-
-          },
-          (url) {
+      },
+      (url) {
         print("✅ Success State: $url");
         emit(PropertyPendingStateSuccess(url));
         paymentUrl = url;
-
       },
     );
     return paymentUrl;
-
   }
 }

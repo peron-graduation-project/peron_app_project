@@ -25,10 +25,52 @@ class GetPropertyRepoImp implements GetPropertyRepo {
       }
       print("Token used for request: $token");
 
-      final Either<Failure, Property> response = await apiService.getProperty(
-        token: token,
-        id: id,
+      final Either<Failure, Property> response = await apiService
+          .getPropertyDetails(token: token, id: id);
+      print("API Response: $response");
+
+      return response.fold(
+        (failure) {
+          print("❌ [DEBUG] Failure in GetPropertyRepoImp Repo: $failure");
+          return Left(failure);
+        },
+        (property) {
+          print("✅ [DEBUG] Property received: $property");
+          return Right(property);
+        },
       );
+    } catch (e) {
+      print("❗️ [DEBUG] Unexpected Error in Get Property Repo Imp: $e");
+      return Left(
+        ServiceFailure(
+          errorMessage: "حدث خطأ غير متوقع أثناء جلب بيانات الشقة",
+          errors: [e.toString()],
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Property>>> getProperties(
+    int index, {
+    String? id,
+  }) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      if (token == null || token.isEmpty) {
+        return Left(
+          ServiceFailure(
+            errorMessage: "لا يوجد توكين مسجل لجلب المحادثات",
+            errors: ["التوكين غير موجود"],
+          ),
+        );
+      }
+      print("Token used for request: $token");
+
+      final Either<Failure, List<Property>> response = await apiService
+          .getProperties(token: token, index: index, id: id);
       print("API Response: $response");
 
       return response.fold(

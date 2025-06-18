@@ -13,13 +13,13 @@ class RecommendedProperties extends StatefulWidget {
   final String location;
 
   const RecommendedProperties({
-    super.key,
+    Key? key,
     required this.location,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
     required this.smallFontSize,
-  });
+  }) : super(key: key);
 
   @override
   State<RecommendedProperties> createState() => _RecommendedPropertiesState();
@@ -76,7 +76,7 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
             children: [
               Divider(thickness: 0.3),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: widget.padding),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

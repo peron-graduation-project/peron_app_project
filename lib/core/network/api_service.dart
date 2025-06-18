@@ -13,6 +13,8 @@ import 'package:cookie_jar/cookie_jar.dart';
 import '../../../../core/error/failure.dart';
 import '../../features/advertisements/data/property_model.dart';
 import '../../features/chats/data/models/message_model.dart';
+import '../../features/detailsAboutProperty/presentation/view/views/models/rate.dart';
+import '../../features/detailsAboutProperty/presentation/view/views/models/rate_param.dart';
 import '../../features/profile/data/models/inquiry_model.dart';
 import '../utils/property_model.dart';
 
@@ -1399,5 +1401,272 @@ Future<Either<Failure, List<ChatBotMessage>>> getChatPotMessages({
       );
     }
   }
+  Future<Either<Failure, String>> postPropertyCreate({
+    required String token,
+    required PropertyFormData property,
+  }) async {
+    try {
+      final dateFormat = DateFormat('yyyy-MM-dd');
+
+      final availableFromStr = dateFormat.format(property.availableFrom);
+      final availableToStr = dateFormat.format(property.availableTo);
+
+      List<MultipartFile> images = [];
+      if (
+      // property.images != null &&   unnecessary check
+      property.images.isNotEmpty) {
+        print("hna property images ${property.images}");
+        for (var image in property.images) {
+          images.add(await MultipartFile.fromFile(image.path));
+        }
+        print("hna property images ${images}");
+      }
+
+      final response = await _dio.post(
+        '/Property/create',
+        data: FormData.fromMap({
+          'Title': property.title ?? "",
+          'Location': property.location ?? "",
+          'AvailableFrom': availableFromStr ?? "",
+          'AvailableTo': availableToStr ?? "",
+          'Price': property.price,
+          'RentType': property.rentType ?? "",
+          'Bedrooms': property.bedrooms ?? "",
+          'Bathrooms': property.bathrooms ?? "",
+          'HasInternet': property.hasInternet ?? false,
+          'AllowsPets': property.allowsPets ?? false,
+          'Area': property.area ?? 0,
+          'SmokingAllowed': property.smokingAllowed ?? false,
+          'Floor': property.floor ?? 0,
+          'IsFurnished': property.isFurnished ?? false,
+          'HasBalcony': property.hasBalcony ?? false,
+          'HasSecurity': property.hasSecurity ?? false,
+          'HasElevator': property.hasElevator ?? false,
+          'MinBookingDays': property.minBookingDays ?? 1,
+          'Description': property.description ?? '',
+          'Latitude': property.latitude ?? 0,
+          'Longitude': property.longitude ?? 0,
+          'Images': images ?? [],
+        }),
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      print(
+        "hn apend response create ${response.data['propertyId'].runtimeType}",
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print("hna in right ${response.statusCode}");
+        return Right(response.data['propertyId'].toString());
+      } else {
+        print("hna in right else ${response.statusCode}");
+        return Left(
+          ServiceFailure(
+            errorMessage: "استجابة غير صحيحة من الخادم",
+            errors: [response.data.toString()],
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      return Left(
+        ServiceFailure(
+          errorMessage: "حدث خطأ غير متوقع أثناء رفع الشقة",
+          errors: [e.toString()],
+        ),
+      );
+    }
+  }
+  Future<Either<Failure, Property>> getPropertyDetails({
+    required String token,
+    required int id,
+  }) async {
+    try {
+      print("hna getProperty ");
+      final response = await _dio.get(
+        '/Property/$id',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      print("✅ [DEBUG] getProperty API Response: ${response.data}");
+
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
+        final property = Property.fromJson(response.data);
+        return Right(property);
+      } else {
+        return Left(
+          ServiceFailure(
+            errorMessage: "فشل في جلب بيانات الشقة: استجابة غير متوقعة",
+            errors: [response.data.toString()],
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error (getProperty): $e");
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      print("❗️ [DEBUG] Unexpected Error in getProperty: $e");
+      return Left(
+        ServiceFailure(
+          errorMessage: "حدث خطأ غير متوقع أثناء جلب  بيانات الشقة",
+          errors: [e.toString()],
+        ),
+      );
+    }
+  }
+  Future<Either<Failure, List<Property>>> getProperties({
+    required String token,
+    required int index,
+    String? id,
+  }) async {
+    try {
+      print("hna getProperty $index");
+      final response = await _dio.get(
+        index == 0
+            ? 'https://sakaniapi1.runasp.net/api/Profile/Get-Property'
+        // ? id != null
+        //     ? 'https://sakaniapi1.runasp.net/api/Property/$id'
+        //     : 'https://sakaniapi1.runasp.net/api/Property'
+            : 'https://sakaniapi1.runasp.net/api/Property/pending',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      print("✅ [DEBUG] getProperty API Response: ${response.data}");
+
+      if (response.statusCode == 200
+      // && response.data is Map<String, dynamic>
+      ) {
+        print("hna data image ${response.data} ");
+        final property = Property.fromJsonList(
+          index == 0 ? response.data['ownedProperties'] : response.data,
+          index,
+        );
+        return Right(property);
+      } else {
+        return Left(
+          ServiceFailure(
+            errorMessage: "فشل في جلب بيانات الشقة: استجابة غير متوقعة",
+            errors: [response.data.toString()],
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      print("❌ [DEBUG] Dio Error (getProperty): $e");
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      print("❗️ [DEBUG] Unexpected Error in getProperty: $e");
+      return Left(
+        ServiceFailure(
+          errorMessage: "حدث خطأ غير متوقع أثناء جلب  بيانات الشقة",
+          errors: [e.toString()],
+        ),
+      );
+    }
+  }
+  Future<Either<Failure, List<Rate>>> getRates(String token, {int? id}) async {
+    // try {
+    print("hna in rates 2");
+    final response = await _dio.get(
+      id != null
+          ? 'https://sakaniapi1.runasp.net/api/Rating/property/$id'
+          : 'https://sakaniapi1.runasp.net/api/Rating/all',
+      // queryParameters: {'session_id': sessionId},
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print("hna in right getRates ${response}");
+      return Right(Rate.fromJsonList(response.data));
+    } else {
+      print("hna in right else ${response.statusCode}");
+      return Left(
+        ServiceFailure(
+          errorMessage: "استجابة غير صحيحة من الخادم",
+          errors: [response.data.toString()],
+        ),
+      );
+    }
+    // } on DioException catch (e) {
+    //   return Left(ServiceFailure.fromDioError(e));
+    // } catch (e) {
+    //   return Left(
+    //     ServiceFailure(
+    //       errorMessage: "حدث خطأ غير متوقع أثناء رفع الشقة",
+    //       errors: [e.toString()],
+    //     ),
+    //   );
+    // }
+  }
+  Future<Either<Failure, String>> addRate(RateParam rate, String token) async {
+    try {
+      print("hna in rates 2 add rate");
+      final response = await _dio.post(
+        'https://sakaniapi1.runasp.net/api/Rating/add',
+        data: {
+          'propertyId': rate.propertyId,
+          'stars': rate.stars,
+          'comment': rate.comment,
+        },
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      print("hna in right add comment ${response}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print("hna in right add comment ${response.data[0]['ratingId']}");
+        return Right(response.data[0]['ratingId'].toString());
+      } else {
+        print("hna in right else ${response.statusCode}");
+        return Left(
+          ServiceFailure(
+            errorMessage: "استجابة غير صحيحة من الخادم",
+            errors: [response.data.toString()],
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      return Left(
+        ServiceFailure(
+          errorMessage: "حدث خطأ غير متوقع أثناء رفع الشقة",
+          errors: [e.toString()],
+        ),
+      );
+    }
+  }
+  Future<Either<Failure, String>> deleteRate(int id, String token) async {
+    try {
+      print("hna in rates 2");
+      final response = await _dio.delete(
+        'https://sakaniapi1.runasp.net/api/Rating/delete/$id',
+
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      print("hna in right delete ${response}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Right(response.data['message']);
+      } else {
+        print("hna in right else ${response.statusCode}");
+        return Left(
+          ServiceFailure(
+            errorMessage: "استجابة غير صحيحة من الخادم",
+            errors: [response.data.toString()],
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(ServiceFailure.fromDioError(e));
+    } catch (e) {
+      return Left(
+        ServiceFailure(
+          errorMessage: "حدث خطأ غير متوقع أثناء رفع الشقة",
+          errors: [e.toString()],
+        ),
+      );
+    }
+  }
+
 
 }

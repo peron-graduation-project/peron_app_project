@@ -5,6 +5,7 @@ import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/features/detailsAboutProperty/domain/repos/get%20property/get_property_repo_imp.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_cubit.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_state.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/views/cubit/review_cubit.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/additionalFeatures.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/contactButtons.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/featureItem.dart';
@@ -29,8 +30,14 @@ class PropertyDetailScreen extends StatefulWidget {
 }
 
 class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
-  final int _currentImageIndex = 0;
+  int _currentImageIndex = 0;
   bool _showExtendedDetails = false;
+
+  @override
+  void initState() {
+    context.read<ReviewCubit>().getRates(widget.propertyId);
+    super.initState();
+  }
 
   final List<String> _imagesPaths = [
     'assets/images/appartment.jpg',
@@ -56,14 +63,14 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
       create:
           (_) =>
               GetPropertyCubit(GetPropertyRepoImp(ApiService(Dio())))
-                ..getProperty(id: widget.propertyId),
+                ..getPropertyDetails(id: widget.propertyId),
       child: BlocBuilder<GetPropertyCubit, GetPropertyState>(
         builder: (context, state) {
           if (state is GetPropertyStateLoading) {
-            return  Scaffold(
-              body: Center(child: CircularProgressIndicator(
-                color: AppColors.primaryColor,
-              )),
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(color: AppColors.primaryColor),
+              ),
             );
           } else if (state is GetPropertyStateFailure) {
             return Scaffold(
@@ -78,7 +85,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
-                        context.read<GetPropertyCubit>().getProperty(
+                        context.read<GetPropertyCubit>().getPropertyDetails(
                           id: widget.propertyId,
                         );
                       },
@@ -89,7 +96,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
               ),
             );
           } else if (state is GetPropertyStateSuccess) {
-            final property = state.property;
+            final property = state.propertyDetails;
             final screenSize = MediaQuery.of(context).size;
             final screenWidth = screenSize.width;
             final screenHeight = screenSize.height;
@@ -119,7 +126,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           PropertyImageSlider(
-                            imagesPaths: property.images ?? [],
+                            imagesPaths: property?.images ?? [],
                             currentImageIndex: _currentImageIndex,
                             goToImage: goToImage,
                             imageHeight: imageHeight,
@@ -128,7 +135,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                             smallCircleSize: smallCircleSize,
                           ),
                           PropertyHeader(
-                            property: state.property,
+                            property: state.propertyDetails!,
                             standardPadding: standardPadding,
                             titleFontSize: titleFontSize,
                             priceFontSize: priceFontSize,
@@ -139,33 +146,32 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                             smallCircleSize: smallCircleSize,
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: smallPadding,
+                            padding: EdgeInsets.only(right: 10
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 const SizedBox(width: 10),
                                 FeatureItem(
-                                  text: property.bedrooms.toString(),
+                                  text: "${property?.bedrooms}",
                                   icon: Icons.chair,
                                   screenWidth: screenWidth,
                                 ),
                                 const SizedBox(width: 12),
                                 FeatureItem(
-                                  text: property.bathrooms.toString(),
+                                  text: "${property?.bathrooms}",
                                   icon: Icons.bathtub,
                                   screenWidth: screenWidth,
                                 ),
                                 const SizedBox(width: 12),
                                 FeatureItem(
-                                  text: property.bedrooms.toString(),
+                                  text: "${property?.bedrooms}",
                                   icon: Icons.bed,
                                   screenWidth: screenWidth,
                                 ),
                                 const SizedBox(width: 12),
                                 FeatureItem(
-                                  text: property.area.toString(),
+                                  text: "${property?.area}",
                                   icon: Icons.swap_horiz,
                                   screenWidth: screenWidth,
                                 ),
@@ -173,7 +179,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                             ),
                           ),
                           PropertyDescription(
-                            description: property.description ?? "",
+                            description: "${property?.description}",
                             standardPadding: standardPadding,
                             smallPadding: smallPadding,
                             regularFontSize: regularFontSize,
@@ -183,17 +189,12 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                           ),
                           if (_showExtendedDetails) ...[
                             PropertyInformation(
-                              property: property,
+                              property: property!,
                               screenWidth: screenWidth,
                               padding: standardPadding,
                               fontSize: regularFontSize,
                             ),
-                            // PropertyFeatures(
-                            //   screenWidth: screenWidth,
-                            //   padding: standardPadding,
-                            //   fontSize: regularFontSize,
-                            //   smallFontSize: smallFontSize,
-                            // ),
+                           
                             PropertyComponents(
                               property: property,
                               screenWidth: screenWidth,
@@ -220,9 +221,10 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                               padding: standardPadding,
                               fontSize: regularFontSize,
                               smallFontSize: smallFontSize,
+                              propertId: widget.propertyId,
                             ),
                             RecommendedProperties(
-                              location: property.location??"",
+                              location: property.location ?? "",
                               screenWidth: screenWidth,
                               padding: standardPadding,
                               fontSize: regularFontSize,
@@ -234,7 +236,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                     ),
                   ),
                   ContactButtons(
-                    property: property,
+                    property: property!,
                     standardPadding: standardPadding,
                     regularFontSize: regularFontSize,
                     smallPadding: smallPadding,

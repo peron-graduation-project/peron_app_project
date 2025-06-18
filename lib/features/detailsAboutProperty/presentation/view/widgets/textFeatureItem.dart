@@ -18,18 +18,14 @@ class TextFeatureItem extends StatelessWidget {
       child: Row(
         textDirection: TextDirection.rtl,
         children: [
-          Text(
-            "-",
-            style: TextStyle(
-              fontFamily: Fonts.primaryFontFamily,
-            ),
-          ),
+          Text("-", style: TextStyle(fontFamily: Fonts.primaryFontFamily)),
 
           SizedBox(width: 4),
           Text(
             text,
             style: TextStyle(
-color: const Color.fromARGB(255, 143, 143, 143),              height: 1.5,
+              color: const Color.fromARGB(255, 143, 143, 143),
+              height: 1.5,
               fontWeight: FontWeight.w100,
               fontSize: 17,
               fontFamily: Fonts.primaryFontFamily,

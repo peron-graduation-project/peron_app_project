@@ -11,7 +11,7 @@ class PropertyDescription extends StatelessWidget {
   final String description;
 
   const PropertyDescription({
-    super.key,
+    Key? key,
     required this.description,
     required this.standardPadding,
     required this.smallPadding,
@@ -19,7 +19,7 @@ class PropertyDescription extends StatelessWidget {
     required this.smallFontSize,
     required this.toggleExtendedDetails,
     required this.showExtendedDetails,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +27,8 @@ class PropertyDescription extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(
-            standardPadding,
-            standardPadding,
-            standardPadding,
-            smallPadding,
+          padding: EdgeInsets.only(right: 10
+            
           ),
           child: Align(
             alignment: Alignment.centerRight,
@@ -48,7 +45,7 @@ class PropertyDescription extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: standardPadding),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
           description,
             style: TextStyle(
@@ -79,7 +76,7 @@ class PropertyDescription extends StatelessWidget {
                   style: TextStyle(
                     color: Color(0xff0F7757),
                     fontWeight: FontWeight.bold,
-                    fontSize: smallFontSize,
+                    fontSize: 15,
                     fontFamily: Fonts.primaryFontFamily,
                   ),
                 ),

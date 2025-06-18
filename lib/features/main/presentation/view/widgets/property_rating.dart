@@ -10,7 +10,7 @@ class PropertyRating extends StatelessWidget {
     var theme=Theme.of(context).textTheme;
     return Row(
       children: [
-        Text("($rating)", style: theme.displayMedium?.copyWith(color: Color(0xff292828))),
+        Text("(${rating.round()})", style: theme.displayMedium?.copyWith(color: Color(0xff292828))),
         ...List.generate(
           5,
               (i) => Icon(

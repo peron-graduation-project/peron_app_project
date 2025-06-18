@@ -20,10 +20,12 @@ class PropertyPendingRepoImp implements PropertyPendingRepo {
       final token = prefs.getString('token');
 
       if (token == null || token.isEmpty) {
-        return Left(ServiceFailure(
-          errorMessage: "لا يوجد توكين مسجل لرفع الشقة",
-          errors: ["التوكين غير موجود"],
-        ));
+        return Left(
+          ServiceFailure(
+            errorMessage: "لا يوجد توكين مسجل لرفع الشقة",
+            errors: ["التوكين غير موجود"],
+          ),
+        );
       }
 
       final response = await apiService.postPropertyPending(
@@ -34,35 +36,41 @@ class PropertyPendingRepoImp implements PropertyPendingRepo {
       print("✅ [DEBUG] PropertyPendingRepoImp Response: $response");
 
       return response.fold(
-            (failure) {
+        (failure) {
           print("❌ [DEBUG] Failure in Repo: $failure");
           return Left(failure);
         },
-            (data) {
-          if (data.containsKey("paypalurl")) {
+        (data) {
+          if (data is Map<String, dynamic> && data.containsKey("paypalurl")) {
             final url = data["paypalurl"];
             if (url is String) {
               return Right(url);
             } else {
-              return Left(ServiceFailure(
-                errorMessage: "رابط الدفع ليس من النوع String",
-                errors: ["نوع البيانات غير متوقع في المفتاح 'paypalurl'"],
-              ));
+              return Left(
+                ServiceFailure(
+                  errorMessage: "رابط الدفع ليس من النوع String",
+                  errors: ["نوع البيانات غير متوقع في المفتاح 'paypalurl'"],
+                ),
+              );
             }
           } else {
-            return Left(ServiceFailure(
-              errorMessage: "الاستجابة لا تحتوي على المفتاح 'paypalurl'",
-              errors: ["لم يتم العثور على المفتاح 'paypalurl' في الاستجابة"],
-            ));
+            return Left(
+              ServiceFailure(
+                errorMessage: "الاستجابة لا تحتوي على المفتاح 'paypalurl'",
+                errors: ["لم يتم العثور على المفتاح 'paypalurl' في الاستجابة"],
+              ),
+            );
           }
         },
       );
     } catch (e) {
       print("❗ [DEBUG] Unexpected Error in PropertyPendingRepoImp: $e");
-      return Left(ServiceFailure(
-        errorMessage: "حدث خطأ غير متوقع أثناء رفع الشقة",
-        errors: [e.toString()],
-      ));
+      return Left(
+        ServiceFailure(
+          errorMessage: "حدث خطأ غير متوقع أثناء رفع الشقة",
+          errors: [e.toString()],
+        ),
+      );
     }
   }
 }

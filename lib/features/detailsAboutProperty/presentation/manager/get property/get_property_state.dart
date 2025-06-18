@@ -13,12 +13,13 @@ class GetPropertyStateInitial extends GetPropertyState {}
 class GetPropertyStateLoading extends GetPropertyState {}
 
 class GetPropertyStateSuccess extends GetPropertyState {
-  final Property property;
+  final Property? propertyDetails;
+  final List<Property>? properties;
 
-  const GetPropertyStateSuccess({required this.property});
+  const GetPropertyStateSuccess({this.propertyDetails, this.properties});
 
   @override
-  List<Object?> get props => [property];
+  List<Object?> get props => [propertyDetails, properties];
 }
 
 class GetPropertyStateFailure extends GetPropertyState {

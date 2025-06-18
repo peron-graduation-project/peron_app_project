@@ -1,5 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peron_project/features/advertisements/data/repo/property_pending/property_pending_repo_imp.dart';
+import 'package:peron_project/features/advertisements/presentation/manager/propert_create/property_create_cubit.dart';
+import 'package:peron_project/features/advertisements/presentation/manager/property_pending/property_pending_cubit.dart';
+import 'package:peron_project/features/detailsAboutProperty/domain/repos/get%20property/get_property_repo_imp.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_cubit.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/views/cubit/rate_cubit.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/views/cubit/review_cubit.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/views/review_repo/review_repo_imp.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,15 +43,16 @@ import '../../../features/profile/presentation/manager/delete%20account/delete_a
 import '../../../features/profile/presentation/manager/get%20inquiry/get_inquiry_cubit.dart';
 import '../../../features/profile/presentation/manager/get%20profile/get_profile_cubit.dart';
 import '../../../features/profile/presentation/manager/update%20profile/update_profile_cubit.dart';
-import '../../features/chatPot/domain/repos/get chatPot/get_chatpot_repo_imp.dart';
+import '../../features/advertisements/data/repo/property_confirm/property_confirm_repo_imp.dart';
+import '../../features/advertisements/presentation/manager/propert_confirm/property_confirm_cubit.dart';
 import '../../features/chats/domain/repos/get chats/get_chats_repo_imp.dart';
 import '../../features/chats/presentation/manager/get chats/get_chats_cubit.dart';
 import '../../features/profile/presentation/manager/app rating/send app rating/send_app_rating_cubit.dart';
 import '../network/api_service.dart';
 
-import 'package:peron_project/features/chatPot/presentation/manager/chatPot_cubit.dart';
-
-Future<List<SingleChildWidget>> getAppProviders(SharedPreferences sharedPreferences) async {
+Future<List<SingleChildWidget>> getAppProviders(
+    SharedPreferences sharedPreferences,
+    ) async {
   final apiService = ApiService(Dio());
   final profileRepo = ProfileRepoImp(apiService, sharedPreferences);
   final profileCubit = GetProfileCubit(profileRepo);
@@ -52,43 +61,98 @@ Future<List<SingleChildWidget>> getAppProviders(SharedPreferences sharedPreferen
   return [
     BlocProvider<GetProfileCubit>.value(value: profileCubit),
 
-    BlocProvider(
-      create: (_) => ChatBotCubit(GetChatBotRepoImpl(apiService)),
-    ),
-
     BlocProvider(create: (_) => SortCubit()),
 
-    BlocProvider(create: (_) => GetRecommendedPropertiesCubit(GetRecommendedRepoImp(apiService))..getRecommendedProperties()),
-    BlocProvider(create: (_) => GetMostAreaCubit(GetMostAreaRepoImp(apiService))..getMostArea()),
-    BlocProvider(create: (_) => GetLowestPricePropertiesCubit(GetLowestPriceRepoImp(apiService))..getLowestPriceProperties()),
-    BlocProvider(create: (_) => GetHighestPricePropertiesCubit(GetHighestPriceRepoImp(apiService))..getHighestPriceProperties()),
+    BlocProvider(
+      create:
+          (_) =>
+      GetRecommendedPropertiesCubit(GetRecommendedRepoImp(apiService))
+        ..getRecommendedProperties(),
+    ),
+    BlocProvider(create: (_) => RateCubit(ReviewRepoImp(apiService))),
+    BlocProvider(
+      create:
+          (_) =>
+      GetMostAreaCubit(GetMostAreaRepoImp(apiService))..getMostArea(),
+    ),
+    BlocProvider(create: (_) => ReviewCubit(ReviewRepoImp(apiService))),
+    BlocProvider(
+      create: (_) => PropertyCreateCubit(PropertyConfirmRepoImp(apiService)),
+    ),
+    BlocProvider(
+      create: (_) => GetPropertyCubit(GetPropertyRepoImp(apiService)),
+    ),
+    BlocProvider(
+      create:
+          (_) =>
+      GetLowestPricePropertiesCubit(GetLowestPriceRepoImp(apiService))
+        ..getLowestPriceProperties(),
+    ),
+    BlocProvider(
+      create:
+          (_) =>
+      GetHighestPricePropertiesCubit(GetHighestPriceRepoImp(apiService))
+        ..getHighestPriceProperties(),
+    ),
 
-    BlocProvider(create: (_) => GetFavoriteCubit(GetFavoriteRepoImp(apiService))),
+    BlocProvider(
+      create: (_) => GetFavoriteCubit(GetFavoriteRepoImp(apiService)),
+    ),
     BlocProvider(create: (_) => AddfavoriteCubit(AddfavImp(apiService))),
     BlocProvider(create: (_) => DeletefavoriteCubit(DeletefavImp(apiService))),
 
     BlocProvider(create: (_) => GetNearestCubit(GetNearestRepoImp(apiService))),
-    BlocProvider(create: (_) => GetSearchPropertiesCubit(GetSearchRepoImp(apiService))),
-
-    BlocProvider(create: (_) => GetNotificationCubit(NotificationRepoImpl(apiService))..getNotifications()),
-    BlocProvider(create: (_) => GetInquiryCubit(GetInquiryRepoImp(apiService))..getInquires()),
-
-    BlocProvider(create: (_) => GetChatsCubit(GetChatsRepoImp(apiService))..getChats()),
-    
-    BlocProvider(create: (_) => SendAppRatingCubit(AppRatingRepoImp(apiService))),
-    BlocProvider(create: (_) => DeleteAccountCubit(DeleteAccountRepoImp(apiService))),
+    BlocProvider(
+      create: (_) => GetSearchPropertiesCubit(GetSearchRepoImp(apiService)),
+    ),
 
     BlocProvider(
-      create: (context) => UpdateProfileCubit(
+      create:
+          (_) =>
+      GetNotificationCubit(NotificationRepoImpl(apiService))
+        ..getNotifications(),
+    ),
+    BlocProvider(
+      create:
+          (_) => GetInquiryCubit(GetInquiryRepoImp(apiService))..getInquires(),
+    ),
+
+    BlocProvider(
+      create: (_) => GetChatsCubit(GetChatsRepoImp(apiService))..getChats(),
+    ),
+
+    BlocProvider(
+      create: (_) => SendAppRatingCubit(AppRatingRepoImp(apiService)),
+    ),
+    BlocProvider(
+      create: (_) => DeleteAccountCubit(DeleteAccountRepoImp(apiService)),
+    ),
+    BlocProvider(
+      create: (_) => PropertyPendingCubit(PropertyPendingRepoImp(apiService)),
+    ),
+    BlocProvider(
+      create:
+          (context) => PropertyConfirmCubit(PropertyConfirmRepoImp(apiService)),
+    ),
+    BlocProvider(
+      create:
+          (context) => UpdateProfileCubit(
         UpdateProfileRepoImp(apiService, profileRepo),
         profileCubit,
       ),
     ),
 
-    ChangeNotifierProxyProvider2<AddfavoriteCubit, DeletefavoriteCubit, FavoriteManager>(
+    ChangeNotifierProxyProvider2<
+        AddfavoriteCubit,
+        DeletefavoriteCubit,
+        FavoriteManager
+    >(
       create: (_) => FavoriteManager(),
-      update: (_, addCubit, deleteCubit, manager) =>
-        manager!..setAddCubit(addCubit)..setDeleteCubit(deleteCubit),
+      update:
+          (_, addCubit, deleteCubit, manager) =>
+      manager!
+        ..setAddCubit(addCubit)
+        ..setDeleteCubit(deleteCubit),
     ),
   ];
 }

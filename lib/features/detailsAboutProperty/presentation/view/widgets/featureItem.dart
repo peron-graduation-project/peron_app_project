@@ -6,12 +6,12 @@ class FeatureItem extends StatelessWidget {
   final IconData icon;
   final double screenWidth;
 
-  const FeatureItem({
-    super.key,
+  FeatureItem({
+    Key? key,
     required this.text,
     required this.icon,
     required this.screenWidth,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class FeatureItem extends StatelessWidget {
         vertical: featurePadding * 0.65,
       ),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color.fromARGB(255, 87, 86, 86)),
+        border: Border.all(color: const Color.fromARGB(255, 87, 86, 86)!),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(

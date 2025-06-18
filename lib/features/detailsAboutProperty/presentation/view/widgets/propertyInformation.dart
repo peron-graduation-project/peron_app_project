@@ -9,17 +9,17 @@ class PropertyInformation extends StatelessWidget {
   final Property property;
 
   const PropertyInformation({
-    super.key,
+    Key? key,
     required this.property,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(padding),
+      padding: EdgeInsets.only(right: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -69,7 +69,10 @@ class Property {
       area: json['area'],
       location: json['location'],
       price: json['price'] != null ? (json['price'] as num).toDouble() : null,
-      createdAt: json['createdAt'] != null ? DateTime.tryParse(json['createdAt']) : null,
+      createdAt:
+      json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'])
+          : null,
       rentType: json['rentType'],
       bedrooms: json['bedrooms'],
       bathrooms: json['bathrooms'],
@@ -81,15 +84,77 @@ class Property {
       hasElevator: json['hasElevator'],
       allowsPets: json['allowsPets'],
       smokingAllowed: json['smokingAllowed'],
-      availableFrom: json['availableFrom'] != null ? DateTime.tryParse(json['availableFrom']) : null,
-      availableTo: json['availableTo'] != null ? DateTime.tryParse(json['availableTo']) : null,
+      availableFrom:
+      json['availableFrom'] != null
+          ? DateTime.tryParse(json['availableFrom'])
+          : null,
+      availableTo:
+      json['availableTo'] != null
+          ? DateTime.tryParse(json['availableTo'])
+          : null,
       minBookingDays: json['minBookingDays'],
       description: json['description'],
       images: json['images'] != null ? List<String>.from(json['images']) : null,
       bookings: json['bookings'],
       ratings: json['ratings'],
-      latitude: json['latitude'] != null ? (json['latitude'] as num).toDouble() : null,
-      longitude: json['longitude'] != null ? (json['longitude'] as num).toDouble() : null,
+      latitude:
+      json['latitude'] != null
+          ? (json['latitude'] as num).toDouble()
+          : null,
+      longitude:
+      json['longitude'] != null
+          ? (json['longitude'] as num).toDouble()
+          : null,
+    );
+  }
+  factory Property.fromJson1(Map<String, dynamic> json) {
+    return Property(
+      propertyId: json['propertyId'],
+      ownerId: json['ownerId'],
+      owner: json['owner'],
+      title: json['title'],
+      area: json['area'],
+      location: json['location'],
+      price: json['price'] != null ? (json['price'] as num).toDouble() : null,
+      createdAt:
+      json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'])
+          : null,
+      rentType: json['rentType'],
+      bedrooms: json['bedrooms'],
+      bathrooms: json['bathrooms'],
+      floor: json['floor'],
+      isFurnished: json['isFurnished'],
+      hasBalcony: json['hasBalcony'],
+      hasInternet: json['hasInternet'],
+      hasSecurity: json['hasSecurity'],
+      hasElevator: json['hasElevator'],
+      allowsPets: json['allowsPets'],
+      smokingAllowed: json['smokingAllowed'],
+      availableFrom:
+      json['availableFrom'] != null
+          ? DateTime.tryParse(json['availableFrom'])
+          : null,
+      availableTo:
+      json['availableTo'] != null
+          ? DateTime.tryParse(json['availableTo'])
+          : null,
+      minBookingDays: json['minBookingDays'],
+      description: json['description'],
+      images:
+      json['imageUrls'] != null
+          ? List<String>.from(json['imageUrls'])
+          : null,
+      bookings: json['bookings'],
+      ratings: json['ratings'],
+      latitude:
+      json['latitude'] != null
+          ? (json['latitude'] as num).toDouble()
+          : null,
+      longitude:
+      json['longitude'] != null
+          ? (json['longitude'] as num).toDouble()
+          : null,
     );
   }
 
@@ -125,5 +190,16 @@ class Property {
       'latitude': latitude,
       'longitude': longitude,
     };
+  }
+
+  static List<Property> fromJsonList(List<dynamic> jsonList, int index) {
+    List<Property> properties = [];
+    for (var json in jsonList) {
+      properties.add(
+        index == 0 ? Property.fromJson(json) : Property.fromJson1(json),
+      );
+    }
+    print("hna fromJsonList ${properties.length}");
+    return properties;
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/fonts.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/views/cubit/rate_cubit.dart';
+import 'package:provider/provider.dart';
 
 class RatingDialog extends StatefulWidget {
   const RatingDialog({super.key});
@@ -10,7 +12,13 @@ class RatingDialog extends StatefulWidget {
 }
 
 class _RatingDialogState extends State<RatingDialog> {
-  int selectedRating = 0;
+  late int _selectedRating;
+
+  @override
+  void initState() {
+    _selectedRating = context.read<RateCubit>().getRate ?? 0;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +44,7 @@ class _RatingDialogState extends State<RatingDialog> {
                       shape: BoxShape.circle,
                     ),
                     padding: EdgeInsets.all(8),
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 20,
-                    ),
+                    child: Icon(Icons.close, color: Colors.white, size: 20),
                   ),
                 ),
               ),
@@ -60,7 +64,7 @@ class _RatingDialogState extends State<RatingDialog> {
                 'وساعد غيرك يختار صح!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 18, 
+                  fontSize: 18,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontFamily: Fonts.primaryFontFamily,
@@ -73,15 +77,17 @@ class _RatingDialogState extends State<RatingDialog> {
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedRating = index + 1;
+                        _selectedRating = index + 1;
+                        context.read<RateCubit>().storeRate(_selectedRating);
+                        Navigator.pop(context);
                       });
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
                       child: SvgPicture.asset(
-                        selectedRating > index 
-                          ? "assets/icons/star.svg" 
-                          : "assets/icons/starborder.svg",
+                        _selectedRating > index
+                            ? "assets/icons/star.svg"
+                            : "assets/icons/starborder.svg",
                         width: 30,
                         height: 30,
                         color: Color(0xFF006A4E),

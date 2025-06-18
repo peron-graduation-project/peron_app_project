@@ -10,19 +10,19 @@ class PropertyComponents extends StatelessWidget {
   final double smallFontSize;
   final Property property;
 
-  const PropertyComponents({
-    super.key,
+  PropertyComponents({
+    Key? key,
     required this.property,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
     required this.smallFontSize,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(padding),
+      padding: EdgeInsets.only(right: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -37,13 +37,18 @@ class PropertyComponents extends StatelessWidget {
             textAlign: TextAlign.right,
           ),
           SizedBox(height: 15),
-          TextFeatureItem(text: 'غرف: ${property.bedrooms}', fontSize: smallFontSize),
-          TextFeatureItem(text: 'حمام: ${property.bathrooms}', fontSize: smallFontSize),
+          TextFeatureItem(
+            text: 'غرف: ${property.bedrooms}',
+            fontSize: smallFontSize,
+          ),
+          TextFeatureItem(
+            text: 'حمام: ${property.bathrooms}',
+            fontSize: smallFontSize,
+          ),
           // TextFeatureItem(text: 'مطبخ', fontSize: smallFontSize),
           // TextFeatureItem(text: 'ريسبشن كبير', fontSize: smallFontSize),
-        if (property.hasBalcony!=null)
-         TextFeatureItem(text: 'بلكونة', fontSize: smallFontSize),
-
+          if (property.hasBalcony != null)
+            TextFeatureItem(text: 'بلكونة', fontSize: smallFontSize),
         ],
       ),
     );

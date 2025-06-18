@@ -9,12 +9,12 @@ class PropertyFeatures extends StatelessWidget {
   final double smallFontSize;
 
   const PropertyFeatures({
-    super.key,
+    Key? key,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
     required this.smallFontSize,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

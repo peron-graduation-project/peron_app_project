@@ -43,7 +43,7 @@ class NotificationButton extends StatelessWidget {
                   icon: Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      Icon(Icons.notifications, color: AppColors.primaryColor),
+                      Center(child: Icon(Icons.notifications, color: AppColors.primaryColor)),
                       if (hasNewNotifications)
                         Positioned(
                           top: 0.01,

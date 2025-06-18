@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/utils/property_model.dart';
+import 'package:peron_project/features/chats/presentation/view/views/chat_body_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 
@@ -12,15 +13,15 @@ class ContactButtons extends StatelessWidget {
   final double screenHeight;
   final Property property;
 
-  const ContactButtons({
-    super.key,
+  ContactButtons({
+    Key? key,
     required this.property,
     required this.standardPadding,
     required this.regularFontSize,
     required this.smallPadding,
     required this.iconSize,
     required this.screenHeight,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

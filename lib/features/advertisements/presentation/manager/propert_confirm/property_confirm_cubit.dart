@@ -6,19 +6,22 @@ import '../../../data/repo/property_confirm/property_confirm_repo.dart';
 class PropertyConfirmCubit extends Cubit<PropertyConfirmState> {
   final PropertyConfirmRepo propertyConfirmRepo;
 
-  PropertyConfirmCubit(this.propertyConfirmRepo) : super(PropertyConfirmStateInitial());
+  PropertyConfirmCubit(this.propertyConfirmRepo)
+    : super(PropertyConfirmStateInitial());
 
   Future<void> propertyConfirm({required String sessionId}) async {
     emit(PropertyConfirmStateLoading());
 
-    final result = await propertyConfirmRepo.propertyConfirm(sessionId: sessionId);
+    final result = await propertyConfirmRepo.propertyConfirm(
+      sessionId: sessionId,
+    );
 
     result.fold(
-          (failure) {
+      (failure) {
         print("❌ Failure State: ${failure.errorMessage}");
         emit(PropertyConfirmStateFailure(failure.errorMessage));
       },
-          (stripeUrl) {
+      (stripeUrl) {
         print("✅ Success State: $stripeUrl");
         emit(PropertyConfirmStateSuccess(stripeUrl));
       },

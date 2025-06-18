@@ -3,9 +3,9 @@ import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/advertisements/presentation/views/add_property_screen.dart';
 
 class NoPublishedAdsContent extends StatelessWidget {
-  final VoidCallback onAddProperty;
 
-  const NoPublishedAdsContent({super.key, required this.onAddProperty});
+
+  const NoPublishedAdsContent({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class NoPublishedAdsContent extends StatelessWidget {
               ),
               const SizedBox(height: 25),
               Text(
-                'لا يوجد إعلانات منشوره بعد',
+                'لا يوجد إعلانات منشوره ',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 24,

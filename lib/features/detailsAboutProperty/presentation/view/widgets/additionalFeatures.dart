@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:peron_project/core/utils/property_model.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/circleFeature.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 
 class AdditionalFeatures extends StatelessWidget {
@@ -9,18 +10,18 @@ class AdditionalFeatures extends StatelessWidget {
   final double fontSize;
   final Property property;
 
-  const AdditionalFeatures({
-    super.key,
+  AdditionalFeatures({
+    Key? key,
     required this.property,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(padding),
+      padding: EdgeInsets.only(right: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -5,5 +5,8 @@ import '../../../../../core/error/failure.dart';
 
 abstract class GetPropertyRepo {
   Future<Either<Failure, Property>> getProperty({required int id});
-
+  Future<Either<Failure, List<Property>>> getProperties(
+    int index, {
+    String? id,
+  });
 }
