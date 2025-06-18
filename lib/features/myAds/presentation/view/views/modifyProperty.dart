@@ -1,6 +1,8 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peron_project/core/helper/app_snack_bar.dart';
 
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/utils/property_model.dart';
@@ -77,8 +79,11 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
       );
     }
     else if (state is UpdatePropertyStateFailure) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('خطأ: ${state.errorMessage}')),
+      AppSnackBar.showFromTop(
+        context: context,
+        title: 'Error',
+        message: state.errorMessage,
+        contentType: ContentType.failure,
       );
     }
 
@@ -323,21 +328,36 @@ class _EditPropertyScreenState extends State<EditPropertyScreen> {
                       if (_formKey.currentState!.validate()) {
                         Property newProperty=Property(
                           images: [],
-                            description:specificationController.text,
-                            price: double.parse(priceController.text),
-                            area:  int.parse(spaceController.text),
-                            location: addressController.text,
-                            rentType: propertyTypeController.text,
-                        bathrooms: int.parse(bathroomsController.text),
-                        bedrooms: int.parse(roomsController.text),
-                        floor: int.parse(floorController.text ),
-                            allowsPets: allowPets,
+                          title: detailsController.text,
+                          description: specificationController.text,
+                          price: double.tryParse(priceController.text) ?? 0.0,
+                          area: int.tryParse(spaceController.text) ?? 0,
+                          location: addressController.text,
+                          rentType: propertyTypeController.text,
+                          bathrooms: int.tryParse(bathroomsController.text) ?? 0,
+                          bedrooms: int.tryParse(roomsController.text) ?? 0,
+                          floor: int.tryParse(floorController.text) ?? 0,
+                          allowsPets: allowPets,
                         );
-                        final int propertyId = widget.property.propertyId!;
+                        final int? propertyId = widget.property.propertyId??24;
+                        if (propertyId == null) {
+                       return   AppSnackBar.showFromTop(
+                            context: context,
+                            title: 'Error',
+                            message: 'لا يمكن تحديث العقار بدون id',
+                            contentType: ContentType.failure,
+                          );
+                        }
+                        print({
+                          "title": newProperty.title,
+                          "location": newProperty.location,
+                        });
+
                         context.read<UpdatePropertyCubit>().updateProperty(
                           property: newProperty,
                           id: propertyId,
                         );
+
                       }
                     }, textColor: Colors.white, text: 'نشر',
                   ),

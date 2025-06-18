@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peron_project/core/helper/colors.dart';
+import 'package:peron_project/core/navigator/page_routes_name.dart';
 
 class SuccessDialog extends StatelessWidget {
   const SuccessDialog({super.key});
@@ -51,7 +52,7 @@ class SuccessDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.pushNamedAndRemoveUntil(context, PageRouteName.home, (route)=>false),
                 child: const Text('عوده', style: TextStyle(color: Colors.white)),
               ),
             ),

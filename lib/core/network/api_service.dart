@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -607,38 +609,38 @@ class ApiService {
   required int id,
 }) async {
   try {
-    
+
     final response = await _dio.delete(
-      '/Favorites/remove/$id', 
+      '/Favorites/remove/$id',
       options: Options(
         headers: {
           'Authorization': 'Bearer $token',
         },
       ),
       data: {
-        "propertyId": id, 
+        "propertyId": id,
       },
     );
 
-    
+
     print("✅ [DEBUG] delete Favorite API Response: ${response.data}");
 
 
     if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
-      return Right(response.data as Map<String, dynamic>); 
+      return Right(response.data as Map<String, dynamic>);
     } else {
-    
+
       return Left(ServiceFailure(
         errorMessage: "فشل في استرجاع بيانات المفضلة: استجابة غير متوقعة",
         errors: [response.data.toString()],
       ));
     }
   } on DioException catch (e) {
-  
+
     print("❌ [DEBUG] Dio Error (delete Favorite): $e");
-    return Left(ServiceFailure.fromDioError(e)); 
+    return Left(ServiceFailure.fromDioError(e));
   } catch (e) {
-    
+
     print("❗ [DEBUG] Unexpected Error in deleteFavorite: $e");
     return Left(ServiceFailure(
       errorMessage: "حدث خطأ غير متوقع أثناء جلب بيانات المفضلة",
@@ -897,7 +899,7 @@ class ApiService {
       print("✅ [DEBUG] submit appRating API Response: ${response.data}");
 
       if (response.statusCode == 200 && response.data is String) {
-        return Right(response.data); 
+        return Right(response.data);
       } else {
         return Left(ServiceFailure(
           errorMessage: "فشل في إرسال تقييم التطبيق: استجابة غير متوقعة",
@@ -1095,7 +1097,7 @@ class ApiService {
           'Authorization': 'Bearer $token',
         },
       ),
-      
+
       );
 
       print("✅ [DEBUG] get Search Property API Response: ${response.data}");
@@ -1126,42 +1128,44 @@ class ApiService {
   Future<Either<Failure, String>> updateProperty({
     required String token,
     required Property property,
-    required int id
+    required int id,
   }) async {
     try {
       final response = await _dio.put(
         '/Property/$id',
+        data: {
+          "title": property.title ?? '',
+          "location": property.location ?? '',
+          "price": property.price,
+          "rentType": property.rentType,
+          "bedrooms": property.bedrooms,
+          "bathrooms": property.bathrooms,
+          "hasInternet": property.hasInternet ?? false,
+          "allowsPets": property.allowsPets ?? false,
+          "area": property.area,
+          "smokingAllowed": property.smokingAllowed ?? false,
+          "floor": property.floor,
+          "isFurnished": property.isFurnished ?? false,
+          "hasBalcony": property.hasBalcony ?? false,
+          "hasSecurity": property.hasSecurity ?? false,
+          "hasElevator": property.hasElevator ?? false,
+          "minBookingDays": property.minBookingDays ?? 1,
+          "availableFrom": property.availableFrom?.toIso8601String() ?? DateTime.now().toIso8601String(),
+          "availableTo": property.availableTo?.toIso8601String() ?? DateTime.now().add(Duration(days: 30)).toIso8601String(),
+          "description": property.description ?? '',
+          "latitude": property.latitude ?? 0.0,
+          "longitude": property.longitude ?? 0.0,
+        },
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
         ),
-        data: {
-          {
-            "title": property.title,
-            "location": property.location,
-            "price": property.price,
-            "rentType": property.rentType,
-            "bedrooms": property.bedrooms,
-            "bathrooms": property.bathrooms,
-            "hasInternet": property.hasInternet,
-            "allowsPets": property.allowsPets,
-            "area": property.area,
-            "smokingAllowed": property.smokingAllowed,
-            "floor": property.floor,
-            "isFurnished": property.isFurnished,
-            "hasBalcony": property.hasBalcony,
-            "hasSecurity": property.hasSecurity,
-            "hasElevator": property.hasElevator,
-            "minBookingDays": property.minBookingDays,
-            "availableFrom": property.availableFrom,
-            "availableTo": property.availableTo,
-            "description": property.description,
-            "latitude": property.latitude,
-            "longitude": property.longitude,
-          }
-        },
       );
+
+      print("📦 Sending Data: ${jsonEncode(property)}");
+
 
       print("✅ [DEBUG] updateProperty API Response: ${response.data}");
 
@@ -1184,7 +1188,8 @@ class ApiService {
       ));
     }
   }
-Future<Either<Failure, Property>> getProperty({
+
+  Future<Either<Failure, Property>> getProperty({
     required String token,
     required int id
   }) async {
