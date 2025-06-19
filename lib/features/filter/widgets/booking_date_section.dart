@@ -4,20 +4,21 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BookingDateSection extends StatelessWidget {
-  final DateTime? selectedDate;
-  final ValueChanged<DateTime> onDateSelected;
+  final DateTime? rangeStart;
+  final DateTime? rangeEnd;
+  final void Function(DateTime? start, DateTime? end) onRangeSelected;
 
   const BookingDateSection({
     super.key,
-    required this.selectedDate,
-    required this.onDateSelected,
+    required this.rangeStart,
+    required this.rangeEnd,
+    required this.onRangeSelected,
   });
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double calendarWidth = (screenWidth * 0.8).clamp(306, 380);
-    double calendarHeight = 310;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,19 +47,31 @@ class BookingDateSection extends StatelessWidget {
               ),
               child: TableCalendar(
                 locale: 'en_US',
-                firstDay: DateTime.now(),
+                firstDay: DateTime.now().add(const Duration(days: 1)), 
                 lastDay: DateTime(DateTime.now().year + 1),
-                focusedDay: selectedDate ?? DateTime.now(),
-                selectedDayPredicate: (day) =>
-                    selectedDate != null && isSameDay(selectedDate, day),
-                onDaySelected: (selectedDay, _) => onDateSelected(selectedDay),
+                focusedDay: rangeStart ?? DateTime.now().add(const Duration(days: 1)),
+                rangeSelectionMode: RangeSelectionMode.toggledOn,
+                onRangeSelected: (start, end, _) {
+                  onRangeSelected(start, end);
+                },
+                selectedDayPredicate: (_) => false,
+                rangeStartDay: rangeStart,
+                rangeEndDay: rangeEnd,
                 headerStyle: const HeaderStyle(
                   formatButtonVisible: false,
                   titleCentered: true,
                 ),
                 calendarStyle: CalendarStyle(
-                  selectedDecoration: BoxDecoration(
+                  rangeStartDecoration: BoxDecoration(
                     color: AppColors.primaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  rangeEndDecoration: BoxDecoration(
+                    color: AppColors.primaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  withinRangeDecoration: BoxDecoration(
+                    color: AppColors.primaryColor.withOpacity(0.3),
                     shape: BoxShape.circle,
                   ),
                   todayDecoration: const BoxDecoration(
