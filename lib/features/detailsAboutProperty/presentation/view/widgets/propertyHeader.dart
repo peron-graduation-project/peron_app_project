@@ -11,8 +11,6 @@ class PropertyHeader extends StatelessWidget {
   final double smallPadding;
   final double regularFontSize;
   final double smallFontSize;
-  final double smallIconSize;
-  final double smallCircleSize;
   final Property property;
 
   const PropertyHeader({
@@ -24,112 +22,93 @@ class PropertyHeader extends StatelessWidget {
     required this.smallPadding,
     required this.regularFontSize,
     required this.smallFontSize,
-    required this.smallIconSize,
-    required this.smallCircleSize,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.symmetric(horizontal: 8,vertical: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
-        textDirection: TextDirection.rtl,
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              textDirection: TextDirection.rtl,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "شقة سكنية  ${property.title ?? ""}",
-                      style: TextStyle(
-                        fontSize: titleFontSize,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                        fontFamily: Fonts.primaryFontFamily,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12.0,right: 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "شقة سكنية ${property.title ?? ""}",
+                        style: TextStyle(
+                          fontSize: titleFontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                          fontFamily: Fonts.primaryFontFamily,
+                        ),
+                        textAlign: TextAlign.right,
                       ),
-                      textAlign: TextAlign.right,
-                    ),
-                    SvgPicture.asset(
-                        'assets/icons/heart.svg',
-                        width: 20,
-                        height: 20,
-                      ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  textDirection: TextDirection.rtl,
-                  children: [
-                    Text(
-                      property.price.toString(),
-                      style: TextStyle(
-                        fontSize: priceFontSize,
-                        color: Color(0xff0F7757),
-                        fontWeight: FontWeight.w900,
-                        fontFamily: Fonts.primaryFontFamily,
-                      ),
-                    ),
-                    SizedBox(width: smallPadding * 0.2),
-                    Text(
-                      "ج.م",
-                      style: TextStyle(
-                        fontSize: priceFontSize,
-                        color: Color(0xff0F7757),
-                        fontWeight: FontWeight.w900,
-                        fontFamily: Fonts.primaryFontFamily,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: smallPadding * 0.4),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  textDirection: TextDirection.rtl,
-                  children: [
-                    
-                    SizedBox(width: smallPadding * 0.8),
-                    Text(
-                      property.ratings ?? 'No Rating',
-                      style: TextStyle(
-                        fontSize: regularFontSize,
-                        color: Colors.black87,
-                        fontFamily: Fonts.primaryFontFamily,
-                      ),
-                    ),
-                  ],
-                ),
-
-                InkWell(
-                  onTap:
-                      () => showDialog(
-                        context: context,
-                        builder: (context) => RatingDialog(),
-                      ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Container(
-                      width: smallCircleSize,
-                      height: smallCircleSize,
-                      decoration: BoxDecoration(
-                        color: Color(0xff0F7757),
-                        shape: BoxShape.circle,
-                      ),
-                    
-                      child:SvgPicture.asset(
-                      'assets/icons/star.svg',
-                      width: 15,
-                      height: 15,
-                    ),
-                    ),
+                      SvgPicture.asset(
+                          'assets/icons/heart.svg',
+                          width: 30,
+                          height: 30,
+                        ),
+                    ],
                   ),
-                ),
-              ],
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        property.price.toString(),
+                        style: TextStyle(
+                          fontSize: priceFontSize,
+                          color: Color(0xff0F7757),
+                          fontWeight: FontWeight.w900,
+                          fontFamily: Fonts.primaryFontFamily,
+                        ),
+                      ),
+                      SizedBox(width: smallPadding * 0.2),
+                      Text(
+                        "ج.م",
+                        style: TextStyle(
+                          fontSize: priceFontSize,
+                          color: Color(0xff0F7757),
+                          fontWeight: FontWeight.w900,
+                          fontFamily: Fonts.primaryFontFamily,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: smallPadding * 0.4),
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap:
+                            () => showDialog(
+                          context: context,
+                          builder: (context) => RatingDialog(),
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/star.svg',
+                          width: 15,
+                        ),
+                      ),
+                      SizedBox(width: 12,),
+                      Text(
+                        property.ratings ?? 'لا يوجد تقييم',
+                        style: TextStyle(
+                          fontSize: regularFontSize,
+                          color: Colors.black87,
+                          fontFamily: Fonts.primaryFontFamily,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

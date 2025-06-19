@@ -9,6 +9,9 @@ import 'package:peron_project/features/detailsAboutProperty/presentation/view/vi
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/ratingDialog.dart';
 import 'package:peron_project/features/profile/presentation/manager/get%20profile/get_profile_cubit.dart';
 
+import '../../../../../core/helper/colors.dart';
+import '../../../../../core/widgets/custom_arrow_back.dart';
+
 class ReviewsScreen extends StatefulWidget {
   final int id;
   const ReviewsScreen({super.key, required this.id});
@@ -90,6 +93,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context).textTheme;
     final double screenWidth = MediaQuery.of(context).size.width;
     final double padding = 16.0;
     final double fontSize = 14.0;
@@ -98,35 +102,24 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
         title: Text(
-          'التقييمات',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            fontFamily: Fonts.primaryFontFamily,
+          "التقييمات",
+          style: theme.headlineMedium!.copyWith(fontSize: 20),
+        ),
+        centerTitle: true,
+        leading: CustomArrowBack(
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Divider(
+            thickness: 1,
+            height: 1,
+            color: AppColors.dividerColor,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.black,
-              size: 20,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-        leading: const SizedBox(),
       ),
       body: Column(
         children: [
-          const Divider(height: 1, thickness: 1, color: Colors.grey),
           Expanded(
             child: BlocConsumer<ReviewCubit, ReviewState>(
               listener: (context, state) {
@@ -271,9 +264,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                   ),
                 ],
               ),
-              // مساحة لدفع الوقت إلى الأسفل
               const SizedBox(height: 12),
-              // نص الوقت - محاذاة إلى اليسار
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -326,7 +317,6 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     );
   }
 
-  // تعديل تصميم مربع التعليق ليتناسب مع التصميم الجديد
   Widget _buildCommentFooter() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -337,7 +327,6 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
       child: Row(
         textDirection: TextDirection.rtl,
         children: [
-          // حقل كتابة التعليق
           Expanded(
             child: Container(
               height: 46,
@@ -372,10 +361,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             width: 46,
             height: 46,
             decoration: BoxDecoration(
-              color:
-                  _commentController.text.isEmpty
-                      ? Colors.grey
-                      : Color(0xff0F7757),
+              color:AppColors.primaryColor,
               shape: BoxShape.circle,
             ),
             child: BlocConsumer<RateCubit, RateState>(

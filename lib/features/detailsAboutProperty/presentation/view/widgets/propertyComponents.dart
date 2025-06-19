@@ -10,14 +10,14 @@ class PropertyComponents extends StatelessWidget {
   final double smallFontSize;
   final Property property;
 
-  PropertyComponents({
-    Key? key,
+  const PropertyComponents({
+    super.key,
     required this.property,
     required this.screenWidth,
     required this.padding,
     required this.fontSize,
     required this.smallFontSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +38,13 @@ class PropertyComponents extends StatelessWidget {
           ),
           SizedBox(height: 15),
           TextFeatureItem(
-            text: 'غرف: ${property.bedrooms}',
+            text: 'غرف: ${property.bedrooms??0}',
             fontSize: smallFontSize,
           ),
           TextFeatureItem(
-            text: 'حمام: ${property.bathrooms}',
+            text: 'حمام: ${property.bathrooms??0}',
             fontSize: smallFontSize,
           ),
-          // TextFeatureItem(text: 'مطبخ', fontSize: smallFontSize),
-          // TextFeatureItem(text: 'ريسبشن كبير', fontSize: smallFontSize),
           if (property.hasBalcony != null)
             TextFeatureItem(text: 'بلكونة', fontSize: smallFontSize),
         ],

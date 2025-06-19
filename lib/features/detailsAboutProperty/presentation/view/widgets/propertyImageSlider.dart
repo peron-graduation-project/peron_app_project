@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/widgets/custom_arrow_back.dart';
 import 'curvedtopclipper.dart';
 
 class PropertyImageSlider extends StatelessWidget {
-  final List<String> imagesPaths; // URLs of images
+  final List<String> imagesPaths;
   final int currentImageIndex;
   final Function(int) goToImage;
   final double imageHeight;
   final double standardPadding;
   final double screenHeight;
   final double smallCircleSize;
+  final PageController pageController;
+
 
   const PropertyImageSlider({
-    Key? key,
+    super.key,
     required this.imagesPaths,
     required this.currentImageIndex,
     required this.goToImage,
@@ -19,30 +22,28 @@ class PropertyImageSlider extends StatelessWidget {
     required this.standardPadding,
     required this.screenHeight,
     required this.smallCircleSize,
-  }) : super(key: key);
+    required this.pageController,
+  });
 
+  @override
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        GestureDetector(
-          onHorizontalDragEnd: (details) {
-            if (details.primaryVelocity != null) {
-              if (details.primaryVelocity! > 0) {
-                goToImage(currentImageIndex + 1);
-              } else {
-                goToImage(currentImageIndex - 1);
-              }
-            }
-          },
-          child: Container(
-            height: imageHeight,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(imagesPaths[currentImageIndex]),
+        SizedBox(
+          height: imageHeight,
+          width: double.infinity,
+          child: PageView.builder(
+            controller: pageController,
+            itemCount: imagesPaths.length,
+            itemBuilder: (context, index) {
+              return Image.network(
+                imagesPaths[index],
                 fit: BoxFit.cover,
-              ),
-            ),
+                width: double.infinity,
+                height: imageHeight,
+              );
+            },
           ),
         ),
         Positioned(
@@ -58,7 +59,7 @@ class PropertyImageSlider extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
                     imagesPaths.length,
-                    (index) => Container(
+                        (index) => Container(
                       width: currentImageIndex == index ? 24 : 8,
                       height: 8,
                       margin: const EdgeInsets.symmetric(horizontal: 2),
@@ -76,8 +77,8 @@ class PropertyImageSlider extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 30,
-          right: 20,
+          top: 40,
+          right: 15,
           child: Container(
             width: smallCircleSize,
             height: smallCircleSize,
@@ -85,17 +86,7 @@ class PropertyImageSlider extends StatelessWidget {
               color: Colors.white,
               shape: BoxShape.circle,
             ),
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: Icon(
-                Icons.chevron_left,
-                color: Colors.grey[800],
-                size: 25,
-              ),
-              onPressed: () {
-                Navigator.pop(context); // رجوع للخلف بدلاً من الذهاب لصفحة ثابتة
-              },
-            ),
+            child: const Center(child: CustomArrowBack()),
           ),
         ),
         Positioned(

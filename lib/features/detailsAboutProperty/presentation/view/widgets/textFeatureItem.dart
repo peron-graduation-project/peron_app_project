@@ -16,10 +16,8 @@ class TextFeatureItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.0),
       child: Row(
-        textDirection: TextDirection.rtl,
         children: [
           Text("-", style: TextStyle(fontFamily: Fonts.primaryFontFamily)),
-
           SizedBox(width: 4),
           Text(
             text,

@@ -1,90 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/utils/property_model.dart';
+import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/textFeatureItem.dart';
 
 class PropertyInformation extends StatelessWidget {
   final double screenWidth;
-  final double padding;
   final double fontSize;
+  final double smallFontSize;
+  final double padding;
+
   final Property property;
 
   const PropertyInformation({
-    Key? key,
+    super.key,
     required this.property,
     required this.screenWidth,
-    required this.padding,
-    required this.fontSize,
-  }) : super(key: key);
+    required this.fontSize, required this.smallFontSize, required this.padding,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(right: 10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 0),
-          Text(
-            property.description??"",
-            style: TextStyle(
-              color: const Color.fromARGB(255, 143, 143, 143),
-              // height: 1.5,
-              fontWeight: FontWeight.normal,
-              fontSize: 17,
-              fontFamily: Fonts.primaryFontFamily,
-            ),
-            textAlign: TextAlign.right,
+          TextFeatureItem(
+            text:'المساحة: ${property.area ?? 0}',
+            fontSize: smallFontSize,
           ),
           SizedBox(height: 5),
-          Text(
-            property.description??"",
-            style: TextStyle(
-              color: const Color.fromARGB(255, 143, 143, 143),
-              height: 1.5,
-              fontWeight: FontWeight.normal,
-              fontSize: 17,
-              fontFamily: Fonts.primaryFontFamily,
-            ),
-            textAlign: TextAlign.right,
-          ),
-            SizedBox(height: 5),
-          Text(
-            'المساحه: ${property.area}   ',
-            style: TextStyle(
-              color: const Color.fromARGB(255, 143, 143, 143),
-              height: 1.5,
-              fontWeight: FontWeight.normal,
-              fontSize: 17,
-              fontFamily: Fonts.primaryFontFamily,
-            ),
-            textAlign: TextAlign.right,
+          TextFeatureItem(
+            text: 'الطابق: ${property.floor ?? 0}',
+            fontSize: smallFontSize,
           ),
           SizedBox(height: 5),
-        
-          Text(
-            'الطابق: ${property.floor}   ',
-            style: TextStyle(
-              color: const Color.fromARGB(255, 143, 143, 143),
-              height: 1.5,
-              fontWeight: FontWeight.normal,
-              fontSize: 17,
-              fontFamily: Fonts.primaryFontFamily,
-            ),
-            textAlign: TextAlign.right,
+          TextFeatureItem(
+            text: 'الموقع: ${property.location ?? "لم يتم تحديد موقع"}',
+            fontSize: smallFontSize,
           ),
-            Text(
-            'الموقع: ${property.location}   ',
-            style: TextStyle(
-              color: const Color.fromARGB(255, 143, 143, 143),
-              height: 1.5,
-              fontWeight: FontWeight.normal,
-              fontSize: 17,
-              fontFamily: Fonts.primaryFontFamily,
-            ),
-            textAlign: TextAlign.right,
-          ),
-            
-          
+
         ],
       ),
     );

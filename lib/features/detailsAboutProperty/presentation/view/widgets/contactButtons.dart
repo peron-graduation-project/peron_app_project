@@ -13,7 +13,7 @@ class ContactButtons extends StatelessWidget {
   final double screenHeight;
   final Property property;
 
-  ContactButtons({
+  const ContactButtons({
     Key? key,
     required this.property,
     required this.standardPadding,

@@ -17,7 +17,6 @@ import 'package:peron_project/features/detailsAboutProperty/presentation/view/wi
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/propertyInformation.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/recommendedProperties.dart';
 import 'package:peron_project/features/detailsAboutProperty/presentation/view/widgets/reviewsSection.dart';
-
 import '../../../../../core/helper/colors.dart';
 
 class PropertyDetailScreen extends StatefulWidget {
@@ -30,26 +29,22 @@ class PropertyDetailScreen extends StatefulWidget {
 }
 
 class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
-  int _currentImageIndex = 0;
+  final int _currentImageIndex = 0;
   bool _showExtendedDetails = false;
+  late final PageController _pageController;
 
   @override
   void initState() {
-    context.read<ReviewCubit>().getRates(widget.propertyId);
     super.initState();
+    _pageController = PageController();
+    context.read<ReviewCubit>().getRates(widget.propertyId);
+  }
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
-  final List<String> _imagesPaths = [
-    'assets/images/appartment.jpg',
-    'assets/images/appartment2.jpg',
-    'assets/images/appartment3.jpg',
-  ];
-
-  void goToImage(int index) {
-    if (index >= 0 && index < _imagesPaths.length) {
-      // Update currentImageIndex (e.g., via a callback or state management)
-    }
-  }
 
   void _toggleExtendedDetails() {
     setState(() {
@@ -60,10 +55,8 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (_) =>
-              GetPropertyCubit(GetPropertyRepoImp(ApiService(Dio())))
-                ..getPropertyDetails(id: widget.propertyId),
+      create: (_) => GetPropertyCubit(GetPropertyRepoImp(ApiService(Dio())))
+        ..getPropertyDetails(id: widget.propertyId),
       child: BlocBuilder<GetPropertyCubit, GetPropertyState>(
         builder: (context, state) {
           if (state is GetPropertyStateLoading) {
@@ -96,26 +89,32 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
               ),
             );
           } else if (state is GetPropertyStateSuccess) {
-            final property = state.propertyDetails;
+            final property = state.propertyDetails!;
+            final List<String> _imagesPaths = state.propertyDetails!.images??[];
+            void goToImage(int index) {
+              if (index >= 0 && index < _imagesPaths.length) {
+                _pageController.animateToPage(
+                  index,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              }
+            }
+
+
             final screenSize = MediaQuery.of(context).size;
             final screenWidth = screenSize.width;
             final screenHeight = screenSize.height;
 
             final imageHeight = screenHeight * 0.5;
             final iconSize = screenWidth * 0.055;
-            final smallIconSize = iconSize * 0.9;
-
             final standardPadding = screenWidth * 0.0;
             final smallPadding = standardPadding * 0.3;
-
             final titleFontSize = screenWidth * 0.055;
             final priceFontSize = screenWidth * 0.06;
             final regularFontSize = screenWidth * 0.045;
             final smallFontSize = screenWidth * 0.04;
-
-            final circleSize = screenWidth * 0.1;
-            final smallCircleSize = screenWidth * 0.08;
-
+            final smallCircleSize = screenWidth * 0.09;
             return Scaffold(
               backgroundColor: Colors.white,
               body: Column(
@@ -123,63 +122,62 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           PropertyImageSlider(
-                            imagesPaths: property?.images ?? [],
+                            imagesPaths: property.images ?? [],
                             currentImageIndex: _currentImageIndex,
                             goToImage: goToImage,
                             imageHeight: imageHeight,
                             standardPadding: standardPadding,
                             screenHeight: screenHeight,
                             smallCircleSize: smallCircleSize,
+                            pageController: _pageController,
                           ),
+
                           PropertyHeader(
-                            property: state.propertyDetails!,
+                            property: property,
                             standardPadding: standardPadding,
                             titleFontSize: titleFontSize,
                             priceFontSize: priceFontSize,
                             smallPadding: smallPadding,
                             regularFontSize: regularFontSize,
                             smallFontSize: smallFontSize,
-                            smallIconSize: smallIconSize,
-                            smallCircleSize: smallCircleSize,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(right: 10
-                            ),
+                            padding: const EdgeInsets.only(left: 12.0,right: 4),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 const SizedBox(width: 10),
                                 FeatureItem(
-                                  text: "${property?.bedrooms}",
+                                  text: "${property.bedrooms}",
                                   icon: Icons.chair,
                                   screenWidth: screenWidth,
                                 ),
                                 const SizedBox(width: 12),
                                 FeatureItem(
-                                  text: "${property?.bathrooms}",
+                                  text: "${property.bathrooms}",
                                   icon: Icons.bathtub,
                                   screenWidth: screenWidth,
                                 ),
                                 const SizedBox(width: 12),
                                 FeatureItem(
-                                  text: "${property?.bedrooms}",
+                                  text: "${property.bedrooms}",
                                   icon: Icons.bed,
                                   screenWidth: screenWidth,
                                 ),
                                 const SizedBox(width: 12),
                                 FeatureItem(
-                                  text: "${property?.area}",
+                                  text: "${property.area}",
                                   icon: Icons.swap_horiz,
                                   screenWidth: screenWidth,
                                 ),
                               ],
                             ),
                           ),
+                          SizedBox(height: 12,),
                           PropertyDescription(
-                            description: "${property?.description}",
+                            description: property.description ?? "لا يوجد وصف للشقة",
                             standardPadding: standardPadding,
                             smallPadding: smallPadding,
                             regularFontSize: regularFontSize,
@@ -189,12 +187,12 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                           ),
                           if (_showExtendedDetails) ...[
                             PropertyInformation(
-                              property: property!,
+                              smallFontSize: smallFontSize,
+                              property: property,
                               screenWidth: screenWidth,
-                              padding: standardPadding,
                               fontSize: regularFontSize,
+                              padding: standardPadding,
                             ),
-                           
                             PropertyComponents(
                               property: property,
                               screenWidth: screenWidth,
@@ -215,7 +213,6 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                               smallFontSize: smallFontSize,
                               property: property,
                             ),
-
                             ReviewsSection(
                               screenWidth: screenWidth,
                               padding: standardPadding,
@@ -236,7 +233,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                     ),
                   ),
                   ContactButtons(
-                    property: property!,
+                    property: property,
                     standardPadding: standardPadding,
                     regularFontSize: regularFontSize,
                     smallPadding: smallPadding,
@@ -247,7 +244,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
               ),
             );
           } else {
-            return const Scaffold(); // للحالة initial
+            return const Scaffold(); // Initial state
           }
         },
       ),
