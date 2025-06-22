@@ -15,66 +15,58 @@ class AddPropertyScreen2 extends StatelessWidget {
   Widget build(BuildContext context) {
     final sw = MediaQuery.of(context).size.width;
     final sh = MediaQuery.of(context).size.height;
+    var theme = Theme.of(context).textTheme;
+
 
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: AppColors.scaffoldBackgroundColor,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: sh * 0.06,
-                    right: 16, left: 16,
-                  ),
-                  child: Stack(
-                    children: [
-                      const Align(
-                        alignment: Alignment.centerRight,
-                        child: CustomArrowBack(),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'أضف عقار',
-                          style: TextStyle(
-                            fontFamily: Fonts.primaryFontFamily,
-                            fontWeight: FontWeight.w700,
-                            fontSize: sw * 0.053,
-                            height: 15.27 / 20,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: sh * 0.025),
-                  child: Container(
-                    height: 1,
-                    width: double.infinity,
-                    color: const Color(0xFFE1E1E1),
-                  ),
-                ),
-                SizedBox(height: sh * 0.03),
-                Center(
-                  child: SvgPicture.asset(
-                    Images.addPropertyTitle2,
-                    width: sw * 0.4,
-                    height: sh * 0.05,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: sw * 0.04,
-                    vertical: sh * 0.02,
-                  ),
-                  child: PropertyForm2(formData: data),
-                ),
-              ],
+        appBar: AppBar(
+          title: Text(
+            'أضف عقار',
+            style: theme.headlineMedium!.copyWith(fontSize: 20),
+          ),
+          leading: CustomArrowBack(),
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1),
+            child: Divider(
+              thickness: 1,
+              height: 1,
+              color: AppColors.dividerColor,
             ),
+          ),
+        ),
+
+        backgroundColor: AppColors.scaffoldBackgroundColor,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: sh * 0.025),
+                child: Container(
+                  height: 1,
+                  width: double.infinity,
+                  color: const Color(0xFFE1E1E1),
+                ),
+              ),
+              SizedBox(height: sh * 0.03),
+              Center(
+                child: SvgPicture.asset(
+                  Images.addPropertyTitle2,
+                  width: sw * 0.4,
+                  height: sh * 0.05,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: sw * 0.04,
+                  vertical: sh * 0.02,
+                ),
+                child: PropertyForm2(formData: data),
+              ),
+            ],
           ),
         ),
       ),

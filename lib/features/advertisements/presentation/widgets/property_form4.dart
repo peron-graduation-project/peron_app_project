@@ -101,8 +101,11 @@ class _PropertyForm3State extends State<PropertyForm4> with WidgetsBindingObserv
 
   void _showPaymentAlert(BuildContext context) {
     if (images.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('❌ يرجى إضافة صورة واحدة على الأقل')),
+      AppSnackBar.showFromTop(
+        context: context,
+        title: 'Error',
+        message: ' يرجى إضافة صورة واحدة على الأقل',
+        contentType: ContentType.failure,
       );
       return;
     }
@@ -173,142 +176,167 @@ class _PropertyForm3State extends State<PropertyForm4> with WidgetsBindingObserv
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          buildLabel('أضف صور العقار', screenWidth),
-          SizedBox(height: screenHeight * 0.02),
-
-          Center(
-            child: DottedBorder(
-              color: const Color(0xFFDADADA),
-              strokeWidth: 1,
-              dashPattern: const [6, 4],
-              borderType: BorderType.RRect,
-              radius: const Radius.circular(8),
-              child: Container(
-                width: screenWidth * 0.88,
-                height: screenHeight * 0.28,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
+      child: BlocListener<PropertyConfirmCubit, PropertyConfirmState>(
+        listener: (context, state) {
+          if (state is PropertyConfirmStateSuccess) {
+            AppSnackBar.showFromTop(
+              context: context,
+              title: 'Success',
+              message: 'تم الدفع بنجاح، سيتم نشر الإعلان.',
+              contentType: ContentType.success,
+            );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyAdvertisementsPage(initialPublishedCount: 0),
+              ),
+            );
+          } else if (state is PropertyConfirmStateFailure) {
+            AppSnackBar.showFromTop(
+              context: context,
+              title: 'Error',
+              message: "فشلت عملية الدفع. سيتم تعليق حجز الشقة مؤقتًا لحين إتمام الدفع.",
+              contentType: ContentType.failure,
+            );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyAdvertisementsPage(initialPublishedCount: 1),
+              ),
+            );
+          }
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildLabel('أضف صور العقار', screenWidth),
+            SizedBox(height: screenHeight * 0.02),
+            Center(
+              child: DottedBorder(
+                color: const Color(0xFFDADADA),
+                strokeWidth: 1,
+                dashPattern: const [6, 4],
+                borderType: BorderType.RRect,
+                radius: const Radius.circular(8),
+                child: Container(
+                  width: screenWidth * 0.88,
+                  height: screenHeight * 0.28,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: images.isEmpty
+                      ? _buildEmptyUploadBox(screenWidth, screenHeight)
+                      : _buildImageGrid(screenWidth),
                 ),
-                child:
-                    images.isEmpty
-                        ? _buildEmptyUploadBox(screenWidth, screenHeight)
-                        : _buildImageGrid(screenWidth),
               ),
             ),
-          ),
+            SizedBox(height: screenHeight * 0.04),
+            Row(
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    text: 'نشر',
+                    backgroundColor: AppColors.primaryColor,
+                    textColor: Colors.white,
+                    onPressed: () async {
+                      if (images.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('❌ يرجى إضافة صورة واحدة على الأقل'),
+                          ),
+                        );
+                        return;
+                      }
+                      final paymentUrl = await context
+                          .read<PropertyPendingCubit>()
+                          .postPropertyPending(property: widget.formData);
+                      print('paymentUrl:$paymentUrl');
+                      if (paymentUrl != null && paymentUrl.isNotEmpty) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          barrierColor: Colors.black.withOpacity(0.4),
+                          builder: (context) => CustomAlertDialog(
+                            iconPath: 'assets/images/alert.svg',
+                            title: 'لنشر الإعلان يجب الدفع',
+                            description: 'قم بالدفع لنشر اعلانك',
+                            confirmText: 'دفع',
+                            cancelText: 'إلغاء',
+                            onConfirm: () async {
+                              final regex = RegExp(r'cs_test_[a-zA-Z0-9]+');
+                              final match = regex.firstMatch(paymentUrl);
+                              final sessionId = match?.group(0);
 
-          SizedBox(height: screenHeight * 0.04),
+                              if (sessionId != null) {
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                await prefs.setString('pending_session_id', sessionId);
 
-          Row(
-            children: [
-              Expanded(
-                child: CustomButton(
-                  text: 'نشر',
-                  backgroundColor: AppColors.primaryColor,
-                  textColor: Colors.white,
-                  onPressed: () async {
-                    if (images.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('❌ يرجى إضافة صورة واحدة على الأقل'),
-                        ),
-                      );
-                      return;
-                    }
-                    final paymentUrl = await context
-                        .read<PropertyPendingCubit>()
-                        .postPropertyPending(property: widget.formData);
-                    print('paymentUrl:$paymentUrl');
-                    if (paymentUrl != null && paymentUrl.isNotEmpty) {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        barrierColor: Colors.black.withOpacity(0.4),
-                        builder:
-                            (context) => CustomAlertDialog(
-                              iconPath: 'assets/images/alert.svg',
-                              title: 'لنشر الإعلان يجب الدفع',
-                              description: 'قم بالدفع لنشر اعلانك',
-                              confirmText: 'دفع',
-                              cancelText: 'إلغاء',
-                              onConfirm: () async {
-                                final regex = RegExp(r'cs_test_[a-zA-Z0-9]+');
-                                final match = regex.firstMatch(paymentUrl);
-                                final sessionId = match?.group(0);
+                                setState(() {
+                                  _pendingSessionId = sessionId;
+                                  _paymentLaunched = true;
+                                });
 
-                                if (sessionId != null) {
-                                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                                  await prefs.setString('pending_session_id', sessionId);
-
-                                  setState(() {
-                                    _pendingSessionId = sessionId;
-                                    _paymentLaunched = true;
-                                  });
-
-                                  await openStripeCheckout(paymentUrl);
-
-                                } else {
-                                  AppSnackBar.showFromTop(
-                                    context: context,
-                                    title: 'Error',
-                                    message: 'لم يتم العثور على session ID في الرابط.',
-                                    contentType: ContentType.failure,
-                                  );
-                                }
-                              },
-                              onCancel: () async {
-                                Navigator.pop(context);
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => MyAdvertisementsPage(
-                                    initialPublishedCount: 1,
-                                  )),
-                                      (route) => false,
+                                await openStripeCheckout(paymentUrl);
+                              } else {
+                                AppSnackBar.showFromTop(
+                                  context: context,
+                                  title: 'Error',
+                                  message: 'لم يتم العثور على session ID في الرابط.',
+                                  contentType: ContentType.failure,
                                 );
-                              },
-                            ),
-                      );
-                      AppSnackBar.showFromTop(
-                        context: context,
-                        title: 'Warning',
-                        message: 'تم تعليق الإعلان لحين إتمام عملية الدفع',
-                        contentType: ContentType.warning,
-                      );
-                    } else {
-                      AppSnackBar.showFromTop(
-                        context: context,
-                        title: 'Error',
-                        message:
-                            ' فشل في إرسال البيانات أو لم يتم الحصول على رابط الدفع',
-                        contentType: ContentType.failure,
-                      );
-                    }
-                  },
+                              }
+                            },
+                            onCancel: () async {
+                              Navigator.pop(context);
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MyAdvertisementsPage(initialPublishedCount: 1),
+                                ),
+                                    (route) => false,
+                              );
+                            },
+                          ),
+                        );
+                        AppSnackBar.showFromTop(
+                          context: context,
+                          title: 'Warning',
+                          message: 'تم تعليق الإعلان لحين إتمام عملية الدفع',
+                          contentType: ContentType.warning,
+                        );
+                      } else {
+                        AppSnackBar.showFromTop(
+                          context: context,
+                          title: 'Error',
+                          message: 'فشل في إرسال البيانات أو لم يتم الحصول على رابط الدفع',
+                          contentType: ContentType.failure,
+                        );
+                      }
+                    },
+                  ),
                 ),
-              ),
-              SizedBox(width: screenWidth * 0.04),
-              Expanded(
-                child: CustomButton(
-                  text: 'السابق',
-                  backgroundColor: Colors.white,
-                  textColor: AppColors.primaryColor,
-                  borderColor: AppColors.primaryColor,
-                  onPressed: () => Navigator.of(context).pop(),
+                SizedBox(width: screenWidth * 0.04),
+                Expanded(
+                  child: CustomButton(
+                    text: 'السابق',
+                    backgroundColor: Colors.white,
+                    textColor: AppColors.primaryColor,
+                    borderColor: AppColors.primaryColor,
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

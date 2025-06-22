@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/fonts.dart';
-import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_cubit.dart';
-import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_state.dart';
 
 class TabItem extends StatelessWidget {
   final String title;

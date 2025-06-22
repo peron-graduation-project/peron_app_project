@@ -9,11 +9,11 @@ class CustomDatePickerField extends StatefulWidget {
   final ValueChanged<DateTime> onDateSelected;
 
   const CustomDatePickerField({
-    Key? key,
+    super.key,
     required this.hintText,
     this.initialDate,
     required this.onDateSelected,
-  }) : super(key: key);
+  });
 
   @override
   _CustomDatePickerFieldState createState() => _CustomDatePickerFieldState();

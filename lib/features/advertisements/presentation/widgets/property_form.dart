@@ -70,7 +70,6 @@ class _PropertyFormState extends State<PropertyForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             buildLabel('نوع العقار', screenWidth),
             const SizedBox(height: 8),
             CustomTextField(
