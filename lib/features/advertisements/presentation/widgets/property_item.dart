@@ -43,20 +43,21 @@ class PropertyItem extends StatelessWidget {
                       },
                       itemBuilder: (context, index) {
                         print('hna property.images ${property.images?[index]}');
+                        print('Image URL: ${property.images?[index]}');
+
                         return CachedNetworkImage(
-                          imageUrl: '${property.images?[index]}',
+                          imageUrl: 'https://via.placeholder.com/300',
                           fit: BoxFit.cover,
                           width: double.infinity,
                           height: 180,
-                          placeholder:
-                              (context, url) =>  Center(
-                                child: CircularProgressIndicator(
-                                  color: AppColors.primaryColor,
-                                ),
-                              ),
-                          errorWidget:
-                              (context, url, error) => const Icon(Icons.error),
-                        );
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        )
+                        ;
                         //  Image.network(
                         //   property.images![index],
                         //   width: double.infinity,

@@ -4,7 +4,6 @@ import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/utils/property_model.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20Search/get_search_cubit.dart';
 import 'package:peron_project/features/main/presentation/manager/get%20Search/get_search_state.dart';
-
 import '../views/property_details.dart';
 
 class RecommendedProperties extends StatefulWidget {
@@ -48,6 +47,15 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final cardWidth = screenWidth * 0.38;
+    final cardImageHeight = screenHeight * 0.13;
+    final iconSize = screenWidth * 0.04;
+    final padding = screenWidth * 0.03;
+    final titleFontSize = screenWidth * 0.035;
+    final smallFontSize = screenWidth * 0.03;
+
     return BlocBuilder<GetSearchPropertiesCubit, GetSearchPropertiesState>(
       builder: (context, state) {
         if (state is GetSearchPropertiesStateLoading) {
@@ -86,7 +94,7 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
                       'مقترح به لك',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20,
+                        fontSize: widget.fontSize,
                         fontWeight: FontWeight.w300,
                         fontFamily: Fonts.primaryFontFamily,
                       ),
@@ -99,31 +107,34 @@ class _RecommendedPropertiesState extends State<RecommendedProperties> {
               Directionality(
                 textDirection: TextDirection.rtl,
                 child: SizedBox(
-                  height: 180,
+                  height: screenHeight * 0.24,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     padding: EdgeInsets.symmetric(horizontal: widget.padding),
                     itemCount: properties.length,
                     itemBuilder: (context, index) {
-                    Property property = properties[index];
-return Row(
-  children: [
-    _buildPropertyCard(
-      property: property,
-      context,
-      index: index,
-      imagePath: property.images != null && property.images!.isNotEmpty
-          ? property.images![0]
-          : "",
-      propertyType: property.rentType ??
-          "غير محدد",
-      location: property.location ?? "موقع غير محدد",
-      price: property.price != null ? property.price.toString() : "سعر غير محدد",
-    ),
-    SizedBox(width: 12),
-  ],
-);
-
+                      Property property = properties[index];
+                      return Row(
+                        children: [
+                          _buildPropertyCard(
+                            context,
+                            index: index,
+                            property: property,
+                            imagePath: property.images != null && property.images!.isNotEmpty
+                                ? property.images![0]
+                                : "",
+                            propertyType: property.rentType ?? "غير محدد",
+                            location: property.location ?? "موقع غير محدد",
+                            price: property.price != null ? property.price.toString() : "سعر غير محدد",
+                            cardWidth: cardWidth,
+                            cardImageHeight: cardImageHeight,
+                            iconSize: iconSize,
+                            smallFontSize: smallFontSize,
+                            padding: padding,
+                          ),
+                          SizedBox(width: 12),
+                        ],
+                      );
                     },
                   ),
                 ),
@@ -138,25 +149,30 @@ return Row(
   }
 
   Widget _buildPropertyCard(
-    BuildContext context, {
-    required int index,
-    String? imagePath,
-    required String propertyType,
-    required String location,
-    required String price,
-        required Property property
-  }) {
+      BuildContext context, {
+        required int index,
+        required String imagePath,
+        required String propertyType,
+        required String location,
+        required String price,
+        required Property property,
+        required double cardWidth,
+        required double cardImageHeight,
+        required double iconSize,
+        required double smallFontSize,
+        required double padding,
+      }) {
     bool isFavorite = _favoriteIndices.contains(index);
 
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PropertyDetailScreen(propertyId: property.propertyId??24,)),
+          MaterialPageRoute(builder: (context) => PropertyDetailScreen(propertyId: property.propertyId ?? 24)),
         );
       },
       child: Container(
-        width: 140,
+        width: cardWidth,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -174,34 +190,34 @@ return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 12),
+              padding: EdgeInsets.only(top: padding),
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 8),
+                margin: EdgeInsets.symmetric(horizontal: padding),
                 child: Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: imagePath != null
+                      child: imagePath.isNotEmpty
                           ? Image.network(
-                              imagePath,
-                              height: 90,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  height: 90,
-                                  width: double.infinity,
-                                  color: Colors.grey[300],
-                                  child: Icon(Icons.broken_image),
-                                );
-                              },
-                            )
+                        imagePath,
+                        height: cardImageHeight,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            height: cardImageHeight,
+                            width: double.infinity,
+                            color: Colors.grey[300],
+                            child: Icon(Icons.broken_image, size: iconSize),
+                          );
+                        },
+                      )
                           : Container(
-                              height: 90,
-                              width: double.infinity,
-                              color: Colors.grey[300],
-                              child: Icon(Icons.image_not_supported),
-                            ),
+                        height: cardImageHeight,
+                        width: double.infinity,
+                        color: Colors.grey[300],
+                        child: Icon(Icons.image_not_supported, size: iconSize),
+                      ),
                     ),
                     Positioned(
                       top: 5,
@@ -211,7 +227,7 @@ return Row(
                         child: Icon(
                           isFavorite ? Icons.favorite : Icons.favorite_border,
                           color: isFavorite ? Colors.red : Colors.white,
-                          size: 20,
+                          size: iconSize + 2,
                         ),
                       ),
                     ),
@@ -220,21 +236,20 @@ return Row(
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+              padding: EdgeInsets.symmetric(horizontal: padding, vertical: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(Icons.home, color: Colors.grey, size: 14),
+                      Icon(Icons.home, color: Colors.grey, size: iconSize),
                       SizedBox(width: 4),
                       Text(
                         "النوع",
                         style: TextStyle(
-                          fontSize: widget.smallFontSize * 0.75,
+                          fontSize: smallFontSize * 0.9,
                           fontWeight: FontWeight.bold,
-                          color: const Color.fromARGB(255, 225, 223, 223),
+                          color: Colors.grey[400],
                           fontFamily: Fonts.primaryFontFamily,
                         ),
                       ),
@@ -243,7 +258,7 @@ return Row(
                         propertyType,
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: widget.smallFontSize * 0.85,
+                          fontSize: smallFontSize,
                           fontWeight: FontWeight.normal,
                           fontFamily: Fonts.primaryFontFamily,
                         ),
@@ -252,41 +267,43 @@ return Row(
                   ),
                   SizedBox(height: 2),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(Icons.location_on, color: Colors.grey, size: 14),
+                      Icon(Icons.location_on, color: Colors.grey, size: iconSize),
+                      SizedBox(width: 4),
                       Text(
                         "الموقع",
                         style: TextStyle(
-                          fontSize: widget.smallFontSize * 0.75,
+                          fontSize: smallFontSize * 0.9,
                           fontWeight: FontWeight.bold,
-                          color: const Color.fromARGB(255, 225, 223, 223),
+                          color: Colors.grey[400],
                           fontFamily: Fonts.primaryFontFamily,
                         ),
                       ),
                       SizedBox(width: 4),
-                      Text(
-                        location,
-                        style: TextStyle(
-                          fontSize: widget.smallFontSize * 0.75,
-                          color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontFamily: Fonts.primaryFontFamily,
+                      Expanded(
+                        child: Text(
+                          location,
+                          style: TextStyle(
+                            fontSize: smallFontSize,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontFamily: Fonts.primaryFontFamily,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
                   ),
                   SizedBox(height: 2),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(Icons.monetization_on, color: Colors.grey, size: 14),
+                      Icon(Icons.monetization_on, color: Colors.grey, size: iconSize),
                       SizedBox(width: 4),
                       Text(
                         'السعر:',
                         style: TextStyle(
-                          fontSize: widget.smallFontSize * 0.75,
-                          color: const Color.fromARGB(255, 225, 223, 223),
+                          fontSize: smallFontSize * 0.9,
+                          color: Colors.grey[400],
                           fontWeight: FontWeight.normal,
                           fontFamily: Fonts.primaryFontFamily,
                         ),
@@ -295,7 +312,7 @@ return Row(
                       Text(
                         price,
                         style: TextStyle(
-                          fontSize: widget.smallFontSize * 0.75,
+                          fontSize: smallFontSize,
                           fontWeight: FontWeight.w200,
                           color: Color(0xff0F7757),
                           fontFamily: Fonts.primaryFontFamily,
@@ -305,7 +322,7 @@ return Row(
                       Text(
                         'ج.م',
                         style: TextStyle(
-                          fontSize: widget.smallFontSize * 0.75,
+                          fontSize: smallFontSize,
                           fontWeight: FontWeight.w200,
                           color: Color(0xff0F7757),
                           fontFamily: Fonts.primaryFontFamily,

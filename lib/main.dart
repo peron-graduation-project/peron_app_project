@@ -28,6 +28,7 @@ class PeronApp extends StatelessWidget {
         return MaterialApp(
           title: 'Peron App',
           theme: ApplicationThemeManager.lightThemeMode,
+          themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,

@@ -1,8 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:peron_project/core/helper/colors.dart';
+import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
+import 'package:peron_project/features/chatPot/domain/repos/get%20chatPot/get_chatpot_repo_imp.dart';
 import 'package:peron_project/features/chatPot/presentation/view/views/chatPot_view_screen.dart';
+
+import '../../manager/chatPot_cubit.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -83,9 +89,13 @@ class WelcomeScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ChatpotViewScreen(),
+                            builder: (_) => BlocProvider(
+                              create: (_) => ChatBotCubit(GetChatBotRepoImpl(ApiService(Dio()))),
+                              child: ChatpotViewScreen(),
+                            ),
                           ),
                         );
+
                       },
                       child: Text(
                         'ابدأ الآن',

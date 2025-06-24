@@ -7,8 +7,6 @@ import '../../../detailsAboutProperty/presentation/manager/get property/get_prop
 import '../../../detailsAboutProperty/presentation/view/views/property_details.dart';
 
 class PropertyCard extends StatefulWidget {
-
-
   const PropertyCard({super.key});
 
   @override
@@ -35,17 +33,21 @@ class _PropertyCardState extends State<PropertyCard> {
                 itemCount: state.properties!.length,
                 itemBuilder: (context, index) =>
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => PropertyDetailScreen(propertyId:state.properties![index].propertyId??24,)),
+                          MaterialPageRoute(
+                            builder: (context) => PropertyDetailScreen(
+                              propertyId: state.properties![index].propertyId ?? 24,
+                            ),
+                          ),
                         );
                       },
-                        child: PropertyItem(property: state.properties![index])),
+                      child: PropertyItem(property: state.properties![index]),
+                    ),
               );
             } else {
-
-               return const Center(child: Text('لا توجد بيانات لعرضها'));
+              return const Center(child: Text('لا توجد بيانات لعرضها'));
             }
           } else {
             return const SizedBox();

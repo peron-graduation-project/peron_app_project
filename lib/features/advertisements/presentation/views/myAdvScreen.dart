@@ -10,6 +10,7 @@ import 'package:peron_project/features/detailsAboutProperty/presentation/manager
 import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_state.dart';
 
 import '../../../../core/helper/colors.dart';
+import '../../../../core/utils/property_model.dart';
 import '../../../../core/widgets/custom_arrow_back.dart';
 import '../widgets/deleted_property_card.dart';
 import '../widgets/no_published.dart';
@@ -27,7 +28,6 @@ class MyAdvertisementsPage extends StatefulWidget {
   @override
   State<MyAdvertisementsPage> createState() => _MyAdvertisementsPageState();
 }
-
 class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
   late int _selectedTabIndex;
 
@@ -80,7 +80,6 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
           .read<PropertyCreateCubit>()
           .getId,
     );
-    // publishedAdsCount = widget.initialPublishedCount;
     print("hna publishedAdsCount ${widget.initialPublishedCount}");
   }
 
@@ -260,25 +259,35 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
   }
 
   Widget _getContentByTabIndex() {
-    print("hna _getContentByTabIndex ${widget.initialPublishedCount}");
-    switch (_selectedTabIndex) {
-      case 0:
-        final propertyCount = context.read<GetPropertyCubit>()
-            .getPropertiesLengthByIndex(0);
+    return BlocBuilder<GetPropertyCubit, GetPropertyState>(
+      builder: (context, state) {
+        if (state is GetPropertyStateLoading) {
+          return Center(child: CircularProgressIndicator(
+            color: AppColors.primaryColor,
+          ));
+        } else if (state is GetPropertyStateSuccess) {
+          final List<Property>? properties = state.properties??[];
 
-        if (propertyCount == null || propertyCount == 0) {
-          return const NoPublishedAdsContent();
-        } else {
-          return PropertyCard();
+          if (_selectedTabIndex == 0) {
+            if (properties==[]) {
+              return const NoPublishedAdsContent();
+            } else {
+              return PropertyCard();
+            }
+          } else if (_selectedTabIndex == 1) {
+            return PropertyCard();
+          } else if (_selectedTabIndex == 2) {
+            return DeletedPropertyCard();
+          } else {
+            return const SizedBox();
+          }
+        } else if (state is GetPropertyStateFailure) {
+          return Center(child: Text('حدث خطأ أثناء تحميل البيانات'));
         }
-      case 1:
-        return PropertyCard();
-      case 2:
-        return DeletedPropertyCard();
 
-      default:
-        return const SizedBox();
-    }
+        return const SizedBox(); // Default empty while waiting
+      },
+    );
   }
 
   }
