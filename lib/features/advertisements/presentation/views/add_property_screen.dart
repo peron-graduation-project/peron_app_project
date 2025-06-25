@@ -7,7 +7,7 @@ import 'package:peron_project/features/advertisements/presentation/widgets/prope
 import 'package:peron_project/core/helper/fonts.dart';
 
 class AddPropertyScreen extends StatelessWidget {
-  const AddPropertyScreen({Key? key}) : super(key: key);
+  const AddPropertyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,34 +34,31 @@ class AddPropertyScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: screenHeight * 0.02,
-            ),
-            child: Column(
-              children: [
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: const Color(0xFFE1E1E1),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: screenHeight * 0.02,
+          ),
+          child: Column(
+            children: [
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: const Color(0xFFE1E1E1),
+              ),
+              SizedBox(height: screenHeight * 0.03),
+              Center(
+                child: SvgPicture.asset(
+                  Images.addPropertyTitle,
+                  width: screenWidth * 0.4,
+                  height: screenHeight * 0.05,
                 ),
-                SizedBox(height: screenHeight * 0.03),
+              ),
 
-                Center(
-                  child: SvgPicture.asset(
-                    Images.addPropertyTitle,
-                    width: screenWidth * 0.4,
-                    height: screenHeight * 0.05,
-                  ),
-                ),
+              SizedBox(height: screenHeight * 0.02),
 
-                SizedBox(height: screenHeight * 0.02),
-
-                const PropertyForm(),
-              ],
-            ),
+              const PropertyForm(),
+            ],
           ),
         ),
       ),

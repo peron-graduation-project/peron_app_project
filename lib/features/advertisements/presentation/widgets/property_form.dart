@@ -134,6 +134,7 @@ class _PropertyFormState extends State<PropertyForm> {
                   return null;
                 },
                 onSaved: (phone) {
+
                   phoneController.text = phone?.completeNumber ?? '';
                 },
               ),
@@ -183,6 +184,7 @@ class _PropertyFormState extends State<PropertyForm> {
                     style: TextStyle(
                       fontFamily: Fonts.primaryFontFamily,
                       fontSize: screenWidth * 0.035,
+                      color: Colors.black
                     ),
                     textAlign: TextAlign.right,
                   ),

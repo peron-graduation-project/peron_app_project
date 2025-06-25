@@ -1,13 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/features/advertisements/presentation/manager/propert_confirm/property_confirm_state.dart';
-
 import '../../../data/repo/property_confirm/property_confirm_repo.dart';
 
 class PropertyConfirmCubit extends Cubit<PropertyConfirmState> {
   final PropertyConfirmRepo propertyConfirmRepo;
 
   PropertyConfirmCubit(this.propertyConfirmRepo)
-    : super(PropertyConfirmStateInitial());
+      : super(PropertyConfirmStateInitial());
 
   Future<void> propertyConfirm({required String sessionId}) async {
     emit(PropertyConfirmStateLoading());
@@ -17,13 +16,13 @@ class PropertyConfirmCubit extends Cubit<PropertyConfirmState> {
     );
 
     result.fold(
-      (failure) {
+          (failure) {
         print("❌ Failure State: ${failure.errorMessage}");
         emit(PropertyConfirmStateFailure(failure.errorMessage));
       },
-      (stripeUrl) {
-        print("✅ Success State: $stripeUrl");
-        emit(PropertyConfirmStateSuccess(stripeUrl));
+          (confirmationMessage) {
+        print("✅ Success State: $confirmationMessage");
+        emit(PropertyConfirmStateSuccess(confirmationMessage));
       },
     );
   }

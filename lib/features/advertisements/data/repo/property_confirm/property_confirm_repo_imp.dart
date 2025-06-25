@@ -19,12 +19,10 @@ class PropertyConfirmRepoImp implements PropertyConfirmRepo {
       final token = prefs.getString('token');
 
       if (token == null || token.isEmpty) {
-        return Left(
-          ServiceFailure(
-            errorMessage: "لا يوجد توكين مسجل لعملية الدفع",
-            errors: ["التوكين غير موجود"],
-          ),
-        );
+        return Left(ServiceFailure(
+          errorMessage: "لا يوجد توكين مسجل لعملية الدفع",
+          errors: ["التوكين غير موجود"],
+        ));
       }
 
       final response = await apiService.getStripeCheckoutSession(
@@ -35,40 +33,30 @@ class PropertyConfirmRepoImp implements PropertyConfirmRepo {
       print("✅ [DEBUG] PropertyConfirmRepoImp Response: $response");
 
       return response.fold(
-        (failure) {
+            (failure) {
           print("❌ [DEBUG] Failure in Repo: $failure");
           return Left(failure);
         },
-        (data) {
-          if (data is Map<String, dynamic>) {
-            if (data.containsKey("message")) {
-              return Right(data["message"].toString());
-            } else {
-              return Left(
-                ServiceFailure(
-                  errorMessage: "الاستجابة لا تحتوي على المفتاح 'message'",
-                  errors: ["لم يتم العثور على المفتاح 'message' في الاستجابة"],
-                ),
-              );
-            }
+            (data) {
+          final status = data["status"];
+          final message = data["message"];
+
+          if (status == "paid") {
+            return Right(message ?? "تم الدفع بنجاح");
           } else {
-            return Left(
-              ServiceFailure(
-                errorMessage: "الاستجابة غير صحيحة",
-                errors: ["البيانات المستلمة ليست من النوع المناسب"],
-              ),
-            );
+            return Left(ServiceFailure(
+              errorMessage: "عملية الدفع لم تكتمل بعد",
+              errors: ["Status: $status", "Message: ${message ?? 'غير متوفر'}"],
+            ));
           }
         },
       );
     } catch (e) {
       print("❗ [DEBUG] Unexpected Error in PropertyConfirmRepoImp: $e");
-      return Left(
-        ServiceFailure(
-          errorMessage: "حدث خطأ غير متوقع أثناء عملية الدفع",
-          errors: [e.toString()],
-        ),
-      );
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء عملية الدفع",
+        errors: [e.toString()],
+      ));
     }
   }
 
@@ -81,12 +69,10 @@ class PropertyConfirmRepoImp implements PropertyConfirmRepo {
       final token = prefs.getString('token');
 
       if (token == null || token.isEmpty) {
-        return Left(
-          ServiceFailure(
-            errorMessage: "لا يوجد توكين مسجل لعملية الدفع",
-            errors: ["التوكين غير موجود"],
-          ),
-        );
+        return Left(ServiceFailure(
+          errorMessage: "لا يوجد توكين مسجل لعملية الدفع",
+          errors: ["التوكين غير موجود"],
+        ));
       }
 
       final response = await apiService.postPropertyCreate(
@@ -97,32 +83,27 @@ class PropertyConfirmRepoImp implements PropertyConfirmRepo {
       print("✅ [DEBUG] PropertyCreateRepoImp Response: $response");
 
       return response.fold(
-        (failure) {
+            (failure) {
           print("❌ [DEBUG] Failure in Repo: $failure");
           return Left(failure);
         },
-        (data) {
-          print("✅ [DEBUG] Success in Repo: $data");
-          // if (data is String) {
-          return Right(data);
-          // } else {
-          //   return Left(
-          //     ServiceFailure(
-          //       errorMessage: "الاستجابة غير صحيحة",
-          //       errors: ["البيانات المستلمة ليست من النوع المناسب"],
-          //     ),
-          //   );
-          // }
+            (data) {
+          if (data is String) {
+            return Right(data);
+          } else {
+            return Left(ServiceFailure(
+              errorMessage: "الاستجابة غير صحيحة",
+              errors: ["البيانات المستلمة ليست من النوع المناسب"],
+            ));
+          }
         },
       );
     } catch (e) {
       print("❗ [DEBUG] Unexpected Error in PropertyConfirmRepoImp: $e");
-      return Left(
-        ServiceFailure(
-          errorMessage: "حدث خطأ غير متوقع أثناء عملية الدفع",
-          errors: [e.toString()],
-        ),
-      );
+      return Left(ServiceFailure(
+        errorMessage: "حدث خطأ غير متوقع أثناء عملية الدفع",
+        errors: [e.toString()],
+      ));
     }
   }
 }

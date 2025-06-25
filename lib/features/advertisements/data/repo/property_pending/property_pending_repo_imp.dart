@@ -36,28 +36,18 @@ class PropertyPendingRepoImp implements PropertyPendingRepo {
       print("✅ [DEBUG] PropertyPendingRepoImp Response: $response");
 
       return response.fold(
-        (failure) {
+            (failure) {
           print("❌ [DEBUG] Failure in Repo: $failure");
           return Left(failure);
         },
-        (data) {
-          if (data is Map<String, dynamic> && data.containsKey("paypalurl")) {
-            final url = data["paypalurl"];
-            if (url is String) {
-              return Right(url);
-            } else {
-              return Left(
-                ServiceFailure(
-                  errorMessage: "رابط الدفع ليس من النوع String",
-                  errors: ["نوع البيانات غير متوقع في المفتاح 'paypalurl'"],
-                ),
-              );
-            }
+            (data) {
+          if (data["paypalurl"] is String) {
+            return Right(data["paypalurl"]);
           } else {
             return Left(
               ServiceFailure(
-                errorMessage: "الاستجابة لا تحتوي على المفتاح 'paypalurl'",
-                errors: ["لم يتم العثور على المفتاح 'paypalurl' في الاستجابة"],
+                errorMessage: "الاستجابة لا تحتوي على رابط دفع صالح",
+                errors: ["المفتاح 'paypalurl' مفقود أو ليس من النوع String"],
               ),
             );
           }

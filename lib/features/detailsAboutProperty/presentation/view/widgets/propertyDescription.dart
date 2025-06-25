@@ -67,17 +67,20 @@ class PropertyDescription extends StatelessWidget {
               standardPadding,
               standardPadding,
             ),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () => toggleExtendedDetails(),
-                child: Text(
-                  'اقرأ المزيد...',
-                  style: TextStyle(
-                    color: Color(0xff0F7757),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    fontFamily: Fonts.primaryFontFamily,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () => toggleExtendedDetails(),
+                  child: Text(
+                    'اقرأ المزيد...',
+                    style: TextStyle(
+                      color: Color(0xff0F7757),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      fontFamily: Fonts.primaryFontFamily,
+                    ),
                   ),
                 ),
               ),

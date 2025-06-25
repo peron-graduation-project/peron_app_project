@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
 class PropertyFormData {
@@ -85,8 +86,42 @@ class PropertyFormData {
       ..phone = phone ?? this.phone;
   }
 
-  /// Convert form data to a map matching backend expectations
-  Map<String, dynamic> toMap() {
+  Future<FormData> toMultipartFormData() async {
+    final dateFormat = DateFormat('yyyy-MM-dd');
+
+    List<MultipartFile> imageFiles = [];
+    for (var image in images) {
+      imageFiles.add(await MultipartFile.fromFile(image.path));
+    }
+
+    return FormData.fromMap({
+      'Title': title,
+      'Location': location,
+      'OwnerId': ownerId,
+      'Price': price,
+      'RentType': rentType,
+      'Bedrooms': bedrooms,
+      'Bathrooms': bathrooms,
+      'HasInternet': hasInternet,
+      'AllowsPets': allowsPets,
+      'Area': area,
+      'SmokingAllowed': smokingAllowed,
+      'Floor': floor,
+      'IsFurnished': isFurnished,
+      'HasBalcony': hasBalcony,
+      'HasSecurity': hasSecurity,
+      'HasElevator': hasElevator,
+      'MinBookingDays': minBookingDays,
+      'AvailableFrom': dateFormat.format(availableFrom),
+      'AvailableTo': dateFormat.format(availableTo),
+      'Description': description,
+      'Latitude': latitude,
+      'Longitude': longitude,
+      'Images': imageFiles,
+    });
+  }
+
+Map<String, dynamic> toMap() {
     final dateFormat = DateFormat('yyyy-MM-dd');
     return {
       'title': title,

@@ -110,7 +110,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
             final iconSize = screenWidth * 0.055;
             final standardPadding = screenWidth * 0.0;
             final smallPadding = standardPadding * 0.3;
-            final titleFontSize = screenWidth * 0.055;
+            final titleFontSize = screenWidth * 0.045;
             final priceFontSize = screenWidth * 0.06;
             final regularFontSize = screenWidth * 0.045;
             final smallFontSize = screenWidth * 0.04;
@@ -244,7 +244,8 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
               ),
             );
           } else {
-            return const Scaffold(); // Initial state
+            return const Scaffold();
+            // Initial state
           }
         },
       ),

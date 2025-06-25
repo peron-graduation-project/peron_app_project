@@ -42,7 +42,7 @@ class MainBodyView extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>WelcomeScreen ()),
+                      MaterialPageRoute(builder: (context) =>WelcomeScreen()),
                     );                  },
                   child: Container(
                     width: 45,

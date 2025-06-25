@@ -10,6 +10,7 @@ import 'package:peron_project/features/detailsAboutProperty/presentation/manager
 import 'package:peron_project/features/detailsAboutProperty/presentation/manager/get%20property/get_property_state.dart';
 
 import '../../../../core/helper/colors.dart';
+import '../../../../core/navigator/page_routes_name.dart';
 import '../../../../core/utils/property_model.dart';
 import '../../../../core/widgets/custom_arrow_back.dart';
 import '../widgets/deleted_property_card.dart';
@@ -54,10 +55,8 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
   @override
   void initState() {
     super.initState();
-
     _selectedTabIndex = widget.currentSelectedIndex ?? 0;
     pendingAdsCount = _selectedTabIndex == 0 ? 0 : 1;
-
     context.read<GetPropertyCubit>().getProperties(
       index: _selectedTabIndex,
       id: context.read<PropertyCreateCubit>().getId,
@@ -66,9 +65,10 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
 
 
   void _navigateToAddPropertyScreen() {
-    Navigator.push(
+    Navigator.pushNamedAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => AddPropertyScreen()),
+      PageRouteName.home,
+          (route) => false,
     );
   }
 
@@ -251,7 +251,7 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
           return Center(child: Text('حدث خطأ أثناء تحميل البيانات'));
         }
 
-        return const SizedBox(); // Default empty while waiting
+        return const SizedBox();
       },
     );
   }

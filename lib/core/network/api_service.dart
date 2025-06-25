@@ -1314,7 +1314,7 @@ class ApiService {
 
       print("✅ [DEBUG] Stripe Checkout API Response: ${response.data}");
 
-      if (response.data is Map<String, dynamic>) {
+      if (response.statusCode == 200 && response.data is Map<String, dynamic>) {
         return Right(response.data as Map<String, dynamic>);
       } else {
         return Left(ServiceFailure(
@@ -1336,6 +1336,7 @@ class ApiService {
       ));
     }
   }
+
 
 
 

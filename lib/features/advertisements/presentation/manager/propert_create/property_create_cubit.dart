@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/features/advertisements/data/property_model.dart';
-import 'package:peron_project/features/advertisements/presentation/manager/propert_confirm/property_confirm_state.dart';
 import 'package:peron_project/features/advertisements/presentation/manager/propert_create/property_confirm_state.dart';
 
 import '../../../data/repo/property_confirm/property_confirm_repo.dart';

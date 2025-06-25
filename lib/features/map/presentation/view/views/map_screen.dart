@@ -119,16 +119,15 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _updatePolylinesToProperties(List<LatLng> propertyLocations) {
-    if (_currentLocation != null) {
+    if (_currentLatLng != null) {
       setState(() {
-        // تحديث الـ polylines فقط إذا كانت هناك مواقع جديدة للشقق.
         for (int i = 0; i < propertyLocations.length; i++) {
           _polylines.add(Polyline(
             polylineId: PolylineId('route_to_property_$i'),
             color: Colors.green,
             width: 3,
             points: [
-              LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!),
+              _currentLatLng!,
               propertyLocations[i],
             ],
           ));
@@ -168,10 +167,24 @@ class _MapScreenState extends State<MapScreen> {
       _markers.add(_userSelectedMarker!);
 
       _locationDetails = locationName;
-      _drawPolylineToPoint(position);
 
-      context.read<GetNearestCubit>().getNearest(lat: position.latitude, lon: position.longitude);
+      if (_currentLatLng != null) {
+        _polylines.clear();
+        _polylines.add(Polyline(
+          polylineId: const PolylineId("to_selected_location"),
+          color: Colors.blue,
+          width: 4,
+          points: [_currentLatLng!, position],
+        ));
+      }
+
+      _currentLatLng = position;
     });
+
+    context.read<GetNearestCubit>().getNearest(
+      lat: position.latitude,
+      lon: position.longitude,
+    );
   }
 
   void _onMapSearchSubmitted(String locationQuery) async {
@@ -179,11 +192,38 @@ class _MapScreenState extends State<MapScreen> {
 
     if (locations.isNotEmpty) {
       LatLng position = LatLng(locations.first.latitude, locations.first.longitude);
-      _onMapTapped(position);
+
+      setState(() {
+        if (_userSelectedMarker != null) _markers.remove(_userSelectedMarker);
+
+        _userSelectedMarker = Marker(
+          markerId: MarkerId(position.toString()),
+          position: position,
+          infoWindow: InfoWindow(title: locationQuery),
+        );
+        _markers.add(_userSelectedMarker!);
+
+        _polylines.clear();
+        if (_currentLatLng != null) {
+          _polylines.add(Polyline(
+            polylineId: const PolylineId("to_search_location"),
+            color: Colors.blue,
+            width: 4,
+            points: [_currentLatLng!, position],
+          ));
+        }
+
+        _currentLatLng = position;
+      });
+
+      _controller?.animateCamera(CameraUpdate.newLatLngZoom(position, 15));
+
+      context.read<GetNearestCubit>().getNearest(
+        lat: position.latitude,
+        lon: position.longitude,
+      );
     }
   }
-
-  @override
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GetNearestCubit, GetNearestState>(
@@ -206,7 +246,7 @@ class _MapScreenState extends State<MapScreen> {
               propertyLocations.add(propertyLatLng);
             }
           }
-          
+
           _updatePolylinesToProperties(propertyLocations);
 
           

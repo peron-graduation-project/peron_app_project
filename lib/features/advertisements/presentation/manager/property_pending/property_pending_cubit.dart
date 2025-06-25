@@ -8,7 +8,7 @@ class PropertyPendingCubit extends Cubit<PropertyPendingState> {
   final PropertyPendingRepo propertyPendingRepo;
 
   PropertyPendingCubit(this.propertyPendingRepo)
-    : super(PropertyPendingStateInitial());
+      : super(PropertyPendingStateInitial());
 
   Future<String?> postPropertyPending({
     required PropertyFormData property,
@@ -18,20 +18,18 @@ class PropertyPendingCubit extends Cubit<PropertyPendingState> {
     final result = await propertyPendingRepo.postPropertyPending(
       property: property,
     );
-    String? paymentUrl;
 
-    result.fold(
-      (failure) {
+    return result.fold(
+          (failure) {
         print("❌ Failure State: ${failure.errorMessage}");
         emit(PropertyPendingStateFailure(failure.errorMessage));
-        paymentUrl = null;
+        return null;
       },
-      (url) {
+          (url) {
         print("✅ Success State: $url");
         emit(PropertyPendingStateSuccess(url));
-        paymentUrl = url;
+        return url;
       },
     );
-    return paymentUrl;
   }
 }
