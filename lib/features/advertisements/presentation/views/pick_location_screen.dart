@@ -1,18 +1,13 @@
-import 'dart:async';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:location/location.dart' as loc;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:peron_project/core/widgets/custom_arrow_back.dart';
+import 'package:location/location.dart' as loc;
 
 class MapResult {
   final double latitude;
   final double longitude;
   final String address;
-
-  MapResult({
+  const MapResult({
     required this.latitude,
     required this.longitude,
     required this.address,
@@ -21,134 +16,125 @@ class MapResult {
 
 class PickLocationScreen extends StatefulWidget {
   const PickLocationScreen({Key? key}) : super(key: key);
+
   @override
   _PickLocationScreenState createState() => _PickLocationScreenState();
 }
 
 class _PickLocationScreenState extends State<PickLocationScreen> {
-  final loc.Location _locationService = loc.Location();
-  LatLng? _currentLatLng;
-  bool _loading = true;
+  GoogleMapController? _controller;
+  LatLng? _pickedLatLng;
+  String _pickedAddress = 'الموقع المحدد';
 
-  final List<Marker> _markers = [];
-  final List<Polyline> _polylines = [];
-  StreamSubscription<loc.LocationData>? _locSub;
+  final loc.Location _location = loc.Location();
 
   @override
   void initState() {
     super.initState();
-    _initLocation();
-    if (!kIsWeb) {
-      _locSub = _locationService.onLocationChanged.listen((d) {
-        if (d.latitude != null && d.longitude != null) {
-          _currentLatLng = LatLng(d.latitude!, d.longitude!);
-          _refreshCurrentMarker();
-        }
-      });
+    _getCurrentLocationAndSetMarker();
+  }
+
+  Future<void> _getCurrentLocationAndSetMarker() async {
+    bool serviceEnabled;
+    loc.PermissionStatus permissionGranted;
+
+    serviceEnabled = await _location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await _location.requestService();
+      if (!serviceEnabled) return;
     }
+
+    permissionGranted = await _location.hasPermission();
+    if (permissionGranted == loc.PermissionStatus.denied) {
+      permissionGranted = await _location.requestPermission();
+      if (permissionGranted != loc.PermissionStatus.granted) return;
+    }
+
+    final currentLocation = await _location.getLocation();
+
+    final LatLng pos = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+    _updateMarkerAndAddress(pos);
+
+    _controller?.animateCamera(CameraUpdate.newLatLngZoom(pos, 16));
   }
 
-  @override
-  void dispose() {
-    _locSub?.cancel();
-    super.dispose();
+  Future<void> _updateMarkerAndAddress(LatLng pos) async {
+    String address = 'الموقع المحدد';
+    try {
+      final placemarks = await placemarkFromCoordinates(pos.latitude, pos.longitude);
+      if (placemarks.isNotEmpty) {
+        final p = placemarks.first;
+        address =
+            "${p.street ?? ''}, ${p.locality ?? ''}, ${p.administrativeArea ?? ''}, ${p.country ?? ''}";
+      }
+    } catch (e) {
+      print('خطأ في جلب العنوان: $e');
+    }
+
+    setState(() {
+      _pickedLatLng = pos;
+      _pickedAddress = address;
+    });
   }
 
-  Future<void> _initLocation() async {
-    if (kIsWeb) {
-      _currentLatLng = LatLng(31.0447, 31.3785);
-      setState(() => _loading = false);
+  void _onMapTap(LatLng pos) {
+    _updateMarkerAndAddress(pos);
+  }
+
+  void _confirm() {
+    if (_pickedLatLng == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('يرجى تحديد الموقع')),
+      );
       return;
     }
 
-    bool serviceEnabled = await _locationService.serviceEnabled() ||
-        await _locationService.requestService();
-    var permission = await _locationService.hasPermission();
-    if (permission == loc.PermissionStatus.denied) {
-      permission = await _locationService.requestPermission();
-    }
-    if (serviceEnabled && permission == loc.PermissionStatus.granted) {
-      final data = await _locationService.getLocation();
-      if (data.latitude != null && data.longitude != null) {
-        _currentLatLng = LatLng(data.latitude!, data.longitude!);
-        _refreshCurrentMarker();
-      }
-    }
-    setState(() => _loading = false);
-  }
-
-  void _refreshCurrentMarker() {
-    _markers.removeWhere((m) => m.key == const ValueKey('current'));
-    if (_currentLatLng != null) {
-      _markers.add(
-        Marker(
-          key: const ValueKey('current'),
-          point: _currentLatLng!,
-          width: 80,
-          height: 80,
-          child: const Icon(Icons.my_location, size: 48, color: Colors.blue),
-        ),
-      );
-    }
-    setState(() {});
-  }
-
-  Future<void> _onTap(LatLng pos) async {
-    String name = 'الموقع المحدد';
-    try {
-      final places = await placemarkFromCoordinates(pos.latitude, pos.longitude);
-      if (places.isNotEmpty) name = places.first.name ?? name;
-    } catch (_) {}
-
-    _markers.removeWhere((m) => m.key != const ValueKey('current'));
-    _markers.add(
-      Marker(
-        key: ValueKey(pos.toString()),
-        point: pos,
-        width: 80,
-        height: 80,
-        child: const Icon(Icons.location_on, size: 48, color: Colors.red),
-      ),
-    );
-
-    _polylines
-      ..clear()
-      ..add(
-        Polyline(
-          points: [_currentLatLng!, pos],
-          strokeWidth: 4,
-        ),
-      );
-
-    Navigator.of(context).pop(
-      MapResult(latitude: pos.latitude, longitude: pos.longitude, address: name),
-    );
-    setState(() {});
+    Navigator.of(context).pop(MapResult(
+      latitude: _pickedLatLng!.latitude,
+      longitude: _pickedLatLng!.longitude,
+      address: _pickedAddress,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
+    final marker = _pickedLatLng != null
+        ? Marker(
+            markerId: const MarkerId('picked'),
+            position: _pickedLatLng!,
+            infoWindow: InfoWindow(title: _pickedAddress),
+          )
+        : null;
+
     return Scaffold(
-      appBar: AppBar(
-        leading: const CustomArrowBack(),
-      ),
-      body: _loading || _currentLatLng == null
-          ? const Center(child: CircularProgressIndicator())
-          : FlutterMap(
-              options: MapOptions(
-                initialCenter: _currentLatLng!,
-                initialZoom: 15,
-                onTap: (_, point) => _onTap(point),
-              ),
-              children: [
-                TileLayer(
-                  urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  subdomains: const ['a', 'b', 'c'],
-                ),
-                if (_markers.isNotEmpty) MarkerLayer(markers: _markers),
-                if (_polylines.isNotEmpty) PolylineLayer(polylines: _polylines),
-              ],
+      appBar: AppBar(toolbarHeight: 0, elevation: 0),
+      body: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: const LatLng(31.037933, 31.381523), 
+              zoom: 12,
             ),
+            onMapCreated: (controller) => _controller = controller,
+            onTap: _onMapTap,
+            markers: marker != null ? {marker} : {},
+            myLocationButtonEnabled: false,
+            zoomControlsEnabled: false,
+          ),
+          Positioned(
+            bottom: 20,
+            left: 20,
+            right: 20,
+            child: ElevatedButton(
+              onPressed: _confirm,
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+              ),
+              child: const Text('تأكيد الموقع'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

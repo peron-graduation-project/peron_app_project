@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peron_project/core/helper/colors.dart';
-import 'package:peron_project/core/helper/images.dart';
 import 'package:peron_project/core/widgets/custom_arrow_back.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/features/advertisements/data/property_model.dart';
@@ -24,66 +22,31 @@ class AddPropertyScreen4 extends StatelessWidget {
     var theme = Theme.of(context).textTheme;
 
 
-    return Directionality(
+   return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: AppColors.scaffoldBackgroundColor,
         appBar: AppBar(
-        title: Text(
-        'أضف عقار',
-        style: theme.headlineMedium!.copyWith(fontSize: 20),
-    ),),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: sh * 0.06, right: 16, left: 16),
-                child: Stack(
-                  children: [
-                    const Align(
-                      alignment: Alignment.centerRight,
-                      child: CustomArrowBack(),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'أضف عقار',
-                        style: TextStyle(
-                          fontFamily: Fonts.primaryFontFamily,
-                          fontWeight: FontWeight.w700,
-                          fontSize: sw * 0.053,
-                          height: 15.27 / 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              Padding(
-                padding: EdgeInsets.only(top: sh * 0.025),
-                child: Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: const Color(0xFFE1E1E1),
-                ),
-              ),
-
-              SizedBox(height: sh * 0.02),
-
-              Center(
-                child: SvgPicture.asset(
-                  Images.addPropertyTitle3,
-                  width: sw * 0.4,
-                  height: sh * 0.05,
-                ),
-              ),
-
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: sw * 0.04,
-                  vertical: sh * 0.02,
-                ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: const CustomArrowBack(),
+          centerTitle: true,
+          title: Text(
+            'أضف عقار',
+            style: TextStyle(
+              fontFamily: Fonts.primaryFontFamily,
+              fontWeight: FontWeight.w700,
+              fontSize: sw * 0.053,
+              height: 15.27 / 20,
+            ),
+          ),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: sh * 0.02,
+            ),
                 child: MultiBlocProvider(
                   providers: [
                     BlocProvider(
@@ -94,9 +57,7 @@ class AddPropertyScreen4 extends StatelessWidget {
                     ),
                   ],
                   child: PropertyForm4(formData: data),
-                ),
-              ),
-            ],
+                     ),
           ),
         ),
       ),

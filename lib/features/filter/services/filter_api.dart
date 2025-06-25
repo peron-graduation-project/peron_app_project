@@ -1,10 +1,10 @@
-import 'package:peron_project/features/filter/models/property_model.dart';
+import 'package:peron_project/core/utils/property_model.dart';
 import 'package:peron_project/features/filter/services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 class FilterApi {
-  static Future<List<PropertyModel>> getFilteredProperties({
+  static Future<List<Property>> getFilteredProperties({
     required Map<String, dynamic> queryParams,
   }) async {
     final prefs = await SharedPreferences.getInstance();
@@ -18,7 +18,7 @@ class FilterApi {
 
     if (response.statusCode == 200 && response.data is List) {
       return (response.data as List)
-          .map((json) => PropertyModel.fromJson(json))
+          .map((json) => Property.fromJson(json))
           .toList();
     } else {
       throw Exception(

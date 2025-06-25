@@ -13,20 +13,32 @@ class FurnitureStatusSection extends StatelessWidget {
   });
 
   Widget buildFurnitureButton(BuildContext context, String label) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double buttonWidth = (screenWidth / 3.5).clamp(98, 140);
+    const double minWidth = 90;
+    const double maxWidth = 120;
+
     final bool isSelected = furnitureStatus == label;
 
-    return SizedBox(
-      width: buttonWidth,
-      height: 48,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minWidth: minWidth,
+        maxWidth: maxWidth,
+        minHeight: 48,
+        maxHeight: 48,
+      ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: isSelected ? AppColors.primaryColor : Colors.white,
           foregroundColor: isSelected ? Colors.white : AppColors.bodySmallColor,
-          side: isSelected ? null : BorderSide(color: AppColors.bodySmallColor.withOpacity(0.7), width: 1),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          padding: EdgeInsets.symmetric(horizontal: buttonWidth * 0.2),
+          side: isSelected
+              ? null
+              : BorderSide(
+                  color: AppColors.bodySmallColor.withOpacity(0.7),
+                  width: 1,
+                ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         ),
         onPressed: () => onChanged(label),
         child: FittedBox(
@@ -49,6 +61,8 @@ class FurnitureStatusSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<String> options = ["مجهزة", "غير مجهزة", "مجهزة جزئيًا"];
 
+    const double spacingBetween = 16;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -61,24 +75,15 @@ class FurnitureStatusSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final buttons = options.map((label) => buildFurnitureButton(context, label)).toList();
-
-            if (constraints.maxWidth > 350) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: buttons,
-              );
-            } else {
-              return Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                alignment: WrapAlignment.center,
-                children: buttons,
-              );
-            }
-          },
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            buildFurnitureButton(context, options[0]),
+            const SizedBox(width: spacingBetween),
+            buildFurnitureButton(context, options[1]),
+            const SizedBox(width: spacingBetween),
+            buildFurnitureButton(context, options[2]),
+          ],
         ),
         const SizedBox(height: 16),
       ],

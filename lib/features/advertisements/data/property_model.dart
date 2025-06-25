@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:intl/intl.dart';
 
 class PropertyFormData {
@@ -86,32 +85,35 @@ class PropertyFormData {
       ..phone = phone ?? this.phone;
   }
 
+  /// Convert form data to a map matching backend expectations
   Map<String, dynamic> toMap() {
-    final dateFormat = DateFormat('yyyy-dd-MM');
+    final dateFormat = DateFormat('yyyy-MM-dd');
     return {
-      'Title': title,
-      'Location': location,
-      'OwnerId': ownerId,
-      'Price': price,
-      'RentType': rentType,
-      'Bedrooms': bedrooms,
-      'Bathrooms': bathrooms,
-      'HasInternet': hasInternet,
-      'AllowsPets': allowsPets,
-      'Area': area,
-      'SmokingAllowed': smokingAllowed,
-      'Floor': floor,
-      'IsFurnished': isFurnished,
-      'HasBalcony': hasBalcony,
-      'HasSecurity': hasSecurity,
-      'HasElevator': hasElevator,
-      'MinBookingDays': minBookingDays,
-      'AvailableFrom': dateFormat.format(availableFrom),
-      'AvailableTo': dateFormat.format(availableTo),
-      'Description': description,
-      'Latitude': latitude,
-      'Longitude': longitude,
-      'SelectedFeatures': selectedFeatures,
+      'title': title,
+      'location': location,
+      'ownerId': ownerId,
+      'price': price,
+      'rentType': rentType,
+      'bedrooms': bedrooms,
+      'bathrooms': bathrooms,
+      'hasInternet': hasInternet,
+      'allowsPets': allowsPets,
+      'area': area,
+      'smokingAllowed': smokingAllowed,
+      'floor': floor,
+      'isFurnished': isFurnished,
+      'hasBalcony': hasBalcony,
+      'hasSecurity': hasSecurity,
+      'hasElevator': hasElevator,
+      'minBookingDays': minBookingDays,
+      'availableFrom': dateFormat.format(availableFrom),
+      'availableTo': dateFormat.format(availableTo),
+      'description': description,
+      'latitude': latitude,
+      'longitude': longitude,
+      'selectedFeatures': selectedFeatures,
+      'phone': phone,
+      'images': images.map((file) => file.path).toList(),
     };
   }
 }

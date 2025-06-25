@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class BookingDateSection extends StatelessWidget {
   final DateTime? rangeStart;
@@ -47,9 +47,10 @@ class BookingDateSection extends StatelessWidget {
               ),
               child: TableCalendar(
                 locale: 'en_US',
-                firstDay: DateTime.now().add(const Duration(days: 1)), 
+                firstDay: DateTime.now().add(const Duration(days: 1)),
                 lastDay: DateTime(DateTime.now().year + 1),
-                focusedDay: rangeStart ?? DateTime.now().add(const Duration(days: 1)),
+                focusedDay:
+                    rangeStart ?? DateTime.now().add(const Duration(days: 1)),
                 rangeSelectionMode: RangeSelectionMode.toggledOn,
                 onRangeSelected: (start, end, _) {
                   onRangeSelected(start, end);
@@ -57,9 +58,14 @@ class BookingDateSection extends StatelessWidget {
                 selectedDayPredicate: (_) => false,
                 rangeStartDay: rangeStart,
                 rangeEndDay: rangeEnd,
-                headerStyle: const HeaderStyle(
+                headerStyle: HeaderStyle(
                   formatButtonVisible: false,
                   titleCentered: true,
+                  titleTextStyle: GoogleFonts.tajawal(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black, 
+                  ),
                 ),
                 calendarStyle: CalendarStyle(
                   rangeStartDecoration: BoxDecoration(

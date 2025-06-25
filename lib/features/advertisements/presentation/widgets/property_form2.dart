@@ -1,34 +1,32 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
 import 'package:peron_project/core/widgets/custom_button.dart';
+
 import 'package:peron_project/features/advertisements/data/property_model.dart';
 import 'package:peron_project/features/advertisements/presentation/views/add_property_screen3.dart';
 import 'package:peron_project/features/advertisements/presentation/views/pick_location_screen.dart';
 import 'package:peron_project/features/advertisements/presentation/widgets/custom_text_field2.dart';
 
+
 class PropertyForm2 extends StatefulWidget {
   final PropertyFormData formData;
-  const PropertyForm2({super.key, required this.formData});
+  const PropertyForm2({Key? key, required this.formData}) : super(key: key);
 
   @override
   _PropertyForm2State createState() => _PropertyForm2State();
 }
 
 class _PropertyForm2State extends State<PropertyForm2> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKey           = GlobalKey<FormState>();
   final bedroomsController = TextEditingController();
-  final bathsController = TextEditingController();
-  final addressController = TextEditingController();
+  final bathsController    = TextEditingController();
+  final addressController  = TextEditingController();
 
-  LatLng? _pickedLatLng;
-  String _pickedAddress = '';
-
-  
-  final MapController _previewMapController = MapController();
+  LatLng?  _pickedLatLng;
+  String   _pickedAddress = '';
+  GoogleMapController? _previewController;
 
   @override
   void dispose() {
@@ -39,23 +37,19 @@ class _PropertyForm2State extends State<PropertyForm2> {
   }
 
   Future<void> _openMap() async {
-    final result = await Navigator.push<MapResult>(
+    final MapResult? result = await Navigator.push<MapResult>(
       context,
       MaterialPageRoute(builder: (_) => const PickLocationScreen()),
     );
     if (result != null) {
-      final newLatLng = LatLng(result.latitude, result.longitude);
       setState(() {
-        _pickedLatLng = newLatLng;
+        _pickedLatLng  = LatLng(result.latitude, result.longitude);
         _pickedAddress = result.address;
       });
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_pickedLatLng != null) {
-          try {
-            _previewMapController.move(_pickedLatLng!, 15);
-          } catch (_) {
-          }
-        }
+        _previewController?.animateCamera(
+          CameraUpdate.newLatLngZoom(_pickedLatLng!, 15),
+        );
       });
     }
   }
@@ -79,12 +73,8 @@ class _PropertyForm2State extends State<PropertyForm2> {
               hintText: 'أدخل عدد الغرف',
               keyboardType: TextInputType.number,
               validator: (v) {
-                if (v == null || v.trim().isEmpty) {
-                  return 'يرجى إدخال عدد الغرف';
-                }
-                if (int.tryParse(v) == null) {
-                  return 'رقم غير صحيح';
-                }
+                if (v == null || v.trim().isEmpty) return 'يرجى إدخال عدد الغرف';
+                if (int.tryParse(v) == null)      return 'رقم غير صحيح';
                 return null;
               },
             ),
@@ -96,12 +86,8 @@ class _PropertyForm2State extends State<PropertyForm2> {
               hintText: 'أدخل عدد الحمامات',
               keyboardType: TextInputType.number,
               validator: (v) {
-                if (v == null || v.trim().isEmpty) {
-                  return 'يرجى إدخال عدد الحمامات';
-                }
-                if (int.tryParse(v) == null) {
-                  return 'رقم غير صحيح';
-                }
+                if (v == null || v.trim().isEmpty) return 'يرجى إدخال عدد الحمامات';
+                if (int.tryParse(v) == null)      return 'رقم غير صحيح';
                 return null;
               },
             ),
@@ -112,9 +98,7 @@ class _PropertyForm2State extends State<PropertyForm2> {
               controller: addressController,
               hintText: 'أدخل العنوان الكامل',
               validator: (v) {
-                if (v == null || v.trim().isEmpty) {
-                  return 'يرجى إدخال العنوان';
-                }
+                if (v == null || v.trim().isEmpty) return 'يرجى إدخال العنوان';
                 return null;
               },
             ),
@@ -138,118 +122,56 @@ class _PropertyForm2State extends State<PropertyForm2> {
                           style: TextStyle(color: Colors.grey),
                         ),
                       )
-                    : Builder(
-                        builder: (context) {
-                          final latLng = _pickedLatLng!;
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Stack(
-                              children: [
-                                AbsorbPointer(
-                                  absorbing: true,
-                                  child: FlutterMap(
-                                    mapController: _previewMapController,
-                                    options: MapOptions(
-                                      initialCenter: latLng,
-                                      initialZoom: 15,
-                                      
-                                    ),
-                                    children: [
-                                      TileLayer(
-                                        urlTemplate:
-                                            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                        subdomains: const ['a', 'b', 'c'],
-                                      ),
-                                      MarkerLayer(
-                                        markers: [
-                                          Marker(
-                                            point: latLng,
-                                            width: 48,
-                                            height: 48,
-                                            child: const Icon(
-                                              Icons.location_on,
-                                              size: 48,
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  child: Container(
-                                    color: Colors.white.withOpacity(0.8),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 8),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          _pickedAddress,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black87,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 2),
-                                        Text(
-                                          '(${latLng.latitude.toStringAsFixed(4)}, ${latLng.longitude.toStringAsFixed(4)})',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black54,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                            target: _pickedLatLng!,
+                            zoom: 15,
+                          ),
+                          onMapCreated: (ctrl) => _previewController = ctrl,
+                          markers: {
+                            Marker(
+                              markerId: const MarkerId('preview'),
+                              position: _pickedLatLng!,
+                            )
+                          },
+                          zoomControlsEnabled: false,
+                          myLocationButtonEnabled: false,
+                        ),
                       ),
               ),
             ),
 
             const SizedBox(height: 24),
-
             Row(
               children: [
                 Expanded(
                   child: CustomButton(
-                    text:'متابعة',
+                    text: 'متابعة',
                     textColor: AppColors.labelMediumColor,
                     backgroundColor: AppColors.primaryColor,
                     onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        if (_pickedLatLng == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('يرجى اختيار الموقع')),
-                          );
-                          return;
-                        }
-                        widget.formData
-                          ..bedrooms = int.parse(bedroomsController.text)
-                          ..bathrooms = int.parse(bathsController.text)
-                          ..latitude = _pickedLatLng!.latitude
-                          ..longitude = _pickedLatLng!.longitude
-                          ..location = _pickedAddress;
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                AddPropertyScreen3(data: widget.formData),
-                          ),
+                      if (!(_formKey.currentState?.validate() ?? false)) return;
+                      if (_pickedLatLng == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('يرجى اختيار الموقع')),
                         );
+                        return;
                       }
+                      widget.formData
+                        ..bedrooms  = int.parse(bedroomsController.text)
+                        ..bathrooms = int.parse(bathsController.text)
+                        ..latitude  = _pickedLatLng!.latitude
+                        ..longitude = _pickedLatLng!.longitude
+                        ..location  = _pickedAddress;
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AddPropertyScreen3(data: widget.formData),
+                        ),
+                      );
                     },
                   ),
                 ),

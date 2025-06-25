@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:peron_project/core/utils/property_model.dart';
+import 'package:peron_project/features/filter/models/property_api.dart';
 import '../services/filter_api.dart';
 import '../widgets/header_section.dart';
 import '../widgets/location_section.dart';
@@ -92,21 +94,23 @@ class _FilterScreenState extends State<FilterScreen> {
       params['AvailableTo'] = rangeEnd!.toIso8601String().split('T').first;
 
     try {
-      final filtered = await FilterApi.getFilteredProperties(
-        queryParams: params,
-      );
+      List<Property> results;
+      if (params.isEmpty) {
+        results = await PropertyApi.getAllProperties();
+      } else {
+        results = await FilterApi.getFilteredProperties(queryParams: params);
+      }
+
       if (!mounted) return;
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => PropertiesScreen(filteredProperties: filtered),
+          builder: (_) => PropertiesScreen(filteredProperties: results),
         ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('حدث خطأ أثناء جلب النتائج'),
-        ),
+        const SnackBar(content: Text('حدث خطأ أثناء جلب النتائج')),
       );
     }
   }

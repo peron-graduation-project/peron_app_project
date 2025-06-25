@@ -56,6 +56,7 @@ class RentalDurationSection extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.w500,
               fontFamily: 'Tajawal',
+              color: Colors.black,  
             ),
           ),
         ),
