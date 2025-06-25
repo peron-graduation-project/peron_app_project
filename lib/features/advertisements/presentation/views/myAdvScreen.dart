@@ -51,37 +51,19 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
   ];
 
   @override
+  @override
   void initState() {
     super.initState();
 
     _selectedTabIndex = widget.currentSelectedIndex ?? 0;
     pendingAdsCount = _selectedTabIndex == 0 ? 0 : 1;
+
     context.read<GetPropertyCubit>().getProperties(
       index: _selectedTabIndex,
-      id: context
-          .read<PropertyCreateCubit>()
-          .getId,
+      id: context.read<PropertyCreateCubit>().getId,
     );
-    context.read<GetPropertyCubit>().getProperties(
-      index: 0,
-      id: context
-          .read<PropertyCreateCubit>()
-          .getId,
-    );
-    context.read<GetPropertyCubit>().getProperties(
-      index: 1,
-      id: context
-          .read<PropertyCreateCubit>()
-          .getId,
-    );
-    context.read<GetPropertyCubit>().getProperties(
-      index: 2,
-      id: context
-          .read<PropertyCreateCubit>()
-          .getId,
-    );
-    print("hna publishedAdsCount ${widget.initialPublishedCount}");
   }
+
 
   void _navigateToAddPropertyScreen() {
     Navigator.push(
@@ -122,7 +104,6 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
           Padding(
             padding: const EdgeInsets.only(left: 12.0, right: 12),
             child: GestureDetector(
-              // Changed onTap to use the navigation function
               onTap: _navigateToAddPropertyScreen,
               child: Container(
                 height: 40,
@@ -171,83 +152,68 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: BlocBuilder<GetPropertyCubit, GetPropertyState>(
-              builder:
-                  (context, state) =>
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TabItem(
-                        title: "منشور",
-                        length: context.read<GetPropertyCubit>()
-                            .getPropertiesLengthByIndex(0),
-                        index: 0,
-                        selectedIndex: _selectedTabIndex,
-                        onTap: (index) {
-                          setState(() {
-                            _selectedTabIndex = index;
-
-                            if (context
-                                .read<GetPropertyCubit>()
-                                .publishedProperties
-                                .isEmpty) {
-                              context.read<GetPropertyCubit>().getProperties(
-                                index: index,
-                                id: context
-                                    .read<PropertyCreateCubit>()
-                                    .getId,
-                              );
-                            } else {
-                              context.read<GetPropertyCubit>().emit(
-                                GetPropertyStateSuccess(
-                                  properties: context
-                                      .read<GetPropertyCubit>()
-                                      .publishedProperties,
-                                ),
-                              );
-                            }
-                          });
-                        },
-                      ),
-                      TabItem(
-                        title: 'معلق ',
-                        length: context
-                            .read<GetPropertyCubit>()
-                            .getPropertiesLengthByIndex(1)
-                        ,
-                        index: 1,
-                        selectedIndex: _selectedTabIndex,
-                        onTap: (index) {
-                          setState(() {
-                            _selectedTabIndex = index;
-                            print(
-                              "hna tapitemid ${context
-                                  .read<PropertyCreateCubit>()
-                                  .getId}",
-                            );
+              builder: (context, state) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TabItem(
+                      title: "منشور",
+                      length: context.watch<GetPropertyCubit>().getPropertiesLengthByIndex(0),
+                      index: 0,
+                      selectedIndex: _selectedTabIndex,
+                      onTap: (index) {
+                        setState(() {
+                          _selectedTabIndex = index;
+                          if (context.read<GetPropertyCubit>().publishedProperties.isEmpty) {
                             context.read<GetPropertyCubit>().getProperties(
                               index: index,
+                              id: context.read<PropertyCreateCubit>().getId,
                             );
-                          });
-                        },
-                      ),
-                      TabItem(
-                        title: 'محذوف ',
-                        length:
-                        context
-                            .read<GetPropertyCubit>()
-                            .getPropertiesLengthByIndex(2)
-                        ,
-                        index: 2,
-                        selectedIndex: _selectedTabIndex,
-                        onTap: (index) {
-                          setState(() {
-                            _selectedTabIndex = index;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                          } else {
+                            context.read<GetPropertyCubit>().emit(
+                              GetPropertyStateSuccess(
+                                properties: context.read<GetPropertyCubit>().publishedProperties,
+                              ),
+                            );
+                          }
+                        });
+                      },
+                    ),
+                    TabItem(
+                      title: "معلق",
+                      length: context.watch<GetPropertyCubit>().getPropertiesLengthByIndex(1),
+                      index: 1,
+                      selectedIndex: _selectedTabIndex,
+                      onTap: (index) {
+                        setState(() {
+                          _selectedTabIndex = index;
+                          context.read<GetPropertyCubit>().getProperties(
+                            index: index,
+                            id: context.read<PropertyCreateCubit>().getId,
+                          );
+                        });
+                      },
+                    ),
+                    TabItem(
+                      title: "محذوف",
+                      length: context.watch<GetPropertyCubit>().getPropertiesLengthByIndex(2),
+                      index: 2,
+                      selectedIndex: _selectedTabIndex,
+                      onTap: (index) {
+                        setState(() {
+                          _selectedTabIndex = index;
+                          context.read<GetPropertyCubit>().getProperties(
+                            index: index,
+                            id: context.read<PropertyCreateCubit>().getId,
+                          );
+                        });
+                      },
+                    ),
+                  ],
+                );
+              },
             ),
+
           ),
           Expanded(child: _getContentByTabIndex()),
           // Expanded(
@@ -269,7 +235,7 @@ class _MyAdvertisementsPageState extends State<MyAdvertisementsPage> {
           final List<Property>? properties = state.properties??[];
 
           if (_selectedTabIndex == 0) {
-            if (properties==[]) {
+            if (properties?.isEmpty ?? true) {
               return const NoPublishedAdsContent();
             } else {
               return PropertyCard();

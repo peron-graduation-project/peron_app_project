@@ -45,8 +45,8 @@ class PropertyItem extends StatelessWidget {
                         print('hna property.images ${property.images?[index]}');
                         print('Image URL: ${property.images?[index]}');
 
-                        return CachedNetworkImage(
-                          imageUrl: 'https://via.placeholder.com/300',
+                         return CachedNetworkImage(
+                          imageUrl: property.images?[index] ?? '',
                           fit: BoxFit.cover,
                           width: double.infinity,
                           height: 180,
@@ -55,8 +55,14 @@ class PropertyItem extends StatelessWidget {
                               color: AppColors.primaryColor,
                             ),
                           ),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
-                        )
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/images/placeholder.png',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: 180,
+                          ),
+                        );
+
                         ;
                         //  Image.network(
                         //   property.images![index],

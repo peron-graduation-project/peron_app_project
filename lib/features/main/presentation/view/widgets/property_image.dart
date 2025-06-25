@@ -13,6 +13,8 @@ class PropertyImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double imageHeight = 100.0;
+
     final bool isValidUrl = imageUrl != null && imageUrl!.trim().isNotEmpty;
 
     return ClipRRect(
@@ -21,16 +23,17 @@ class PropertyImage extends StatelessWidget {
           ? Image.network(
         imageUrl!,
         width: double.infinity,
+        height: imageHeight,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
-          return _placeholder();
+          return _placeholder(imageHeight);
         },
         loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
           if (loadingProgress == null) {
             return child;
           }
           return Container(
-            height: itemWidth * 0.6,
+            height: imageHeight,
             color: Colors.grey[300],
             child: Center(
               child: CircularProgressIndicator(
@@ -43,13 +46,13 @@ class PropertyImage extends StatelessWidget {
           );
         },
       )
-          : _placeholder(),
+          : _placeholder(imageHeight),
     );
   }
 
-  Widget _placeholder() {
+  Widget _placeholder(double height) {
     return Container(
-      height: itemWidth * 0.6,
+      height: height,
       color: Colors.grey[300],
       child: const Center(child: Icon(Icons.image_not_supported, size: 50)),
     );

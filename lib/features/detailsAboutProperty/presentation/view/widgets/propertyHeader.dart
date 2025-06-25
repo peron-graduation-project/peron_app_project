@@ -42,7 +42,7 @@ class PropertyHeader extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "شقة سكنية ${property.title ?? ""}",
+                       property.title ?? "",
                         style: TextStyle(
                           fontSize: titleFontSize,
                           fontWeight: FontWeight.bold,

@@ -1,7 +1,8 @@
+import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:peron_project/features/chats/data/models/chat_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:peron_project/features/chats/data/models/chat_model.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/network/api_service.dart';
@@ -20,7 +21,7 @@ class GetChatsRepoImp implements GetChatsRepo {
 
   Future<void> cacheChatsLocally(List<ChatModel> chats) async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> chatsJson = chats.map((chat) => chat.toJson()).cast<String>().toList();
+    List<String> chatsJson = chats.map((chat) => jsonEncode(chat.toJson())).toList();
     prefs.setStringList('cached_chats', chatsJson);
   }
 
@@ -30,7 +31,9 @@ class GetChatsRepoImp implements GetChatsRepo {
 
     if (cachedChatsJson == null) return [];
 
-    return cachedChatsJson.map((chatJson) => ChatModel.fromJson(chatJson as Map<String, dynamic>)).toList();
+    return cachedChatsJson
+        .map((chatJson) => ChatModel.fromJson(jsonDecode(chatJson)))
+        .toList();
   }
 
   @override
