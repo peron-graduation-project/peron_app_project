@@ -33,22 +33,25 @@ class ApiService {
     try {
       final map = data.toMap();
 
-      map['Images'] = await Future.wait(
+      final multipartImages = await Future.wait(
         data.images.map((file) => MultipartFile.fromFile(
           file.path,
           filename: file.path.split('/').last,
         )),
       );
+      map['Images'] = multipartImages;
 
       final formData = FormData.fromMap(map);
 
       final response = await _dio.post(
-        'Property/create',
+        'Property/pending',
         data: formData,
         options: Options(contentType: 'multipart/form-data'),
       );
 
-      if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 300) {
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
         print('✅ إنشاء العقار تم بنجاح');
       } else {
         throw Exception('فشل إنشاء العقار: ${response.statusCode}');
@@ -59,3 +62,4 @@ class ApiService {
     }
   }
 }
+

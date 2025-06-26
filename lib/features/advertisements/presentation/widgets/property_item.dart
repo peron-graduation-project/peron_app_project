@@ -1,14 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peron_project/core/helper/colors.dart';
 import 'package:peron_project/core/helper/fonts.dart';
-import 'package:peron_project/core/network/api_service.dart';
 import 'package:peron_project/core/utils/property_model.dart';
-import 'package:peron_project/features/myAds/domain/repos/edit%20property/edit_property_repo_imp.dart';
-import 'package:peron_project/features/myAds/presentation/manager/update%20property/update_property_cubit.dart';
-import 'package:peron_project/features/myAds/presentation/view/views/modifyProperty.dart';
 
 class PropertyItem extends StatelessWidget {
   final Property property;
@@ -16,6 +10,31 @@ class PropertyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const baseImageUrl = 'https://sakaniapi1.runasp.net';
+
+    String _buildImageUrl(String rawPath) =>
+        rawPath.startsWith('http') ? rawPath : baseImageUrl + rawPath;
+
+    double _extractPrice() {
+      if (property.price != null && property.price! > 0) {
+        return property.price!;
+      }
+      try {
+        final map = property.toJson();
+        dynamic raw;
+        if (map.containsKey('Price')) {
+          raw = map['Price'];
+        } else if (map.containsKey('price')) {
+          raw = map['price'];
+        }
+        if (raw is num) return raw.toDouble();
+        if (raw is String) return double.tryParse(raw) ?? 0.0;
+      } catch (_) {}
+      return 0.0;
+    }
+
+    final priceValue = _extractPrice();
+
     return Container(
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -28,94 +47,24 @@ class PropertyItem extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(15.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Stack(
-                children: [
-                  SizedBox(
+            child: SizedBox(
+              height: 180,
+              width: double.infinity,
+              child: PageView.builder(
+                itemCount: property.images?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final rawPath = property.images![index];
+                  return CachedNetworkImage(
+                    imageUrl: _buildImageUrl(rawPath),
+                    fit: BoxFit.cover,
+                    width: double.infinity,
                     height: 180,
-                    child: PageView.builder(
-                      itemCount: property.images?.length,
-                      onPageChanged: (index) {
-                        // setState(() {
-                        //   _currentImageIndex = index;
-                        // });
-                      },
-                      itemBuilder: (context, index) {
-                        print('hna property.images ${property.images?[index]}');
-                        print('Image URL: ${property.images?[index]}');
-
-                         return CachedNetworkImage(
-                          imageUrl: property.images?[index] ?? '',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: 180,
-                          placeholder: (context, url) => Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.primaryColor,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Image.asset(
-                            'assets/images/placeholder.png',
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: 180,
-                          ),
-                        );
-
-                        ;
-                        //  Image.network(
-                        //   property.images![index],
-                        //   width: double.infinity,
-                        //   height: 180,
-                        //   fit: BoxFit.cover,
-                        // );
-                      },
+                    placeholder: (c, u) => Center(
+                      child: CircularProgressIndicator(color: AppColors.primaryColor),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 10,
-                    left: 10,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => BlocProvider(
-                                  create:
-                                      (context) => UpdatePropertyCubit(
-                                        UpdatePropertyRepoImp(
-                                          ApiService(Dio()),
-                                        ),
-                                      ),
-                                  child: EditPropertyScreen(property: property),
-                                ),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF0F8E65),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          'تعديل',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            fontFamily: Fonts.primaryFontFamily,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                    errorWidget: (c, u, e) => Icon(Icons.error, color: AppColors.primaryColor),
+                  );
+                },
               ),
             ),
           ),

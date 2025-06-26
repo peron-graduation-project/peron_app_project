@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
 class PropertyFormData {
@@ -86,15 +85,11 @@ class PropertyFormData {
       ..phone = phone ?? this.phone;
   }
 
-  Future<FormData> toMultipartFormData() async {
-    final dateFormat = DateFormat('yyyy-MM-dd');
-
-    List<MultipartFile> imageFiles = [];
-    for (var image in images) {
-      imageFiles.add(await MultipartFile.fromFile(image.path));
-    }
-
-    return FormData.fromMap({
+  /// Convert form data to a map matching backend expectations
+  Map<String, dynamic> toMap() {
+    // ISO 8601 format with time
+    final isoFormatter = DateFormat("yyyy-MM-ddTHH:mm:ss");
+    return {
       'Title': title,
       'Location': location,
       'OwnerId': ownerId,
@@ -112,43 +107,16 @@ class PropertyFormData {
       'HasSecurity': hasSecurity,
       'HasElevator': hasElevator,
       'MinBookingDays': minBookingDays,
-      'AvailableFrom': dateFormat.format(availableFrom),
-      'AvailableTo': dateFormat.format(availableTo),
+      'AvailableFrom': isoFormatter.format(availableFrom),
+      'AvailableTo': isoFormatter.format(availableTo),
       'Description': description,
       'Latitude': latitude,
       'Longitude': longitude,
-      'Images': imageFiles,
-    });
-  }
-
-Map<String, dynamic> toMap() {
-    final dateFormat = DateFormat('yyyy-MM-dd');
-    return {
-      'title': title,
-      'location': location,
-      'ownerId': ownerId,
-      'price': price,
-      'rentType': rentType,
-      'bedrooms': bedrooms,
-      'bathrooms': bathrooms,
-      'hasInternet': hasInternet,
-      'allowsPets': allowsPets,
-      'area': area,
-      'smokingAllowed': smokingAllowed,
-      'floor': floor,
-      'isFurnished': isFurnished,
-      'hasBalcony': hasBalcony,
-      'hasSecurity': hasSecurity,
-      'hasElevator': hasElevator,
-      'minBookingDays': minBookingDays,
-      'availableFrom': dateFormat.format(availableFrom),
-      'availableTo': dateFormat.format(availableTo),
-      'description': description,
-      'latitude': latitude,
-      'longitude': longitude,
-      'selectedFeatures': selectedFeatures,
-      'phone': phone,
-      'images': images.map((file) => file.path).toList(),
+      'SelectedFeatures': selectedFeatures,
+      'Phone': phone,
+      // 'Images' field handled separately in ApiService
     };
   }
 }
+
+
